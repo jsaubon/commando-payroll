@@ -562,9 +562,13 @@ const TabReportsDebitCredit = () => {
                             "client_employee"
                         );
 
-                        let employee_index = data_employee.indexOf(
-                            entry.client_employee.name
-                        );
+                        let employee_index = -1;
+                        if(entry.client_employee) {
+                            employee_index = data_employee.indexOf(
+                                entry.client_employee.name
+                            );
+                        }
+                        
                         if (employee_index !== -1) {
                             // NAA NA
                             if (_data[employee_index][_filter]) {
@@ -616,7 +620,7 @@ const TabReportsDebitCredit = () => {
                             let _temp = {
                                 client:
                                     entry.client_accounting_entry.client.name,
-                                client_employee: entry.client_employee.name,
+                                client_employee: entry.client_employee ? entry.client_employee.name : '',
                                 client_employee_payroll:
                                     moment(
                                         entry.client_employee_payroll
@@ -669,7 +673,7 @@ const TabReportsDebitCredit = () => {
 
             //console.log('_data[_data.length-1]',_data[_data.length-1]);
             if (
-                report_data[report_data.length - 1].client_employee != "Total"
+                report_data[report_data.length - 1] && report_data[report_data.length - 1].client_employee != "Total"
             ) {
                 let totalRow = {
                     client: "",
