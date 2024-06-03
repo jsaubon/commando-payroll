@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Modal, Row, Col, DatePicker, Input } from "antd";
 import { Print } from "react-easy-print";
 import Title from "antd/lib/typography/Title";
@@ -22,6 +22,30 @@ const ModalPayrollViewInfo = ({
     const handlePrintPayroll = useReactToPrint({
         content: () => componentRef.current
     });
+
+    const [accountingEntriesDebit, setAccountingEntriesDebit] = useState([]);
+    useEffect(() => {
+        // sort debit by order  asc and id desc
+        let _accountingEntriesDebit = accountingEntries.debit.sort((a, b) => {
+            if (a.order > b.order) {
+                return 1;
+            }
+            if (a.order < b.order) {
+                return -1;
+            }
+            if (a.id < b.id) {
+                return 1;
+            }
+            if (a.id > b.id) {
+                return -1;
+            }
+            return 0;
+        });
+
+        setAccountingEntriesDebit(_accountingEntriesDebit);
+        return () => {};
+    }, [accountingEntries]);
+
     return (
         <>
             <Modal
@@ -151,7 +175,7 @@ const ModalPayrollViewInfo = ({
                                                 <th className="ant-table-cell text-center fz-10">
                                                     # of Days Work
                                                 </th>
-                                                {accountingEntries.debit.map(
+                                                {accountingEntriesDebit.map(
                                                     (debit, key) => {
                                                         if (debit.visible) {
                                                             if (

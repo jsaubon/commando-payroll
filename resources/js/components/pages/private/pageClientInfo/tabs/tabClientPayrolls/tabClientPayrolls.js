@@ -142,7 +142,6 @@ const TabClientPayrolls = ({ client_id }) => {
 
     let userdata = JSON.parse(localStorage.userdata);
 
-
     const toggleShowModalPayslip = () => {
         setShowModalPayslip(!showModalPayslip);
     };
@@ -181,7 +180,7 @@ const TabClientPayrolls = ({ client_id }) => {
                 />
             )}
 
-             {selectedPayroll && showModalPayslip && (
+            {selectedPayroll && showModalPayslip && (
                 <ModalPayslip
                     selectedPayroll={selectedPayroll}
                     showModalPayslip={showModalPayslip}
