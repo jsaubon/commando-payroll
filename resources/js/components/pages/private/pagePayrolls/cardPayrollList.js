@@ -83,6 +83,8 @@ const CardPayrollList = () => {
         let credit = record.client.client_accounting_entries.filter(
             p => p.type == "credit"
         );
+        // credit sort order by order
+        credit.sort((a, b) => a.order - b.order);
         setAccountingEntries({
             ...accountingEntries,
             debit: debit,

@@ -42,6 +42,7 @@ const ModalPayrollViewInfo = ({
             return 0;
         });
 
+        console.log("accountingEntries", accountingEntries);
         setAccountingEntriesDebit(_accountingEntriesDebit);
         return () => {};
     }, [accountingEntries]);

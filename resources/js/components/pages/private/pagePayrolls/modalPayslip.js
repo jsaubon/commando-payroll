@@ -41,6 +41,7 @@ const ModalPayslip = ({
         >
             <div ref={componentRef}>
                 {chunkedPayrolls.map((chunkedPayroll, chunked_key) => {
+                    console.log("chunkedPayroll", chunkedPayroll);
                     return (
                         <>
                             <Row key={chunked_key}>
@@ -429,6 +430,16 @@ const ModalPayslip = ({
                                                                     employee_accounting,
                                                                     employee_accountings_key
                                                                 ) => {
+                                                                    console.log(
+                                                                        "employee_accounting.amount",
+                                                                        employee_accounting.amount
+                                                                    );
+                                                                    console.log(
+                                                                        "employee_accounting.title",
+                                                                        employee_accounting
+                                                                            .client_accounting_entry
+                                                                            .title
+                                                                    );
                                                                     if (
                                                                         employee_accounting.amount !=
                                                                             0 &&

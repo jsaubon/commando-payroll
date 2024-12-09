@@ -91,6 +91,43 @@ Route::get('populate_rest_day', function() {
             'fixed_amount' => 0
         ]);
 
+        $client_accounting_entries = \App\ClientAccountingEntry::updateOrCreate([
+            'client_id' => $client->id,
+            'title' => 'OTHER Misc. 1',
+            'type' => 'credit',
+        ],[
+            'client_id' => $client->id,
+            'visible' => 1,
+            'type' => 'credit',
+            'title' => 'OTHER Misc. 1',
+            'amount' => 0,
+            'order' => 29,
+            'fixed' => 0,
+            'fixed_amount' => 0
+        ]);
+
+        $client_accounting_entries = \App\ClientAccountingEntry::updateOrCreate([
+            'client_id' => $client->id,
+            'title' => 'OTHER Misc. 2',
+            'type' => 'credit',
+        ],[
+            'client_id' => $client->id,
+            'visible' => 1,
+            'type' => 'credit',
+            'title' => 'OTHER Misc. 2',
+            'amount' => 0,
+            'order' => 30,
+            'fixed' => 0,
+            'fixed_amount' => 0
+        ]);
+        $client_accounting_entries = \App\ClientAccountingEntry::updateOrCreate([
+            'client_id' => $client->id,
+            'title' => 'Insurance',
+            'type' => 'credit',
+        ],[
+            'order' => 31,
+        ]);
+
     }
 
 });

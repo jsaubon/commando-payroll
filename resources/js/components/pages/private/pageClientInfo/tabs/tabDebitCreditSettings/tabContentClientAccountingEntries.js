@@ -9,7 +9,7 @@ import {
     Form,
     InputNumber,
     Space,
-    notification
+    notification,
 } from "antd";
 import { fetchData } from "../../../../../../axios";
 import Title from "antd/lib/typography/Title";
@@ -23,7 +23,7 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
             amount: 0,
             fixed_amount: 0,
             visible: true,
-            fixed: false
+            fixed: false,
         },
         {
             order: 18,
@@ -31,7 +31,7 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
             amount: 0,
             fixed_amount: 0,
             visible: true,
-            fixed: false
+            fixed: false,
         },
         {
             order: 19,
@@ -39,7 +39,7 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
             amount: 0,
             fixed_amount: 0,
             visible: true,
-            fixed: false
+            fixed: false,
         },
         {
             order: 20,
@@ -47,7 +47,7 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
             amount: 0,
             fixed_amount: 0,
             visible: true,
-            fixed: false
+            fixed: false,
         },
         {
             order: 21,
@@ -55,7 +55,7 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
             amount: 0,
             fixed_amount: 0,
             visible: true,
-            fixed: false
+            fixed: false,
         },
         {
             order: 22,
@@ -63,7 +63,7 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
             amount: 0,
             fixed_amount: 0,
             visible: true,
-            fixed: false
+            fixed: false,
         },
         {
             order: 23,
@@ -71,7 +71,7 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
             amount: 0,
             fixed_amount: 0,
             visible: true,
-            fixed: false
+            fixed: false,
         },
         {
             order: 24,
@@ -79,7 +79,7 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
             amount: 0,
             fixed_amount: 0,
             visible: true,
-            fixed: false
+            fixed: false,
         },
         {
             order: 25,
@@ -87,7 +87,7 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
             amount: 0,
             fixed_amount: 0,
             visible: true,
-            fixed: false
+            fixed: false,
         },
         {
             order: 26,
@@ -95,7 +95,7 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
             amount: 0,
             fixed_amount: 0,
             visible: true,
-            fixed: false
+            fixed: false,
         },
         {
             order: 27,
@@ -103,7 +103,7 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
             amount: 0,
             fixed_amount: 0,
             visible: true,
-            fixed: false
+            fixed: false,
         },
         {
             order: 28,
@@ -111,7 +111,23 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
             amount: 0,
             fixed_amount: 0,
             visible: true,
-            fixed: false
+            fixed: false,
+        },
+        {
+            order: 29,
+            title: "OTHERS Misc. 1",
+            amount: 0,
+            fixed_amount: 0,
+            visible: true,
+            fixed: false,
+        },
+        {
+            order: 29,
+            title: "OTHERS Misc. 2",
+            amount: 0,
+            fixed_amount: 0,
+            visible: true,
+            fixed: false,
         },
         {
             order: 29,
@@ -119,8 +135,8 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
             amount: 0,
             fixed_amount: 0,
             visible: false,
-            fixed: false
-        }
+            fixed: false,
+        },
     ]);
     const [debitList, setDebitList] = useState([
         {
@@ -129,28 +145,28 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
             amount: 0,
             fixed_amount: 0,
             visible: true,
-            fixed: false
+            fixed: false,
         },
         {
             order: 2,
             title: "Rest Day Pay",
             amount: 0,
             fixed_amount: 0,
-            visible: false
+            visible: false,
         },
         {
             order: 2,
             title: "Reg. Hol. Pay",
             amount: 0,
             fixed_amount: 0,
-            visible: false
+            visible: false,
         },
         {
             order: 3,
             title: "Spcl. Hol. Pay",
             amount: 0,
             fixed_amount: 0,
-            visible: false
+            visible: false,
         },
         {
             order: 4,
@@ -158,42 +174,42 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
             amount: 0,
             fixed_amount: 0,
             visible: true,
-            fixed: false
+            fixed: false,
         },
         {
             order: 5,
             title: "Night Rest Day Pay",
             amount: 0,
             fixed_amount: 0,
-            visible: false
+            visible: false,
         },
         {
             order: 5,
             title: "Night Reg. Hol. Pay",
             amount: 0,
             fixed_amount: 0,
-            visible: false
+            visible: false,
         },
         {
             order: 6,
             title: "Night Spcl. Hol. Pay",
             amount: 0,
             fixed_amount: 0,
-            visible: false
+            visible: false,
         },
         {
             order: 7,
             title: "13th-Month Pay",
             amount: 0,
             fixed_amount: 0,
-            visible: false
+            visible: false,
         },
         {
             order: 8,
             title: "Uniform Allowance",
             amount: 0,
             fixed_amount: 0,
-            visible: false
+            visible: false,
         },
         {
             order: 9,
@@ -201,7 +217,7 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
             amount: 0,
             fixed_amount: 0,
             visible: true,
-            fixed: false
+            fixed: false,
         },
         {
             order: 10,
@@ -209,7 +225,7 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
             amount: 0,
             fixed_amount: 0,
             visible: true,
-            fixed: false
+            fixed: false,
         },
         {
             order: 11,
@@ -217,7 +233,7 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
             amount: 0,
             fixed_amount: 0,
             visible: true,
-            fixed: false
+            fixed: false,
         },
         {
             order: 12,
@@ -225,7 +241,7 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
             amount: 0,
             fixed_amount: 0,
             visible: true,
-            fixed: false
+            fixed: false,
         },
         {
             order: 13,
@@ -233,28 +249,28 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
             amount: 0,
             fixed_amount: 0,
             visible: true,
-            fixed: false
+            fixed: false,
         },
         {
             order: 14,
             title: "Overtime Reg. Hol. Pay",
             amount: 0,
             fixed_amount: 0,
-            visible: false
+            visible: false,
         },
         {
             order: 14,
             title: "Overtime Rest Day Pay",
             amount: 0,
             fixed_amount: 0,
-            visible: false
+            visible: false,
         },
         {
             order: 15,
             title: "Overtime Spcl. Hol. Pay",
             amount: 0,
             fixed_amount: 0,
-            visible: false
+            visible: false,
         },
         {
             order: 16,
@@ -262,8 +278,8 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
             amount: 0,
             fixed_amount: 0,
             visible: true,
-            fixed: false
-        }
+            fixed: false,
+        },
     ]);
 
     useEffect(() => {
@@ -272,12 +288,12 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
     }, []);
     const getClientAccountingEntry = () => {
         fetchData("GET", "api/accounting_entry?client_id=" + client_id).then(
-            res => {
+            (res) => {
                 if (res.credit.length) {
                     let _creditList = creditList;
                     _creditList.map((credit, key) => {
                         let cred = res.credit.find(
-                            p => p.title == credit.title
+                            (p) => p.title == credit.title
                         );
                         if (cred) {
                             credit["id"] = cred.id;
@@ -292,7 +308,9 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
                 if (res.debit.length) {
                     let _debitList = debitList;
                     _debitList.map((debit, key) => {
-                        let cred = res.debit.find(p => p.title == debit.title);
+                        let cred = res.debit.find(
+                            (p) => p.title == debit.title
+                        );
                         if (cred) {
                             debit["id"] = cred.id;
                             debit.amount = cred.amount;
@@ -315,12 +333,12 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
         fetchData("POST", "api/accounting_entry", {
             type: "credit",
             data: creditList,
-            client_id
-        }).then(res => {
+            client_id,
+        }).then((res) => {
             if (res.success) {
                 setSaveCreditLoading(false);
                 notification.success({
-                    message: "Credit Settings Successfully Saved"
+                    message: "Credit Settings Successfully Saved",
                 });
             }
         });
@@ -331,12 +349,12 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
         fetchData("POST", "api/accounting_entry", {
             type: "debit",
             data: debitList,
-            client_id
-        }).then(res => {
+            client_id,
+        }).then((res) => {
             if (res.success) {
                 setSaveDebitLoading(false);
                 notification.success({
-                    message: "Debit Settings Successfully Saved"
+                    message: "Debit Settings Successfully Saved",
                 });
             }
         });
@@ -359,7 +377,7 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
                             <Button
                                 type="primary"
                                 block
-                                onClick={e => saveDebitSettings()}
+                                onClick={(e) => saveDebitSettings()}
                                 loading={saveDebitLoading}
                             >
                                 Save Debit Settings
@@ -379,7 +397,7 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
                             <Button
                                 type="primary"
                                 block
-                                onClick={e => saveCreditSettings()}
+                                onClick={(e) => saveCreditSettings()}
                                 loading={saveCreditLoading}
                             >
                                 Save Credit Settings

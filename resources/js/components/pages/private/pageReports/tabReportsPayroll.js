@@ -53,13 +53,22 @@ const TabReportsPayroll = () => {
             key: "employee",
             className: "fz-10  w-nowrap",
             render: (text, record) => {
-                return record.id ? record.client_employee ? record.client_employee.name : '' : "";
+                return record.id
+                    ? record.client_employee
+                        ? record.client_employee.name
+                        : ""
+                    : "";
             },
             // filterMultiple: false,
             onFilter: (value, record) =>
-                record.client_employee ? record.client_employee.name.indexOf(value) === 0 : false,
+                record.client_employee
+                    ? record.client_employee.name.indexOf(value) === 0
+                    : false,
             sorter: (a, b) =>
-                a.client_employee ? a.client_employee.name.length - b.client_employee.name.length : false,
+                a.client_employee
+                    ? a.client_employee.name.length -
+                      b.client_employee.name.length
+                    : false,
             sortDirections: ["descend", "ascend"],
             filters: [...tableFilters.employees]
         },
@@ -369,6 +378,42 @@ const TabReportsPayroll = () => {
             }
         },
         {
+            title: "OTHERS Misc. 1",
+            dataIndex: "OTHERS_Misc. 1",
+            key: "OTHERS_Misc. 1",
+            className: "fz-10 text-center",
+            render: (text, record) => {
+                if (record.id) {
+                    let rec = record.client_employee_accountings.find(
+                        p =>
+                            p.client_accounting_entry != null &&
+                            p.client_accounting_entry.title == "OTHERS Misc. 1"
+                    );
+                    return currencyFormat(rec.amount);
+                } else {
+                    return <b>{currencyFormat(record.totalOTHERSMisc1)}</b>;
+                }
+            }
+        },
+        {
+            title: "OTHERS Misc. 2",
+            dataIndex: "OTHERS_Misc. 2",
+            key: "OTHERS_Misc. 2",
+            className: "fz-10 text-center",
+            render: (text, record) => {
+                if (record.id) {
+                    let rec = record.client_employee_accountings.find(
+                        p =>
+                            p.client_accounting_entry != null &&
+                            p.client_accounting_entry.title == "OTHERS Misc. 2"
+                    );
+                    return currencyFormat(rec.amount);
+                } else {
+                    return <b>{currencyFormat(record.totalOTHERSMisc2)}</b>;
+                }
+            }
+        },
+        {
             title: "Insurance",
             dataIndex: "insurance",
             key: "insurance",
@@ -423,6 +468,8 @@ const TabReportsPayroll = () => {
                     totalOTHERSCanteen: 0,
                     totalOTHERSAmmosAccessories: 0,
                     totalOTHERSMisc: 0,
+                    totalOTHERSMisc1: 0,
+                    totalOTHERSMisc2: 0,
                     totalInsurance: 0
                 };
                 let _data = res.data;
@@ -458,7 +505,10 @@ const TabReportsPayroll = () => {
                                 p.client_accounting_entry.title ==
                                     "OTHERS Misc." ||
                                 p.client_accounting_entry.title ==
-                                    "Insurance")
+                                    "OTHERS Misc. 1" ||
+                                p.client_accounting_entry.title ==
+                                    "OTHERS Misc. 2" ||
+                                p.client_accounting_entry.title == "Insurance")
                     );
 
                     recs.map((entry, key) => {
@@ -503,8 +553,7 @@ const TabReportsPayroll = () => {
                                 ? entry.amount
                                 : 0;
                         _entry.totalBond +=
-                            entry.client_accounting_entry.title ==
-                            "Bond"
+                            entry.client_accounting_entry.title == "Bond"
                                 ? entry.amount
                                 : 0;
                         _entry.totalLOANNorthStar +=
@@ -531,9 +580,18 @@ const TabReportsPayroll = () => {
                             "OTHERS Misc."
                                 ? entry.amount
                                 : 0;
-                        _entry.totalInsurance +=
+                        _entry.totalOTHERSMisc1 +=
                             entry.client_accounting_entry.title ==
-                            "Insurance"
+                            "OTHERS Misc. 1"
+                                ? entry.amount
+                                : 0;
+                        _entry.totalOTHERSMisc2 +=
+                            entry.client_accounting_entry.title ==
+                            "OTHERS Misc. 2"
+                                ? entry.amount
+                                : 0;
+                        _entry.totalInsurance +=
+                            entry.client_accounting_entry.title == "Insurance"
                                 ? entry.amount
                                 : 0;
                     });
@@ -552,13 +610,19 @@ const TabReportsPayroll = () => {
                         });
                     }
 
-                    let temp_employee = _employees.find(
-                        p => p.text == payroll.client_employee ? payroll.client_employee.name : ''
+                    let temp_employee = _employees.find(p =>
+                        p.text == payroll.client_employee
+                            ? payroll.client_employee.name
+                            : ""
                     );
                     if (temp_employee == undefined) {
                         _employees.push({
-                            text: payroll.client_employee ? payroll.client_employee.name : '',
-                            value: payroll.client_employee ? payroll.client_employee.name : ''
+                            text: payroll.client_employee
+                                ? payroll.client_employee.name
+                                : "",
+                            value: payroll.client_employee
+                                ? payroll.client_employee.name
+                                : ""
                         });
                     }
                 });
