@@ -218,6 +218,15 @@ const ModalPayslip = ({
                                                                         }
                                                                         if (
                                                                             title ==
+                                                                            "Rest Day Pay"
+                                                                        ) {
+                                                                            count =
+                                                                                payroll.days_of_work_rest_day;
+                                                                            prefix =
+                                                                                "days";
+                                                                        }
+                                                                        if (
+                                                                            title ==
                                                                             "Reg. Hol. Pay"
                                                                         ) {
                                                                             count =
@@ -255,6 +264,15 @@ const ModalPayslip = ({
                                                                         }
                                                                         if (
                                                                             title ==
+                                                                            "Night Rest Day Pay"
+                                                                        ) {
+                                                                            count =
+                                                                                payroll.night_pay_rest_day;
+                                                                            prefix =
+                                                                                "hours";
+                                                                        }
+                                                                        if (
+                                                                            title ==
                                                                             "Night Spcl. Hol. Pay"
                                                                         ) {
                                                                             count =
@@ -269,6 +287,15 @@ const ModalPayslip = ({
                                                                         ) {
                                                                             count =
                                                                                 payroll.hours_overtime;
+                                                                            prefix =
+                                                                                "hours";
+                                                                        }
+                                                                        if (
+                                                                            title ==
+                                                                            "Overtime Rest Day Pay"
+                                                                        ) {
+                                                                            count =
+                                                                                payroll.hours_overtime_rest_day;
                                                                             prefix =
                                                                                 "hours";
                                                                         }
@@ -413,7 +440,10 @@ const ModalPayslip = ({
                                                                             employee_accounting
                                                                                 .client_accounting_entry
                                                                                 .title;
-                                                                        console.log('title',title);
+                                                                        console.log(
+                                                                            "title",
+                                                                            title
+                                                                        );
                                                                         netPay +=
                                                                             employee_accounting.amount;
 

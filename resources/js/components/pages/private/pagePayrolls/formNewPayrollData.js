@@ -46,12 +46,15 @@ const FormNewPayrollData = ({
                             id: employee.id,
                             name: employee.name,
                             days_of_work: 0,
+                            days_of_work_rest_day: 0,
                             days_of_work_reg_hol: 0,
                             days_of_work_spcl_hol: 0,
                             night_pay: 0,
+                            night_pay_rest_day: 0,
                             night_pay_reg_hol: 0,
                             night_pay_spcl_hol: 0,
                             hours_overtime: 0,
+                            hours_overtime_rest_day: 0,
                             hours_overtime_reg_hol: 0,
                             hours_overtime_spcl_hol: 0,
                             deductions: employee.client_employee_deductions
@@ -113,12 +116,15 @@ const FormNewPayrollData = ({
                 days_of_work: employee.days_of_work,
                 hours_overtime: employee.hours_overtime,
                 days_of_work: employee.days_of_work,
+                days_of_work_rest_day: employee.days_of_work_rest_day,
                 days_of_work_reg_hol: employee.days_of_work_reg_hol,
                 days_of_work_spcl_hol: employee.days_of_work_spcl_hol,
                 night_pay: employee.night_pay,
+                night_pay_rest_day: employee.night_pay_rest_day,
                 night_pay_reg_hol: employee.night_pay_reg_hol,
                 night_pay_spcl_hol: employee.night_pay_spcl_hol,
                 hours_overtime: employee.hours_overtime,
+                hours_overtime_rest_day: employee.hours_overtime_rest_day,
                 hours_overtime_reg_hol: employee.hours_overtime_reg_hol,
                 hours_overtime_spcl_hol: employee.hours_overtime_spcl_hol,
                 debit: [],
@@ -132,7 +138,7 @@ const FormNewPayrollData = ({
             let m_date_start = moment(payrollDetails.date_start);
             let m_date_end = moment(payrollDetails.date_end);
             let date_range = Math.abs(m_date_start.diff(m_date_end, "day")) + 1;
-            console.log('date_range',date_range);
+            console.log("date_range", date_range);
 
             accountingEntries.debit.map((debit, key) => {
                 let amount = 0;
@@ -147,71 +153,120 @@ const FormNewPayrollData = ({
 
                 if (debit.title == "Basic Pay") {
                     //amount = _debit_amount * _days_of_work;
-                    if(debit.fixed) {
-                        amount = (debit.fixed_amount / date_range) * employee.days_of_work;
+                    if (debit.fixed) {
+                        amount =
+                            (debit.fixed_amount / date_range) *
+                            employee.days_of_work;
                     } else {
                         amount = debit.amount * employee.days_of_work;
                     }
+                } else if (debit.title == "Rest Day Pay") {
+                    // amount = _debit_amount * employee.days_of_work_rest_day;
+                    if (debit.fixed) {
+                        amount =
+                            (debit.fixed_amount / date_range) *
+                            employee.days_of_work_rest_day;
+                    } else {
+                        amount = debit.amount * employee.days_of_work_rest_day;
+                    }
                 } else if (debit.title == "Reg. Hol. Pay") {
                     // amount = _debit_amount * employee.days_of_work_reg_hol;
-                    if(debit.fixed) {
-                        amount = (debit.fixed_amount / date_range) * employee.days_of_work_reg_hol;
+                    if (debit.fixed) {
+                        amount =
+                            (debit.fixed_amount / date_range) *
+                            employee.days_of_work_reg_hol;
                     } else {
                         amount = debit.amount * employee.days_of_work_reg_hol;
                     }
                 } else if (debit.title == "Spcl. Hol. Pay") {
                     // amount = _debit_amount * employee.days_of_work_spcl_hol;
-                    if(debit.fixed) {
-                        amount = (debit.fixed_amount / date_range) * employee.days_of_work_spcl_hol;
+                    if (debit.fixed) {
+                        amount =
+                            (debit.fixed_amount / date_range) *
+                            employee.days_of_work_spcl_hol;
                     } else {
                         amount = debit.amount * employee.days_of_work_spcl_hol;
                     }
                 } else if (debit.title == "Overtime Pay") {
                     // amount = _debit_amount * employee.hours_overtime;
-                    if(debit.fixed) {
-                        amount = (debit.fixed_amount / date_range) * employee.hours_overtime;
+                    if (debit.fixed) {
+                        amount =
+                            (debit.fixed_amount / date_range) *
+                            employee.hours_overtime;
                     } else {
                         amount = debit.amount * employee.hours_overtime;
                     }
+                } else if (debit.title == "Overtime Rest Day Pay") {
+                    // amount = _debit_amount * employee.hours_overtime_reg_hol;
+                    if (debit.fixed) {
+                        amount =
+                            (debit.fixed_amount / date_range) *
+                            employee.hours_overtime_rest_day;
+                    } else {
+                        amount =
+                            debit.amount * employee.hours_overtime_rest_day;
+                    }
                 } else if (debit.title == "Overtime Reg. Hol. Pay") {
                     // amount = _debit_amount * employee.hours_overtime_reg_hol;
-                    if(debit.fixed) {
-                        amount = (debit.fixed_amount / date_range) * employee.hours_overtime_reg_hol;
+                    if (debit.fixed) {
+                        amount =
+                            (debit.fixed_amount / date_range) *
+                            employee.hours_overtime_reg_hol;
                     } else {
                         amount = debit.amount * employee.hours_overtime_reg_hol;
                     }
                 } else if (debit.title == "Overtime Spcl. Hol. Pay") {
                     // amount = _debit_amount * employee.hours_overtime_spcl_hol;
-                    if(debit.fixed) {
-                        amount = (debit.fixed_amount / date_range) * employee.hours_overtime_spcl_hol;
+                    if (debit.fixed) {
+                        amount =
+                            (debit.fixed_amount / date_range) *
+                            employee.hours_overtime_spcl_hol;
                     } else {
-                        amount = debit.amount * employee.hours_overtime_spcl_hol;
+                        amount =
+                            debit.amount * employee.hours_overtime_spcl_hol;
                     }
                 } else if (debit.title == "Night Premium Pay") {
                     // amount = _debit_amount * employee.night_pay;
-                    if(debit.fixed) {
-                        amount = (debit.fixed_amount / date_range) * employee.night_pay;
+                    if (debit.fixed) {
+                        amount =
+                            (debit.fixed_amount / date_range) *
+                            employee.night_pay;
                     } else {
                         amount = debit.amount * employee.night_pay;
                     }
                 } else if (debit.title == "Night Reg. Hol. Pay") {
                     // amount = _debit_amount * employee.night_pay_reg_hol;
-                    if(debit.fixed) {
-                        amount = (debit.fixed_amount / date_range) * employee.night_pay_reg_hol;
+                    if (debit.fixed) {
+                        amount =
+                            (debit.fixed_amount / date_range) *
+                            employee.night_pay_reg_hol;
                     } else {
                         amount = debit.amount * employee.night_pay_reg_hol;
                     }
+                } else if (debit.title == "Night Rest Day Pay") {
+                    // amount = _debit_amount * employee.night_pay_reg_hol;
+                    if (debit.fixed) {
+                        amount =
+                            (debit.fixed_amount / date_range) *
+                            employee.night_pay_rest_day;
+                    } else {
+                        amount = debit.amount * employee.night_pay_rest_day;
+                    }
                 } else if (debit.title == "Night Spcl. Hol. Pay") {
                     // amount = _debit_amount * employee.night_pay_spcl_hol;
-                    if(debit.fixed) {
-                        amount = (debit.fixed_amount / date_range) * employee.night_pay_spcl_hol;
+                    if (debit.fixed) {
+                        amount =
+                            (debit.fixed_amount / date_range) *
+                            employee.night_pay_spcl_hol;
                     } else {
                         amount = debit.amount * employee.night_pay_spcl_hol;
                     }
                 } else {
                     // amount = _debit_amount * _days_of_work;
-                    if(debit.fixed) {
-                        amount = (debit.fixed_amount / date_range) * employee.days_of_work;
+                    if (debit.fixed) {
+                        amount =
+                            (debit.fixed_amount / date_range) *
+                            employee.days_of_work;
                     } else {
                         amount = debit.amount * employee.days_of_work;
                     }
@@ -223,16 +278,20 @@ const FormNewPayrollData = ({
                     //     (employee.days_of_work +
                     //         employee.days_of_work_reg_hol +
                     //         employee.days_of_work_spcl_hol);
-                    if(debit.fixed) {
-                        amount = (debit.fixed_amount / date_range) * 
+                    if (debit.fixed) {
+                        amount =
+                            (debit.fixed_amount / date_range) *
                             (employee.days_of_work +
-                            employee.days_of_work_reg_hol +
-                            employee.days_of_work_spcl_hol);;
+                                employee.days_of_work_rest_day +
+                                employee.days_of_work_reg_hol +
+                                employee.days_of_work_spcl_hol);
                     } else {
-                        amount = debit.amount *
+                        amount =
+                            debit.amount *
                             (employee.days_of_work +
-                            employee.days_of_work_reg_hol +
-                            employee.days_of_work_spcl_hol);;
+                                employee.days_of_work_rest_day +
+                                employee.days_of_work_reg_hol +
+                                employee.days_of_work_spcl_hol);
                     }
                 }
 
@@ -299,7 +358,7 @@ const FormNewPayrollData = ({
                                             <tr>
                                                 <th
                                                     className="ant-table-cell text-center fz-10"
-                                                    colSpan={11}
+                                                    colSpan={14}
                                                 >
                                                     Employees
                                                 </th>
@@ -319,6 +378,12 @@ const FormNewPayrollData = ({
                                                     style={{ width: 150 }}
                                                 >
                                                     # of Days Work
+                                                </th>
+                                                <th
+                                                    className="ant-table-cell fz-10 text-center"
+                                                    style={{ width: 150 }}
+                                                >
+                                                    # of Days Work (Rest Day)
                                                 </th>
                                                 <th
                                                     className="ant-table-cell fz-10 text-center"
@@ -344,6 +409,12 @@ const FormNewPayrollData = ({
                                                     className="ant-table-cell fz-10 text-center"
                                                     style={{ width: 150 }}
                                                 >
+                                                    Night Hours (Rest Day)
+                                                </th>
+                                                <th
+                                                    className="ant-table-cell fz-10 text-center"
+                                                    style={{ width: 150 }}
+                                                >
                                                     Night Hours (Reg. Holiday)
                                                 </th>
                                                 <th
@@ -357,6 +428,12 @@ const FormNewPayrollData = ({
                                                     style={{ width: 150 }}
                                                 >
                                                     Hours Overtime
+                                                </th>
+                                                <th
+                                                    className="ant-table-cell fz-10 text-center"
+                                                    style={{ width: 150 }}
+                                                >
+                                                    Hours Overtime (Rest Day)
                                                 </th>
                                                 <th
                                                     className="ant-table-cell fz-10 text-center"
@@ -423,6 +500,25 @@ const FormNewPayrollData = ({
                                                                                 "100%"
                                                                         }}
                                                                         value={
+                                                                            employee.days_of_work_rest_day
+                                                                        }
+                                                                        onChange={value =>
+                                                                            handleUpdateEmployee(
+                                                                                key,
+                                                                                "days_of_work_rest_day",
+                                                                                value
+                                                                            )
+                                                                        }
+                                                                        min={0}
+                                                                    />
+                                                                </td>
+                                                                <td className="ant-table-cell">
+                                                                    <InputNumber
+                                                                        style={{
+                                                                            width:
+                                                                                "100%"
+                                                                        }}
+                                                                        value={
                                                                             employee.days_of_work_reg_hol
                                                                         }
                                                                         onChange={value =>
@@ -469,6 +565,26 @@ const FormNewPayrollData = ({
                                                                             handleUpdateEmployee(
                                                                                 key,
                                                                                 "night_pay",
+                                                                                value
+                                                                            )
+                                                                        }
+                                                                        min={0}
+                                                                    />
+                                                                </td>
+                                                                <td className="ant-table-cell">
+                                                                    <InputNumber
+                                                                        style={{
+                                                                            width:
+                                                                                "100%"
+                                                                        }}
+                                                                        name="night_pay_rest_day"
+                                                                        value={
+                                                                            employee.night_pay_rest_day
+                                                                        }
+                                                                        onChange={value =>
+                                                                            handleUpdateEmployee(
+                                                                                key,
+                                                                                "night_pay_rest_day",
                                                                                 value
                                                                             )
                                                                         }
@@ -541,6 +657,26 @@ const FormNewPayrollData = ({
                                                                             width:
                                                                                 "100%"
                                                                         }}
+                                                                        name="hours_overtime_rest_day"
+                                                                        value={
+                                                                            employee.hours_overtime_rest_day
+                                                                        }
+                                                                        onChange={value =>
+                                                                            handleUpdateEmployee(
+                                                                                key,
+                                                                                "hours_overtime_rest_day",
+                                                                                value
+                                                                            )
+                                                                        }
+                                                                        min={0}
+                                                                    />
+                                                                </td>
+                                                                <td className="ant-table-cell">
+                                                                    <InputNumber
+                                                                        style={{
+                                                                            width:
+                                                                                "100%"
+                                                                        }}
                                                                         name="hours_overtime_reg_hol"
                                                                         value={
                                                                             employee.hours_overtime_reg_hol
@@ -586,7 +722,7 @@ const FormNewPayrollData = ({
                                                 >
                                                     <td
                                                         className="ant-table-cell text-center"
-                                                        colSpan={11}
+                                                        colSpan={14}
                                                     >
                                                         No Data Found
                                                     </td>

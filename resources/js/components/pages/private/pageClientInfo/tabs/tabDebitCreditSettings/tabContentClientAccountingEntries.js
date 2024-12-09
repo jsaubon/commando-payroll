@@ -133,6 +133,13 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
         },
         {
             order: 2,
+            title: "Rest Day Pay",
+            amount: 0,
+            fixed_amount: 0,
+            visible: false
+        },
+        {
+            order: 2,
             title: "Reg. Hol. Pay",
             amount: 0,
             fixed_amount: 0,
@@ -152,6 +159,13 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
             fixed_amount: 0,
             visible: true,
             fixed: false
+        },
+        {
+            order: 5,
+            title: "Night Rest Day Pay",
+            amount: 0,
+            fixed_amount: 0,
+            visible: false
         },
         {
             order: 5,
@@ -224,6 +238,13 @@ const TabContentClientAccountingEntries = ({ client_id }) => {
         {
             order: 14,
             title: "Overtime Reg. Hol. Pay",
+            amount: 0,
+            fixed_amount: 0,
+            visible: false
+        },
+        {
+            order: 14,
+            title: "Overtime Rest Day Pay",
             amount: 0,
             fixed_amount: 0,
             visible: false

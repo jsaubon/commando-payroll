@@ -43,3 +43,54 @@ Route::get('testing', function() {
 
     dd($employees);
 });
+Route::get('populate_rest_day', function() {
+    $clients = \App\Client::all();
+    foreach($clients as $client) {
+        $client_accounting_entries = \App\ClientAccountingEntry::updateOrCreate([
+            'client_id' => $client->id,
+            'title' => 'Rest Day Pay',
+            'type' => 'debit',
+        ],[
+            'client_id' => $client->id,
+            'visible' => 0,
+            'type' => 'debit',
+            'title' => 'Rest Day Pay',
+            'amount' => 0,
+            'order' => 2,
+            'fixed' => 0,
+            'fixed_amount' => 0
+        ]);
+
+        $client_accounting_entries = \App\ClientAccountingEntry::updateOrCreate([
+            'client_id' => $client->id,
+            'title' => 'Night Rest Day Pay',
+            'type' => 'debit',
+        ],[
+            'client_id' => $client->id,
+            'visible' => 0,
+            'type' => 'debit',
+            'title' => 'Night Rest Day Pay',
+            'amount' => 0,
+            'order' => 5,
+            'fixed' => 0,
+            'fixed_amount' => 0
+        ]);
+
+        $client_accounting_entries = \App\ClientAccountingEntry::updateOrCreate([
+            'client_id' => $client->id,
+            'title' => 'Overtime Rest Day Pay',
+            'type' => 'debit',
+        ],[
+            'client_id' => $client->id,
+            'visible' => 0,
+            'type' => 'debit',
+            'title' => 'Overtime Rest Day Pay',
+            'amount' => 0,
+            'order' => 15,
+            'fixed' => 0,
+            'fixed_amount' => 0
+        ]);
+
+    }
+
+});

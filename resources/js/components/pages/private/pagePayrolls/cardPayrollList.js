@@ -242,7 +242,7 @@ const CardPayrollList = () => {
                                 onChange={e =>
                                     setPageFilters({
                                         ...pageFilters,
-                                        search: (e.target.value)
+                                        search: e.target.value
                                     })
                                 }
                             />
