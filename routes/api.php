@@ -22,24 +22,28 @@ Route::post('register', 'PassportController@register');
 Route::middleware('auth:api')->group(function () {
     Route::get('user', 'PassportController@details');
 
-    Route::apiResource('user','UserController');
-    Route::apiResource('client','ClientController');
-    Route::apiResource('employee','ClientEmployeeController');
-    Route::apiResource('other_info','OtherInfoController');
-    Route::apiResource('accounting_entry','ClientAccountingEntryController');
-    Route::apiResource('employee_accounting','ClientEmployeeAccountingController');
-    Route::apiResource('employee_deduction','ClientEmployeeDeductionController');
-    Route::apiResource('payroll','ClientPayrollController');
-    Route::apiResource('employee_payroll','ClientEmployeePayrollController');
-    Route::apiResource('employee_assigned_post','ClientEmployeeAssignedPostController');
+    Route::apiResource('user', 'UserController');
+    Route::apiResource('client', 'ClientController');
+    Route::apiResource('employee', 'ClientEmployeeController');
+    Route::apiResource('other_info', 'OtherInfoController');
+    Route::apiResource('accounting_entry', 'ClientAccountingEntryController');
+    Route::apiResource('employee_accounting', 'ClientEmployeeAccountingController');
+    Route::apiResource('employee_deduction', 'ClientEmployeeDeductionController');
+    Route::apiResource('payroll', 'ClientPayrollController');
+    Route::apiResource('employee_payroll', 'ClientEmployeePayrollController');
+    Route::apiResource('employee_assigned_post', 'ClientEmployeeAssignedPostController');
+    Route::apiResource('banks', 'BankController');
+    Route::apiResource('expenses', 'ExpensesController');
+    Route::apiResource('deposits', 'DepositsController');
+    Route::apiResource('client_banks', 'ClientBanksController');
 
-    Route::post('client/logo','ClientController@uploadLogo');
+    Route::post('client/logo', 'ClientController@uploadLogo');
 });
 
-Route::get('testing', function() {
-    $employees = \App\ClientEmployee::where('id',3)
-            ->with(['bonds','client'])
-            ->get()->toArray();
+Route::get('testing', function () {
+    $employees = \App\ClientEmployee::where('id', 3)
+        ->with(['bonds', 'client'])
+        ->get()->toArray();
 
     dd($employees);
 });
