@@ -8,6 +8,9 @@ import PageClientInfo from "../pages/private/pageClientInfo";
 import PagePayrolls from "../pages/private/pagePayrolls";
 import PageReports from "../pages/private/pageReports";
 import PageUsers from "../pages/private/pageUsers";
+import PageExpenses from "../pages/private/PageExpenses/PageExpenses";
+import PageBank from "../pages/private/pageBank/pageBank";
+import PageDeposits from "../pages/private/PageDeposits/PageDeposits";
 
 const LayoutContent = () => {
     const { Content } = Layout;
@@ -32,6 +35,17 @@ const LayoutContent = () => {
                         />
                         <Route exact path="/reports" component={PageReports} />
                         <Route exact path="/users" component={PageUsers} />
+                        <Route exact path="/banks" component={PageBank} />
+                        <Route
+                            exact
+                            path="/deposits"
+                            component={PageDeposits}
+                        />
+                        <Route
+                            exact
+                            path="/expenses"
+                            component={PageExpenses}
+                        />
                         <Route
                             exact
                             path="/clients/:id"

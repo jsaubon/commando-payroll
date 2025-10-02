@@ -27,6 +27,7 @@ import { clientEmployeesTableColumns } from "./pageClientInfo/tabs/tabEmployeesL
 import TabContentClientEmployees from "./pageClientInfo/tabs/tabEmployeesList/tabContentClientEmployees";
 import TabContentClientAccountingEntries from "./pageClientInfo/tabs/tabDebitCreditSettings/tabContentClientAccountingEntries";
 import TabClientPayrolls from "./pageClientInfo/tabs/tabClientPayrolls/tabClientPayrolls";
+import TabsContentBanks from "./pageClientInfo/tabs/tabsBanks/tabsContentBanks";
 const PageClientInfo = ({ match, history }) => {
     const client_id = match.params.id;
     const [clientInfo, setClientInfo] = useState();
@@ -107,6 +108,9 @@ const PageClientInfo = ({ match, history }) => {
                                 <TabContentClientAccountingEntries
                                     client_id={client_id}
                                 />
+                            </Tabs.TabPane>
+                            <Tabs.TabPane tab="Banks" key="4">
+                                <TabsContentBanks client_id={client_id} />
                             </Tabs.TabPane>
                         </Tabs>
                     </Card>
