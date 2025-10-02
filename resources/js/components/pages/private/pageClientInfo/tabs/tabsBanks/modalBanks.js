@@ -9,7 +9,7 @@ export default function ModalBanks(props) {
     // console.log(dataBankName);
 
     useEffect(() => {
-        fetchData("GET", "api/client?sort=asc").then(res => {
+        fetchData("GET", "api/banks?sort=asc").then(res => {
             console.log(res);
             if (res.success) {
                 setDataBankName(res.data);
@@ -17,6 +17,7 @@ export default function ModalBanks(props) {
         });
         return () => {};
     }, []);
+
     useEffect(() => {
         if (togglemodalBanks.open) {
             form.setFieldsValue({
@@ -69,11 +70,11 @@ export default function ModalBanks(props) {
                         rules={[
                             {
                                 required: true,
-                                message: "Please Select Bank"
+                                message: "Please Select Bank Name"
                             }
                         ]}
                     >
-                        <Select placeholder="Select Banks">
+                        <Select placeholder="Select Bank Name">
                             {dataBankName?.data?.map(bank => (
                                 <Select.Option
                                     key={bank.id}

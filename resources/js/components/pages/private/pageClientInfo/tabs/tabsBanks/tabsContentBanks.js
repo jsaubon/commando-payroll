@@ -78,7 +78,7 @@ export default function TabsContentBanks(props) {
                                 setTogglemodalBanks({ open: true, data: null })
                             }
                         >
-                            New Bank
+                            New
                         </Button>
                     )}
                 </Col>
