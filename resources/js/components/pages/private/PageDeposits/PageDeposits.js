@@ -33,7 +33,7 @@ export default function PageDeposits() {
         fetchData("DELETE", "api/deposits/" + record.id).then(res => {
             if (res.success) {
                 notification.success({
-                    message: res.message,
+                    message: "Deposit",
                     description: res.message
                 });
                 setDataDeposit(prev =>

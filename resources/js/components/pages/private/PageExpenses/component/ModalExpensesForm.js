@@ -25,8 +25,8 @@ export default function ModalExpensesForm(props) {
                 // console.log(res);
                 if (res.success) {
                     notification.success({
-                        message: res.message,
-                        description: res.description
+                        message: "Expense",
+                        description: res.message
                     });
                     setFormLoadingExpenses(false);
                     refreshExpenses();
@@ -37,7 +37,7 @@ export default function ModalExpensesForm(props) {
             })
             .catch(err => {
                 notification.error({
-                    message: err.message,
+                    message: "Expense",
                     description: err.message
                 });
                 setFormLoadingExpenses(false);

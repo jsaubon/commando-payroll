@@ -39,7 +39,8 @@ export default function PageBank() {
         fetchData("DELETE", "api/banks/" + record.id).then(res => {
             if (res.success) {
                 notification.success({
-                    message: "Bank Successfully Deleted!"
+                    message: "Bank",
+                    description: res.message
                 });
                 setDataBanks(prev =>
                     prev.filter(bank => bank.id !== record.id)

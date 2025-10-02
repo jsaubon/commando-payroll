@@ -25,7 +25,7 @@ export default function ModalDepositsForm(props) {
                 // console.log(res);
                 if (res.success) {
                     notification.success({
-                        message: res.message,
+                        message: "Deposit",
                         description: res.description
                     });
                     setFormLoadingDeposits(false);
@@ -37,7 +37,7 @@ export default function ModalDepositsForm(props) {
             })
             .catch(err => {
                 notification.error({
-                    message: err.message,
+                    message: "Deposit",
                     description: err.message
                 });
                 setFormLoadingDeposits(false);

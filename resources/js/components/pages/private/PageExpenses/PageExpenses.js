@@ -35,7 +35,7 @@ export default function PageExpenses() {
         fetchData("DELETE", "api/expenses/" + record.id).then(res => {
             if (res.success) {
                 notification.success({
-                    message: res.message,
+                    message: "Expense",
                     description: res.message
                 });
                 setDataExpenses(prev =>

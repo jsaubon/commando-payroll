@@ -41,8 +41,8 @@ export default function ModalBanks(props) {
                 console.log(res);
                 if (res.success) {
                     notification.success({
-                        message: res.message,
-                        description: res.description
+                        message: "Bank",
+                        description: res.message
                     });
                     setFormLoadingClientBank(false);
                     refreshClientBanks();
@@ -53,7 +53,7 @@ export default function ModalBanks(props) {
             })
             .catch(err => {
                 notification.error({
-                    message: err.message,
+                    message: "Bank",
                     description: err.message
                 });
                 setFormLoadingClientBank(false);
