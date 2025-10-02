@@ -1,7 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import ButtonGroup from "antd/lib/button/button-group";
-import { Button, Card, Popconfirm, Table, Typography } from "antd";
+import {
+    Button,
+    Card,
+    notification,
+    Popconfirm,
+    Table,
+    Typography
+} from "antd";
+
+import { fetchData } from "../../../../axios";
 import ModalDepositsForm from "./component/ModalDepositsForm";
 
 export default function PageDeposits() {
@@ -10,13 +19,35 @@ export default function PageDeposits() {
         open: false
     });
 
-    const dataSource = [
-        {
-            key: "1",
-            deposit_name: "Client Payment",
-            deposit_description: "Deposit from client payment"
-        }
-    ];
+    const [dataDeposit, setDataDeposit] = useState([]);
+
+    const getDeposits = () => {
+        fetchData("GET", "api/deposits").then(res => {
+            if (res.success) {
+                setDataDeposit(res.data);
+            }
+        });
+    };
+
+    const handleDeleteDeposit = record => {
+        fetchData("DELETE", "api/deposits/" + record.id).then(res => {
+            if (res.success) {
+                notification.success({
+                    message: res.message,
+                    description: res.message
+                });
+                setDataDeposit(prev =>
+                    prev.filter(deposit => deposit.id !== record.id)
+                );
+            }
+        });
+    };
+
+    useEffect(() => {
+        getDeposits();
+        return () => {};
+    }, []);
+
     const columns = [
         {
             title: "Deposit  Name",
@@ -58,9 +89,7 @@ export default function PageDeposits() {
                             >
                                 <Popconfirm
                                     title="Are you sure delete this data?"
-                                    // onConfirm={e =>
-                                    //     handleDeleteUser(record)
-                                    // }
+                                    onConfirm={e => handleDeleteDeposit(record)}
                                     okText="Yes"
                                     cancelText="No"
                                 >
@@ -90,7 +119,7 @@ export default function PageDeposits() {
             <Card className="mt-10">
                 <Table
                     columns={columns}
-                    dataSource={dataSource}
+                    dataSource={dataDeposit}
                     pagination={false}
                     size="small"
                 />
@@ -99,6 +128,7 @@ export default function PageDeposits() {
             <ModalDepositsForm
                 toggleModalDepositsForm={toggleModalDepositsForm}
                 setToggleModalDepositsForm={setToggleModalDepositsForm}
+                refreshDeposits={getDeposits}
             />
         </div>
     );

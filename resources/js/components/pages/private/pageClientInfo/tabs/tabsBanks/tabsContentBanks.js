@@ -1,19 +1,49 @@
-import React, { useState } from "react";
-import { DeleteOutlined } from "@ant-design/icons";
-import ButtonGroup from "antd/lib/button/button-group";
+import React, { useEffect, useState } from "react";
+
 import { Button, Col, Input, Popconfirm, Row, Table } from "antd";
+
+import { fetchData } from "../../../../../../axios";
 
 import ModalBanks from "./modalBanks";
 
 export default function TabsContentBanks(props) {
     const { client_id } = props;
-    // console.log("client_id TabsContentBanks  ", client_id);
 
     const [togglemodalBanks, setTogglemodalBanks] = useState({
         open: false,
         data: null
     });
 
+    const [dataClientBanks, setDataClientBanks] = useState([]);
+    const [clientBankTableSettings, setClientBankTableSettings] = useState({
+        size: 20,
+        page: 1,
+        search: "",
+        order: "id",
+        sort: "asc"
+    });
+
+    const getClientBank = () => {
+        fetchData(
+            "GET",
+            "api/client_banks?client_id=" +
+                client_id +
+                "&search=" +
+                clientBankTableSettings.search +
+                "&page=" +
+                clientBankTableSettings.page +
+                "&size=" +
+                clientBankTableSettings.size +
+                "&order=" +
+                clientBankTableSettings.order +
+                "&sort=" +
+                clientBankTableSettings.sort
+        ).then(res => {
+            if (res.success) {
+                setDataClientBanks(res.data);
+            }
+        });
+    };
     const columns = [
         {
             title: "Bank Name",
@@ -22,8 +52,8 @@ export default function TabsContentBanks(props) {
         },
         {
             title: "Notes",
-            dataIndex: "Notes",
-            key: "Notes"
+            dataIndex: "notes",
+            key: "notes"
         }
 
         // {
@@ -67,6 +97,32 @@ export default function TabsContentBanks(props) {
     ];
     let userdata = JSON.parse(localStorage.userdata);
 
+    const handleOnPageChange = (page, pageSize) => {
+        setClientBankTableSettings({
+            ...clientBankTableSettings,
+            page: page,
+            size: pageSize
+        });
+    };
+    const handleOnPageSizeChange = (page, pageSize) => {
+        setClientBankTableSettings({
+            ...clientBankTableSettings,
+            page: page,
+            size: pageSize
+        });
+    };
+
+    const handleSearchBank = search => {
+        setClientBankTableSettings({
+            ...clientBankTableSettings,
+            search: search
+        });
+    };
+    useEffect(() => {
+        getClientBank();
+        return () => {};
+    }, [clientBankTableSettings]);
+
     return (
         <>
             <Row className="mb-10">
@@ -85,20 +141,43 @@ export default function TabsContentBanks(props) {
                 <Col xs={24} md={6} className="px-0">
                     <div style={{ display: "flex" }}>
                         <Input.Search
-                        // placeholder="Search Employee"
-                        // onSearch={value => handleSearchEmployee(value)}
-                        // style={{ width: "100%" }}
-                        // className="pull-right"
-                        // onChange={e => handleSearchEmployee(e.target.value)}
+                            allowClear
+                            placeholder="Search Bank"
+                            onSearch={value => handleSearchBank(value)}
+                            style={{ width: "100%" }}
+                            className="pull-right"
+                            onChange={e => handleSearchBank(e.target.value)}
                         />
                     </div>
                 </Col>
             </Row>
-            <Table columns={columns} />
+            <Table
+                columns={columns}
+                dataSource={dataClientBanks}
+                rowKey={record => record.id}
+                pagination={{
+                    onChange: (page, pageSize) =>
+                        handleOnPageChange(page, pageSize),
+                    onShowSizeChange: (current, size) =>
+                        handleOnPageSizeChange(current, size),
+                    total: clientBankTableSettings.total
+                }}
+                onChange={(pagination, filters, sorter) => {
+                    setClientBankTableSettings({
+                        ...clientBankTableSettings,
+                        order: sorter.columnKey ? sorter.columnKey : "id",
+                        sort: sorter.order
+                            ? sorter.order.replace("end", "")
+                            : "asc"
+                    });
+                }}
+            />
 
             <ModalBanks
                 togglemodalBanks={togglemodalBanks}
                 setTogglemodalBanks={setTogglemodalBanks}
+                client_id={client_id}
+                refreshClientBanks={getClientBank}
             />
         </>
     );

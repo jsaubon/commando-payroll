@@ -1,8 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import ButtonGroup from "antd/lib/button/button-group";
-import { Button, Card, Popconfirm, Table, Typography } from "antd";
+import {
+    Button,
+    Card,
+    notification,
+    Popconfirm,
+    Table,
+    Typography
+} from "antd";
 
+import { fetchData } from "../../../../axios";
 import ModalExpensesForm from "./component/ModalExpensesForm";
 
 export default function PageExpenses() {
@@ -11,13 +19,37 @@ export default function PageExpenses() {
         data: null
     });
 
-    const dataSource = [
-        {
-            key: "1",
-            expense_name: "Office Supplies",
-            expense_description: "Expenses for office supplies"
-        }
-    ];
+    const [dataExpenses, setDataExpenses] = useState([]);
+
+    const getExpenses = () => {
+        fetchData("GET", "api/expenses").then(res => {
+            // console.log("dataExpenses", res.data);
+
+            if (res.success) {
+                setDataExpenses(res.data);
+            }
+        });
+    };
+
+    const handleDeleteExpense = record => {
+        fetchData("DELETE", "api/expenses/" + record.id).then(res => {
+            if (res.success) {
+                notification.success({
+                    message: res.message,
+                    description: res.message
+                });
+                setDataExpenses(prev =>
+                    prev.filter(expense => expense.id !== record.id)
+                );
+            }
+        });
+    };
+
+    useEffect(() => {
+        getExpenses();
+        return () => {};
+    }, []);
+
     const columns = [
         {
             title: "Expense Name",
@@ -59,9 +91,7 @@ export default function PageExpenses() {
                             >
                                 <Popconfirm
                                     title="Are you sure delete this data?"
-                                    // onConfirm={e =>
-                                    //     handleDeleteUser(record)
-                                    // }
+                                    onConfirm={e => handleDeleteExpense(record)}
                                     okText="Yes"
                                     cancelText="No"
                                 >
@@ -90,7 +120,7 @@ export default function PageExpenses() {
             <Card className="mt-10">
                 <Table
                     columns={columns}
-                    dataSource={dataSource}
+                    dataSource={dataExpenses}
                     pagination={false}
                     size="small"
                 />
@@ -99,6 +129,7 @@ export default function PageExpenses() {
             <ModalExpensesForm
                 toggleModalExpensesForm={toggleModalExpensesForm}
                 setToggleModalExpensesForm={setToggleModalExpensesForm}
+                refreshExpenses={getExpenses}
             />
         </div>
     );

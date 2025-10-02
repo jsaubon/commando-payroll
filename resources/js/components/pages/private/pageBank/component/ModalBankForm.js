@@ -1,14 +1,59 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
-import { Button, DatePicker, Form, Input, Modal, Select } from "antd";
+import {
+    Button,
+    DatePicker,
+    Form,
+    Input,
+    Modal,
+    notification,
+    Select
+} from "antd";
 
 import { fetchData } from "../../../../../axios";
 
 export default function ModalBankForm(props) {
-    const { toggleModalBankForm, setToggleModalBankForm } = props;
+    const { toggleModalBankForm, setToggleModalBankForm, refreshBanks } = props;
     // console.log("toggleModalBankForm", toggleModalBankForm);
 
     const [form] = Form.useForm();
+    const [formLoadingBank, setFormLoadingBank] = useState(false);
+
+    const onFinish = values => {
+        console.log("Success:", values);
+
+        let data = {
+            ...values,
+            id: toggleModalBankForm.data?.id || "",
+            expiration_date: values.expiration_date
+                ? moment(values.expiration_date).format("YYYY-MM-DD")
+                : ""
+        };
+
+        fetchData("POST", "api/banks", data)
+            .then(res => {
+                console.log(res);
+                if (res.success) {
+                    notification.success({
+                        message: res.message,
+                        description: res.description
+                    });
+                    setFormLoadingBank(false);
+                    refreshBanks();
+
+                    setToggleModalBankForm({ open: false, data: null });
+                    form.resetFields();
+                }
+            })
+            .catch(err => {
+                notification.error({
+                    message: err.message,
+                    description: err.message
+                });
+                setFormLoadingBank(false);
+            });
+        setFormLoadingBank(false);
+    };
 
     useEffect(() => {
         if (toggleModalBankForm.open) {
@@ -29,6 +74,7 @@ export default function ModalBankForm(props) {
         <Modal
             title={toggleModalBankForm.data ? "Edit Bank" : "Add Bank"}
             visible={toggleModalBankForm.open}
+            afterClose={() => form.resetFields()}
             onCancel={() => setToggleModalBankForm({ open: false, data: null })}
             footer={[
                 <>
@@ -37,27 +83,31 @@ export default function ModalBankForm(props) {
                         shape="square"
                         size="medium"
                         onClick={() => {
-                            form.resetFields();
                             setToggleModalBankForm({
                                 open: false,
                                 data: null
                             });
+                            form.resetFields();
                         }}
+                        key={1}
+                        disabled={formLoadingBank}
                     >
                         Close
                     </Button>
                     <Button
                         key="submit"
+                        onClick={() => form.submit()}
                         type="primary"
                         shape="square"
                         size="medium"
+                        loading={formLoadingBank}
                     >
                         Save
                     </Button>
                 </>
             ]}
         >
-            <Form {...layout} form={form}>
+            <Form {...layout} form={form} onFinish={onFinish}>
                 <Form.Item
                     label="Bank Name"
                     name="bank_name"
@@ -108,6 +158,12 @@ export default function ModalBankForm(props) {
                     required
                     name="account_number"
                     className="mb-15"
+                    rules={[
+                        {
+                            required: true,
+                            message: "Account number is required"
+                        }
+                    ]}
                 >
                     <Input name="account_number" />
                 </Form.Item>

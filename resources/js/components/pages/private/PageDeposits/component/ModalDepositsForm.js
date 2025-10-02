@@ -1,8 +1,49 @@
-import React, { useEffect } from "react";
-import { Button, Form, Input, Modal } from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, Form, Input, Modal, notification } from "antd";
+
+import { fetchData } from "../../../../../axios";
 
 export default function ModalDepositsForm(props) {
-    const { toggleModalDepositsForm, setToggleModalDepositsForm } = props;
+    const {
+        toggleModalDepositsForm,
+        setToggleModalDepositsForm,
+        refreshDeposits
+    } = props;
+
+    const [formLoadingDeposits, setFormLoadingDeposits] = useState(false);
+
+    const onFinish = values => {
+        // console.log("Success:", values);
+
+        let data = {
+            ...values,
+            id: toggleModalDepositsForm.data?.id || ""
+        };
+
+        fetchData("POST", "api/deposits", data)
+            .then(res => {
+                // console.log(res);
+                if (res.success) {
+                    notification.success({
+                        message: res.message,
+                        description: res.description
+                    });
+                    setFormLoadingDeposits(false);
+                    refreshDeposits();
+
+                    setToggleModalDepositsForm({ open: false, data: null });
+                    form.resetFields();
+                }
+            })
+            .catch(err => {
+                notification.error({
+                    message: err.message,
+                    description: err.message
+                });
+                setFormLoadingDeposits(false);
+            });
+        setFormLoadingDeposits(false);
+    };
 
     const [form] = Form.useForm();
     useEffect(() => {
@@ -32,6 +73,7 @@ export default function ModalDepositsForm(props) {
                         type="default"
                         shape="square"
                         size="medium"
+                        disabled={formLoadingDeposits}
                         onClick={() => {
                             form.resetFields();
                             setToggleModalDepositsForm({
@@ -47,13 +89,15 @@ export default function ModalDepositsForm(props) {
                         type="primary"
                         shape="square"
                         size="medium"
+                        onClick={() => form.submit()}
+                        loading={formLoadingDeposits}
                     >
                         Save
                     </Button>
                 </>
             ]}
         >
-            <Form {...layout} form={form}>
+            <Form {...layout} form={form} onFinish={onFinish}>
                 <Form.Item
                     label="Deposit  Name"
                     name="deposit_name"

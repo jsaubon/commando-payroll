@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Popconfirm, Table, Typography } from "antd";
+import {
+    Button,
+    Card,
+    notification,
+    Popconfirm,
+    Table,
+    Typography
+} from "antd";
 import ButtonGroup from "antd/lib/button/button-group";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
@@ -11,15 +18,20 @@ export default function PageBank() {
         open: false,
         data: null
     });
+    const [dataBanks, setDataBanks] = useState([]);
 
     useEffect(() => {
-        getUsers();
+        getBanks();
         return () => {};
     }, []);
 
-    const getUsers = () => {
+    const getBanks = () => {
         fetchData("GET", "api/banks").then(res => {
-            console.log(res);
+            console.log("dataBanks", res.data);
+
+            if (res.success) {
+                setDataBanks(res.data);
+            }
         });
     };
 
@@ -29,34 +41,13 @@ export default function PageBank() {
                 notification.success({
                     message: "Bank Successfully Deleted!"
                 });
-                getUsers();
+                setDataBanks(prev =>
+                    prev.filter(bank => bank.id !== record.id)
+                );
             }
         });
     };
 
-    const [clientInfo, setClientInfo] = useState();
-
-    const getClientInfo = () => {
-        fetchData("GET", "api/client/" + client_id).then(res => {
-            // console.log(res);
-            if (res.success) {
-                setClientInfo(res.data);
-            }
-        });
-    };
-
-    const dataSource = [
-        {
-            key: "1",
-            bank_name: "Bank of America",
-            bank_branch: "Los Angeles",
-            account_name: "John Doe",
-            account_type: "Checking Accounts",
-            account_number: "123456789",
-
-            expiration_date: "12/12/2025"
-        }
-    ];
     const columns = [
         {
             title: "Bank Name",
@@ -148,7 +139,7 @@ export default function PageBank() {
             <Card className="mt-10">
                 <Table
                     columns={columns}
-                    dataSource={dataSource}
+                    dataSource={dataBanks}
                     pagination={false}
                     size="small"
                 />
@@ -157,6 +148,7 @@ export default function PageBank() {
             <ModalBankForm
                 toggleModalBankForm={toggleModalBankForm}
                 setToggleModalBankForm={setToggleModalBankForm}
+                refreshBanks={getBanks}
             />
         </div>
     );

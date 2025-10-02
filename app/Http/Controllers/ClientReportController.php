@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Bank;
 use App\ClientReport;
 use Illuminate\Http\Request;
 
@@ -57,8 +58,5 @@ class ClientReportController extends Controller
      * @param  \App\ClientReport  $clientReport
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ClientReport $clientReport)
-    {
-        //
-    }
+    public function destroy(ClientReport $id) {}
 }

@@ -1,9 +1,49 @@
 import React, { useEffect } from "react";
-import { Button, Form, Input, Modal } from "antd";
+import { Button, Form, Input, Modal, notification } from "antd";
+
+import { fetchData } from "../../../../../axios";
 
 export default function ModalExpensesForm(props) {
-    const { toggleModalExpensesForm, setToggleModalExpensesForm } = props;
+    const {
+        toggleModalExpensesForm,
+        setToggleModalExpensesForm,
+        refreshExpenses
+    } = props;
     const [form] = Form.useForm();
+    const [formLoadingExpenses, setFormLoadingExpenses] = React.useState(false);
+
+    const onFinish = values => {
+        // console.log("Success:", values);
+
+        let data = {
+            ...values,
+            id: toggleModalExpensesForm.data?.id || ""
+        };
+
+        fetchData("POST", "api/expenses", data)
+            .then(res => {
+                // console.log(res);
+                if (res.success) {
+                    notification.success({
+                        message: res.message,
+                        description: res.description
+                    });
+                    setFormLoadingExpenses(false);
+                    refreshExpenses();
+
+                    setToggleModalExpensesForm({ open: false, data: null });
+                    form.resetFields();
+                }
+            })
+            .catch(err => {
+                notification.error({
+                    message: err.message,
+                    description: err.message
+                });
+                setFormLoadingExpenses(false);
+            });
+        setFormLoadingExpenses(false);
+    };
 
     useEffect(() => {
         if (toggleModalExpensesForm.open) {
@@ -23,6 +63,7 @@ export default function ModalExpensesForm(props) {
             title={
                 toggleModalExpensesForm.data ? "Edit Expense" : "Add Expense"
             }
+            afterClose={() => form.resetFields()}
             visible={toggleModalExpensesForm.open}
             onCancel={() =>
                 setToggleModalExpensesForm({ open: false, data: null })
@@ -33,6 +74,7 @@ export default function ModalExpensesForm(props) {
                         type="default"
                         shape="square"
                         size="medium"
+                        disabled={formLoadingExpenses}
                         onClick={() => {
                             form.resetFields();
                             setToggleModalExpensesForm({
@@ -48,13 +90,14 @@ export default function ModalExpensesForm(props) {
                         type="primary"
                         shape="square"
                         size="medium"
+                        onClick={() => form.submit()}
                     >
                         Save
                     </Button>
                 </>
             ]}
         >
-            <Form {...layout} form={form}>
+            <Form {...layout} form={form} onFinish={onFinish}>
                 <Form.Item
                     label="Expense Name"
                     name="expense_name"

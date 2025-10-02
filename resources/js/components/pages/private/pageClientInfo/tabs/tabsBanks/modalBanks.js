@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Button, Modal, Form, Col, Select, Input } from "antd";
+import { Button, Modal, Form, Col, Select, Input, notification } from "antd";
+
 import { fetchData } from "../../../../../../axios";
 
 export default function ModalBanks(props) {
-    const { togglemodalBanks, setTogglemodalBanks } = props;
+    const {
+        togglemodalBanks,
+        setTogglemodalBanks,
+        client_id,
+        refreshClientBanks
+    } = props;
+
     const [form] = Form.useForm();
     const [dataBankName, setDataBankName] = useState(null);
     // console.log(dataBankName);
@@ -17,6 +24,42 @@ export default function ModalBanks(props) {
         });
         return () => {};
     }, []);
+
+    const [formLoadingClientBank, setFormLoadingClientBank] = useState(false);
+
+    const onFinish = values => {
+        console.log("Success:", values);
+
+        let data = {
+            ...values,
+            id: togglemodalBanks.data?.id || "",
+            client_id: client_id
+        };
+
+        fetchData("POST", "api/client_banks", data)
+            .then(res => {
+                console.log(res);
+                if (res.success) {
+                    notification.success({
+                        message: res.message,
+                        description: res.description
+                    });
+                    setFormLoadingClientBank(false);
+                    refreshClientBanks();
+
+                    setTogglemodalBanks({ open: false, data: null });
+                    form.resetFields();
+                }
+            })
+            .catch(err => {
+                notification.error({
+                    message: err.message,
+                    description: err.message
+                });
+                setFormLoadingClientBank(false);
+            });
+        setFormLoadingClientBank(false);
+    };
 
     useEffect(() => {
         if (togglemodalBanks.open) {
@@ -41,6 +84,7 @@ export default function ModalBanks(props) {
                         type="default"
                         shape="square"
                         size="medium"
+                        disabled={formLoadingClientBank}
                         onClick={() => {
                             form.resetFields();
                             setTogglemodalBanks({
@@ -56,17 +100,19 @@ export default function ModalBanks(props) {
                         type="primary"
                         shape="square"
                         size="medium"
+                        loading={formLoadingClientBank}
+                        onClick={() => form.submit()}
                     >
                         Save
                     </Button>
                 </>
             ]}
         >
-            <Form {...layout} form={form}>
+            <Form {...layout} form={form} onFinish={onFinish}>
                 <Col xs={24} md={8} lg={24}>
                     <Form.Item
                         label="Bank Name"
-                        name="bank_name"
+                        name="bank_id"
                         rules={[
                             {
                                 required: true,
@@ -74,15 +120,19 @@ export default function ModalBanks(props) {
                             }
                         ]}
                     >
-                        <Select placeholder="Select Bank Name">
-                            {dataBankName?.data?.map(bank => (
-                                <Select.Option
-                                    key={bank.id}
-                                    value={bank.bank_name}
-                                >
-                                    {bank.bank_name}
-                                </Select.Option>
-                            ))}
+                        <Select
+                            allowClear
+                            name="bank_id"
+                            required
+                            label="Select Bank Name"
+                            placeholder="Select Bank Name"
+                        >
+                            {dataBankName &&
+                                dataBankName.map((item, index) => (
+                                    <Select.Option key={index} value={item.id}>
+                                        {item.bank_name}
+                                    </Select.Option>
+                                ))}
                         </Select>
                     </Form.Item>
                     <Form.Item label="Notes" name="notes">
