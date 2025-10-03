@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Modal, Form, Col, Select, Input, notification } from "antd";
 
 import { fetchData } from "../../../../../../axios";
+import { notificationErrors } from "../../../../../notificationErrors";
 
 export default function ModalBanks(props) {
     const {
@@ -52,10 +53,7 @@ export default function ModalBanks(props) {
                 }
             })
             .catch(err => {
-                notification.error({
-                    message: "Bank",
-                    description: err.message
-                });
+                notificationErrors(err);
                 setFormLoadingClientBank(false);
             });
         setFormLoadingClientBank(false);

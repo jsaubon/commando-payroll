@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { Button, Form, Input, Modal, notification } from "antd";
 
 import { fetchData } from "../../../../../axios";
+import { notificationErrors } from "../../../../notificationErrors";
+import validateRules from "../../../../validateRules";
 
 export default function ModalExpensesForm(props) {
     const {
@@ -36,10 +38,7 @@ export default function ModalExpensesForm(props) {
                 }
             })
             .catch(err => {
-                notification.error({
-                    message: "Expense",
-                    description: err.message
-                });
+                notificationErrors(err);
                 setFormLoadingExpenses(false);
             });
         setFormLoadingExpenses(false);
@@ -103,6 +102,7 @@ export default function ModalExpensesForm(props) {
                     name="expense_name"
                     className="mb-15"
                     required
+                    rules={[validateRules.required()]}
                 >
                     <Input name="expense_name" />
                 </Form.Item>
@@ -111,6 +111,7 @@ export default function ModalExpensesForm(props) {
                     label="Expense Description"
                     name="expense_description"
                     className="mb-15"
+                    rules={[validateRules.required()]}
                 >
                     <Input name="expense_description" />
                 </Form.Item>

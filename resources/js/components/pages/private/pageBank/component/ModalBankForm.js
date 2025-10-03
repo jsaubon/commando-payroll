@@ -12,6 +12,7 @@ import {
 
 import { fetchData } from "../../../../../axios";
 import { notificationErrors } from "../../../../notificationErrors";
+import validateRules from "../../../../validateRules";
 
 export default function ModalBankForm(props) {
     const { toggleModalBankForm, setToggleModalBankForm, refreshBanks } = props;
@@ -112,6 +113,7 @@ export default function ModalBankForm(props) {
                     name="bank_name"
                     className="mb-15"
                     required
+                    rules={[validateRules.required()]}
                 >
                     <Input name="bank_name" />
                 </Form.Item>
@@ -120,6 +122,7 @@ export default function ModalBankForm(props) {
                     label="Bank Branch"
                     name="bank_branch"
                     className="mb-15"
+                    rules={[validateRules.required()]}
                 >
                     <Input name="bank_branch" />
                 </Form.Item>
@@ -128,6 +131,7 @@ export default function ModalBankForm(props) {
                     name="account_name"
                     className="mb-15"
                     required
+                    rules={[validateRules.required()]}
                 >
                     <Input name="account_name" />
                 </Form.Item>
@@ -135,9 +139,15 @@ export default function ModalBankForm(props) {
                     label="Account Type"
                     name="account_type"
                     className="mb-15"
+                    rules={[validateRules.required()]}
                     required
                 >
-                    <Select name="account_type" required>
+                    <Select
+                        name="account_type"
+                        required
+                        allowClear
+                        rules={[validateRules.required()]}
+                    >
                         <Select.Option value="Checking Accounts">
                             Checking Accounts
                         </Select.Option>
@@ -157,12 +167,7 @@ export default function ModalBankForm(props) {
                     required
                     name="account_number"
                     className="mb-15"
-                    rules={[
-                        {
-                            required: true,
-                            message: "Account number is required"
-                        }
-                    ]}
+                    rules={[validateRules.required()]}
                 >
                     <Input name="account_number" />
                 </Form.Item>
@@ -171,6 +176,7 @@ export default function ModalBankForm(props) {
                     name="expiration_date"
                     className="mb-15"
                     required
+                    rules={[validateRules.required()]}
                 >
                     <DatePicker name="expiration_date" />
                 </Form.Item>

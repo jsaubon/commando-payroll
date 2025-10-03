@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Button, Form, Input, Modal, notification } from "antd";
 
 import { fetchData } from "../../../../../axios";
+import { notificationErrors } from "../../../../notificationErrors";
+import validateRules from "../../../../validateRules";
 
 export default function ModalDepositsForm(props) {
     const {
@@ -36,10 +38,7 @@ export default function ModalDepositsForm(props) {
                 }
             })
             .catch(err => {
-                notification.error({
-                    message: "Deposit",
-                    description: err.message
-                });
+                notificationErrors(err);
                 setFormLoadingDeposits(false);
             });
         setFormLoadingDeposits(false);
@@ -103,6 +102,7 @@ export default function ModalDepositsForm(props) {
                     name="deposit_name"
                     className="mb-15"
                     required
+                    rules={[validateRules.required()]}
                 >
                     <Input name="deposit_name" />
                 </Form.Item>
@@ -111,6 +111,7 @@ export default function ModalDepositsForm(props) {
                     label="Deposit  Description"
                     name="deposit_description"
                     className="mb-15"
+                    rules={[validateRules.required()]}
                 >
                     <Input name="deposit_description" />
                 </Form.Item>
