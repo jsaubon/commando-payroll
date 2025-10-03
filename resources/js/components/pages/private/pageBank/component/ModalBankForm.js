@@ -11,6 +11,7 @@ import {
 } from "antd";
 
 import { fetchData } from "../../../../../axios";
+import { notificationErrors } from "../../../../notificationErrors";
 
 export default function ModalBankForm(props) {
     const { toggleModalBankForm, setToggleModalBankForm, refreshBanks } = props;
@@ -46,11 +47,8 @@ export default function ModalBankForm(props) {
                 }
             })
             .catch(err => {
-                console.log("err", err);
-                notification.error({
-                    message: err.message,
-                    description: err.message
-                });
+                // console.log("err", err);
+                notificationErrors(err);
                 setFormLoadingBank(false);
             });
         setFormLoadingBank(false);

@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Bank;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+
 
 class BankController extends Controller
 {
@@ -70,28 +70,28 @@ class BankController extends Controller
             "message" => "Data not " . ($request->id ? "update" : "save"),
         ];
 
+
         $dataBank = $request->validate([
-            'bank_name' => 'required|string',
-            'bank_branch' => 'required|string',
-            'account_name' => 'required|string',
-            'account_type' => 'required|string',
-            'account_number' => 'required|regex:/^\d+(-\d+)*$/',
+            'bank_name'       => 'required|string',
+            'bank_branch'     => 'required|string',
+            'account_name'    => 'required|string',
+            'account_type'    => 'required|string',
+            'account_number'  => 'required|regex:/^\d+(-\d+)*$/',
             'expiration_date' => 'required|date',
+        ], [
+            'account_number.regex' => 'The account number format is invalid.',
         ]);
 
         try {
             DB::transaction(function () use ($request, $dataBank, &$ret) {
-                $query = Bank::updateOrCreate(
+                Bank::updateOrCreate(
                     ["id" => $request->id ?? null],
                     $dataBank
                 );
 
-                if ($query) {
-                    $ret = [
-                        "success" => true,
-                        "message" => "Data " . ($request->id ? "updated" : "saved") . " successfully",
-                    ];
-                }
+
+                $ret['success'] = true;
+                $ret['message'] = "Data " . ($request->id ? "updated" : "saved") . " successfully";
             });
         } catch (\Throwable $th) {
             //throw $th;
@@ -99,6 +99,7 @@ class BankController extends Controller
         }
 
 
+        $ret['request'] = $request->all();
 
         return response()->json($ret, 200);
     }
