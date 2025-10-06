@@ -36,6 +36,8 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('expenses', 'ExpensesController');
     Route::apiResource('deposits', 'DepositsController');
     Route::apiResource('client_banks', 'ClientBanksController');
+    Route::apiResource('client_expenses', 'ClientExpensesController');
+    Route::apiResource('client_deposits', 'ClientDepositController');
 
     Route::post('client/logo', 'ClientController@uploadLogo');
 });
