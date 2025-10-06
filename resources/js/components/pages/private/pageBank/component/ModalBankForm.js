@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment";
 import {
     Button,
+    Col,
     DatePicker,
     Form,
     Input,
@@ -11,8 +11,9 @@ import {
 } from "antd";
 
 import { fetchData } from "../../../../../axios";
-import { notificationErrors } from "../../../../notificationErrors";
+import moment from "moment";
 import validateRules from "../../../../validateRules";
+import { notificationErrors } from "../../../../notificationErrors";
 
 export default function ModalBankForm(props) {
     const { toggleModalBankForm, setToggleModalBankForm, refreshBanks } = props;
@@ -22,8 +23,6 @@ export default function ModalBankForm(props) {
     const [formLoadingBank, setFormLoadingBank] = useState(false);
 
     const onFinish = values => {
-        console.log("Success:", values);
-
         let data = {
             ...values,
             id: toggleModalBankForm.data?.id || "",
@@ -48,9 +47,8 @@ export default function ModalBankForm(props) {
                 }
             })
             .catch(err => {
-                // console.log("err", err);
                 notificationErrors(err);
-                setFormLoadingBank(false);
+                // err,
             });
         setFormLoadingBank(false);
     };
@@ -108,78 +106,83 @@ export default function ModalBankForm(props) {
             ]}
         >
             <Form {...layout} form={form} onFinish={onFinish}>
-                <Form.Item
-                    label="Bank Name"
-                    name="bank_name"
-                    className="mb-15"
-                    required
-                    rules={[validateRules.required()]}
-                >
-                    <Input name="bank_name" />
-                </Form.Item>
-                <Form.Item
-                    required
-                    label="Bank Branch"
-                    name="bank_branch"
-                    className="mb-15"
-                    rules={[validateRules.required()]}
-                >
-                    <Input name="bank_branch" />
-                </Form.Item>
-                <Form.Item
-                    label="Account Name"
-                    name="account_name"
-                    className="mb-15"
-                    required
-                    rules={[validateRules.required()]}
-                >
-                    <Input name="account_name" />
-                </Form.Item>
-                <Form.Item
-                    label="Account Type"
-                    name="account_type"
-                    className="mb-15"
-                    rules={[validateRules.required()]}
-                    required
-                >
-                    <Select
-                        name="account_type"
+                <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
+                    <Form.Item
+                        label="Bank Name"
+                        name="bank_name"
+                        className="mb-15"
                         required
-                        allowClear
                         rules={[validateRules.required()]}
                     >
-                        <Select.Option value="Checking Accounts">
-                            Checking Accounts
-                        </Select.Option>
-                        <Select.Option value="Savings Accounts">
-                            Savings Accounts
-                        </Select.Option>
-                        <Select.Option value="Money Market Accounts">
-                            Money Market Accounts
-                        </Select.Option>
-                        <Select.Option value="Certificates of Deposit (CDs)">
-                            Certificates of Deposit (CDs)
-                        </Select.Option>
-                    </Select>
-                </Form.Item>
-                <Form.Item
-                    label="Account Number"
-                    required
-                    name="account_number"
-                    className="mb-15"
-                    rules={[validateRules.required()]}
-                >
-                    <Input name="account_number" />
-                </Form.Item>
-                <Form.Item
-                    label="Expiration Date"
-                    name="expiration_date"
-                    className="mb-15"
-                    required
-                    rules={[validateRules.required()]}
-                >
-                    <DatePicker name="expiration_date" />
-                </Form.Item>
+                        <Input name="bank_name" />
+                    </Form.Item>
+                    <Form.Item
+                        required
+                        label="Bank Branch"
+                        name="bank_branch"
+                        className="mb-15"
+                        rules={[validateRules.required()]}
+                    >
+                        <Input name="bank_branch" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Account Name"
+                        name="account_name"
+                        className="mb-15"
+                        required
+                        rules={[validateRules.required()]}
+                    >
+                        <Input name="account_name" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Account Type"
+                        name="account_type"
+                        className="mb-15"
+                        rules={[validateRules.required()]}
+                        required
+                    >
+                        <Select
+                            name="account_type"
+                            required
+                            allowClear
+                            rules={[validateRules.required()]}
+                        >
+                            <Select.Option value="Checking Accounts">
+                                Checking Accounts
+                            </Select.Option>
+                            <Select.Option value="Savings Accounts">
+                                Savings Accounts
+                            </Select.Option>
+                            <Select.Option value="Money Market Accounts">
+                                Money Market Accounts
+                            </Select.Option>
+                            <Select.Option value="Certificates of Deposit (CDs)">
+                                Certificates of Deposit (CDs)
+                            </Select.Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
+                        label="Account Number"
+                        required
+                        name="account_number"
+                        className="mb-15"
+                        rules={[validateRules.required()]}
+                    >
+                        <Input name="account_number" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Expiration Date"
+                        name="expiration_date"
+                        className="mb-15"
+                        required
+                        rules={[validateRules.required()]}
+                    >
+                        <DatePicker
+                            name="expiration_date"
+                            style={{ width: "100%" }}
+                        />
+                    </Form.Item>
+                </Col>
             </Form>
         </Modal>
     );

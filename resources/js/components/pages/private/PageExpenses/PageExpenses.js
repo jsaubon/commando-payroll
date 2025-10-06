@@ -18,6 +18,7 @@ export default function PageExpenses() {
         open: false,
         data: null
     });
+    const userdata = JSON.parse(localStorage.userdata);
 
     const [dataExpenses, setDataExpenses] = useState([]);
 
@@ -69,53 +70,60 @@ export default function PageExpenses() {
             render: (text, record) => {
                 return (
                     <>
-                        <ButtonGroup>
-                            <Button
-                                size="small"
-                                type="primary"
-                                icon={<EditOutlined />}
-                                onClick={e =>
-                                    setToggleModalExpensesForm({
-                                        open: true,
-                                        data: record
-                                    })
-                                }
-                            >
-                                Edit
-                            </Button>
-                            <Button
-                                size="small"
-                                type="primary"
-                                danger
-                                icon={<DeleteOutlined />}
-                            >
-                                <Popconfirm
-                                    title="Are you sure delete this data?"
-                                    onConfirm={e => handleDeleteExpense(record)}
-                                    okText="Yes"
-                                    cancelText="No"
+                        {userdata.role != "Staff" && (
+                            <ButtonGroup>
+                                <Button
+                                    size="small"
+                                    type="primary"
+                                    icon={<EditOutlined />}
+                                    onClick={e =>
+                                        setToggleModalExpensesForm({
+                                            open: true,
+                                            data: record
+                                        })
+                                    }
                                 >
-                                    Delete
-                                </Popconfirm>
-                            </Button>
-                        </ButtonGroup>
+                                    Edit
+                                </Button>
+                                <Button
+                                    size="small"
+                                    type="primary"
+                                    danger
+                                    icon={<DeleteOutlined />}
+                                >
+                                    <Popconfirm
+                                        title="Are you sure delete this data?"
+                                        onConfirm={e =>
+                                            handleDeleteExpense(record)
+                                        }
+                                        okText="Yes"
+                                        cancelText="No"
+                                    >
+                                        Delete
+                                    </Popconfirm>
+                                </Button>
+                            </ButtonGroup>
+                        )}
                     </>
                 );
             }
         }
     ];
+
     return (
         <div>
             <Typography.Title level={1}>Expenses</Typography.Title>
 
-            <Button
-                type="primary"
-                onClick={e =>
-                    setToggleModalExpensesForm({ open: true, data: null })
-                }
-            >
-                New
-            </Button>
+            {userdata.role != "Staff" && (
+                <Button
+                    type="primary"
+                    onClick={e =>
+                        setToggleModalExpensesForm({ open: true, data: null })
+                    }
+                >
+                    New
+                </Button>
+            )}
 
             <Card className="mt-10">
                 <Table

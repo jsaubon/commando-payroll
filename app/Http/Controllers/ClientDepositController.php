@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Bank;
+use App\ClientDeposit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-
-class BankController extends Controller
+class ClientDepositController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,20 +15,31 @@ class BankController extends Controller
      */
     public function index(Request $request)
     {
-        $expiration_date_formatted = "DATE_FORMAT(expiration_date, '%Y/%m/%d')";
+        $deposit_name = "(SELECT `deposit_name` FROM `deposits` WHERE `deposits`.id=client_deposits.deposit_id)";
+        $date_formatted = "DATE_FORMAT(date, '%Y/%m/%d')";
 
-        $data = Bank::select([
+
+        $data = ClientDeposit::select([
             "*",
-
-            DB::raw("($expiration_date_formatted) expiration_date"),
+            DB::raw("($deposit_name) deposit_name"),
+            DB::raw("($date_formatted) date_formatted")
 
         ]);
 
-        $data = $data->where(function ($query) use ($request, $expiration_date_formatted) {
+        $data = $data->where(function ($query) use ($request, $deposit_name, $date_formatted) {
             if ($request->search) {
-                $query->orWhere(DB::raw("($expiration_date_formatted)"), 'LIKE', "%$request->search%");
+                $query->orWhere('notes', 'LIKE', "%$request->search%");
+                $query->orWhere('amount', 'LIKE', "%$request->search%");
+                $query->orWhere(DB::raw($deposit_name), 'LIKE', "%$request->search%");
+                $query->orWhere(DB::raw($date_formatted), 'LIKE', "%$request->search%");
             }
         });
+        if ($request->client_id) {
+            $data = $data->where('client_id', $request->client_id);
+        }
+        if ($request->deposit_id) {
+            $data = $data->where('deposit_id', $request->deposit_id);
+        }
 
 
         if ($request->sort_field && $request->sort_order) {
@@ -70,23 +80,22 @@ class BankController extends Controller
             "message" => "Data not " . ($request->id ? "update" : "save"),
         ];
 
+        $dataClientDeposit = $request->validate([
+            'client_id' => 'required|exists:clients,id',
+            'deposit_id' => 'required|exists:deposits,id',
+            'amount' => 'required|numeric',
+            'date' => 'required|date',
+            'notes' => 'nullable|string',
 
-        $dataBank = $request->validate([
-            'bank_name'       => 'required|string',
-            'bank_branch'     => 'required|string',
-            'account_name'    => 'required|string',
-            'account_type'    => 'required|string',
-            'account_number'  => 'required|regex:/^\d+(-\d+)*$/',
-            'expiration_date' => 'required|date',
         ]);
 
         try {
-            DB::transaction(function () use ($request, $dataBank, &$ret) {
-                Bank::updateOrCreate(
-                    ["id" => $request->id ?? null],
-                    $dataBank
-                );
+            DB::transaction(function () use ($request, $dataClientDeposit, &$ret) {
 
+                ClientDeposit::updateOrCreate(
+                    ["id" => $request->id ?? null],
+                    $dataClientDeposit
+                );
 
                 $ret['success'] = true;
                 $ret['message'] = "Data " . ($request->id ? "updated" : "saved") . " successfully";
@@ -98,17 +107,16 @@ class BankController extends Controller
 
 
         $ret['request'] = $request->all();
-
         return response()->json($ret, 200);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Bank  $bank
+     * @param  \App\ClientDeposit  $clientDeposit
      * @return \Illuminate\Http\Response
      */
-    public function show(Bank $bank)
+    public function show(ClientDeposit $clientDeposit)
     {
         //
     }
@@ -117,10 +125,10 @@ class BankController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Bank  $bank
+     * @param  \App\ClientDeposit  $clientDeposit
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Bank $bank)
+    public function update(Request $request, ClientDeposit $clientDeposit)
     {
         //
     }
@@ -128,31 +136,11 @@ class BankController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Bank  $bank
+     * @param  \App\ClientDeposit  $clientDeposit
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(ClientDeposit $clientDeposit)
     {
-        $ret  = [
-            "success" => false,
-            "message" => "Data not deleted"
-        ];
-
-        $findBank = Bank::find($id);
-
-        if ($findBank) {
-
-
-            if ($findBank->delete()) {
-                $ret  = [
-                    "success" => true,
-                    "message" => "Data deleted successfully"
-                ];
-            }
-        }
-
         //
-
-        return response()->json($ret, 200);
     }
 }

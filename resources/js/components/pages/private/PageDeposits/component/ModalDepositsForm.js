@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, Input, Modal, notification } from "antd";
+import { Button, Col, Form, Input, Modal, notification } from "antd";
 
 import { fetchData } from "../../../../../axios";
 import { notificationErrors } from "../../../../notificationErrors";
@@ -97,24 +97,26 @@ export default function ModalDepositsForm(props) {
             ]}
         >
             <Form {...layout} form={form} onFinish={onFinish}>
-                <Form.Item
-                    label="Deposit  Name"
-                    name="deposit_name"
-                    className="mb-15"
-                    required
-                    rules={[validateRules.required()]}
-                >
-                    <Input name="deposit_name" />
-                </Form.Item>
-                <Form.Item
-                    required
-                    label="Deposit  Description"
-                    name="deposit_description"
-                    className="mb-15"
-                    rules={[validateRules.required()]}
-                >
-                    <Input name="deposit_description" />
-                </Form.Item>
+                <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
+                    <Form.Item
+                        label="Deposit  Name"
+                        name="deposit_name"
+                        className="mb-15"
+                        required
+                        rules={[validateRules.required()]}
+                    >
+                        <Input name="deposit_name" />
+                    </Form.Item>
+                    <Form.Item
+                        required
+                        label="Deposit  Description"
+                        name="deposit_description"
+                        className="mb-15"
+                        rules={[validateRules.required()]}
+                    >
+                        <Input name="deposit_description" />
+                    </Form.Item>
+                </Col>
             </Form>
         </Modal>
     );

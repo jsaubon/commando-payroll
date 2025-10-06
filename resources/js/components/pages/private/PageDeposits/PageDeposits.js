@@ -18,6 +18,7 @@ export default function PageDeposits() {
         data: null,
         open: false
     });
+    const userdata = JSON.parse(localStorage.userdata);
 
     const [dataDeposit, setDataDeposit] = useState([]);
 
@@ -67,36 +68,40 @@ export default function PageDeposits() {
             render: (text, record) => {
                 return (
                     <>
-                        <ButtonGroup>
-                            <Button
-                                size="small"
-                                type="primary"
-                                icon={<EditOutlined />}
-                                onClick={e =>
-                                    setToggleModalDepositsForm({
-                                        open: true,
-                                        data: record
-                                    })
-                                }
-                            >
-                                Edit
-                            </Button>
-                            <Button
-                                size="small"
-                                type="primary"
-                                danger
-                                icon={<DeleteOutlined />}
-                            >
-                                <Popconfirm
-                                    title="Are you sure delete this data?"
-                                    onConfirm={e => handleDeleteDeposit(record)}
-                                    okText="Yes"
-                                    cancelText="No"
+                        {userdata.role != "Staff" && (
+                            <ButtonGroup>
+                                <Button
+                                    size="small"
+                                    type="primary"
+                                    icon={<EditOutlined />}
+                                    onClick={e =>
+                                        setToggleModalDepositsForm({
+                                            open: true,
+                                            data: record
+                                        })
+                                    }
                                 >
-                                    Delete
-                                </Popconfirm>
-                            </Button>
-                        </ButtonGroup>
+                                    Edit
+                                </Button>
+                                <Button
+                                    size="small"
+                                    type="primary"
+                                    danger
+                                    icon={<DeleteOutlined />}
+                                >
+                                    <Popconfirm
+                                        title="Are you sure delete this data?"
+                                        onConfirm={e =>
+                                            handleDeleteDeposit(record)
+                                        }
+                                        okText="Yes"
+                                        cancelText="No"
+                                    >
+                                        Delete
+                                    </Popconfirm>
+                                </Button>
+                            </ButtonGroup>
+                        )}
                     </>
                 );
             }
@@ -107,14 +112,16 @@ export default function PageDeposits() {
         <div>
             <Typography.Title level={1}>Deposits</Typography.Title>
 
-            <Button
-                type="primary"
-                onClick={e =>
-                    setToggleModalDepositsForm({ open: true, data: null })
-                }
-            >
-                New
-            </Button>
+            {userdata.role != "Staff" && (
+                <Button
+                    type="primary"
+                    onClick={e =>
+                        setToggleModalDepositsForm({ open: true, data: null })
+                    }
+                >
+                    New
+                </Button>
+            )}
 
             <Card className="mt-10">
                 <Table

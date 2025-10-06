@@ -28,6 +28,8 @@ import TabContentClientEmployees from "./pageClientInfo/tabs/tabEmployeesList/ta
 import TabContentClientAccountingEntries from "./pageClientInfo/tabs/tabDebitCreditSettings/tabContentClientAccountingEntries";
 import TabClientPayrolls from "./pageClientInfo/tabs/tabClientPayrolls/tabClientPayrolls";
 import TabsContentBanks from "./pageClientInfo/tabs/tabsBanks/tabsContentBanks";
+import TabsContentDeposit from "./pageClientInfo/tabs/tabDeposit/tabsContentDeposit";
+import TabsContentExpenses from "./pageClientInfo/tabs/tabExpenses/tabsContentExpenses";
 const PageClientInfo = ({ match, history }) => {
     const client_id = match.params.id;
     const [clientInfo, setClientInfo] = useState();
@@ -111,6 +113,13 @@ const PageClientInfo = ({ match, history }) => {
                             </Tabs.TabPane>
                             <Tabs.TabPane tab="Banks" key="4">
                                 <TabsContentBanks client_id={client_id} />
+                            </Tabs.TabPane>
+
+                            <Tabs.TabPane tab="Deposit" key="5">
+                                <TabsContentDeposit client_id={client_id} />
+                            </Tabs.TabPane>
+                            <Tabs.TabPane tab="Expenses" key="6">
+                                <TabsContentExpenses client_id={client_id} />
                             </Tabs.TabPane>
                         </Tabs>
                     </Card>

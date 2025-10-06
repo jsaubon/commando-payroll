@@ -84,17 +84,14 @@ class ClientBanksController extends Controller
 
         try {
             DB::transaction(function () use ($request, $dataClientBank, &$ret) {
-                $query = ClientBanks::updateOrCreate(
+
+                ClientBanks::updateOrCreate(
                     ["id" => $request->id ?? null],
                     $dataClientBank
                 );
 
-                if ($query) {
-                    $ret = [
-                        "success" => true,
-                        "message" => "Data " . ($request->id ? "updated" : "saved") . " successfully",
-                    ];
-                }
+                $ret['success'] = true;
+                $ret['message'] = "Data " . ($request->id ? "updated" : "saved") . " successfully";
             });
         } catch (\Throwable $th) {
             //throw $th;
@@ -102,6 +99,7 @@ class ClientBanksController extends Controller
         }
 
 
+        $ret['request'] = $request->all();
 
         return response()->json($ret, 200);
     }

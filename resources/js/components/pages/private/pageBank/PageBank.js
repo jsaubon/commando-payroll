@@ -18,6 +18,9 @@ export default function PageBank() {
         open: false,
         data: null
     });
+
+    const userdata = JSON.parse(localStorage.userdata);
+
     const [dataBanks, setDataBanks] = useState([]);
 
     useEffect(() => {
@@ -27,8 +30,6 @@ export default function PageBank() {
 
     const getBanks = () => {
         fetchData("GET", "api/banks").then(res => {
-            console.log("dataBanks", res.data);
-
             if (res.success) {
                 setDataBanks(res.data);
             }
@@ -88,37 +89,41 @@ export default function PageBank() {
             render: (text, record) => {
                 return (
                     <>
-                        <ButtonGroup>
-                            <Button
-                                size="small"
-                                type="primary"
-                                icon={<EditOutlined />}
-                                onClick={e =>
-                                    setToggleModalBankForm({
-                                        open: true,
-                                        data: record
-                                    })
-                                }
-                            >
-                                Edit
-                            </Button>
-
-                            <Button
-                                size="small"
-                                type="primary"
-                                danger
-                                icon={<DeleteOutlined />}
-                            >
-                                <Popconfirm
-                                    title="Are you sure delete this data?"
-                                    onConfirm={e => handleDeleteBank(record)}
-                                    okText="Yes"
-                                    cancelText="No"
+                        {userdata.role != "Staff" && (
+                            <ButtonGroup>
+                                <Button
+                                    size="small"
+                                    type="primary"
+                                    icon={<EditOutlined />}
+                                    onClick={e =>
+                                        setToggleModalBankForm({
+                                            open: true,
+                                            data: record
+                                        })
+                                    }
                                 >
-                                    Delete
-                                </Popconfirm>
-                            </Button>
-                        </ButtonGroup>
+                                    Edit
+                                </Button>
+
+                                <Button
+                                    size="small"
+                                    type="primary"
+                                    danger
+                                    icon={<DeleteOutlined />}
+                                >
+                                    <Popconfirm
+                                        title="Are you sure delete this data?"
+                                        onConfirm={e =>
+                                            handleDeleteBank(record)
+                                        }
+                                        okText="Yes"
+                                        cancelText="No"
+                                    >
+                                        Delete
+                                    </Popconfirm>
+                                </Button>
+                            </ButtonGroup>
+                        )}
                     </>
                 );
             }
@@ -128,14 +133,16 @@ export default function PageBank() {
         <div>
             <Typography.Title level={1}>Banks</Typography.Title>
 
-            <Button
-                type="primary"
-                onClick={e =>
-                    setToggleModalBankForm({ open: true, data: null })
-                }
-            >
-                New
-            </Button>
+            {userdata.role != "Staff" && (
+                <Button
+                    type="primary"
+                    onClick={e =>
+                        setToggleModalBankForm({ open: true, data: null })
+                    }
+                >
+                    New
+                </Button>
+            )}
 
             <Card className="mt-10">
                 <Table

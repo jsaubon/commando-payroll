@@ -107,7 +107,7 @@ export default function ModalBanks(props) {
             ]}
         >
             <Form {...layout} form={form} onFinish={onFinish}>
-                <Col xs={24} md={8} lg={24}>
+                <Col xs={24} md={24} lg={24} xl={24} xxl={24}>
                     <Form.Item
                         label="Bank Name"
                         name="bank_id"
