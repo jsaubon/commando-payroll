@@ -32,6 +32,7 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('payroll', 'ClientPayrollController');
     Route::apiResource('employee_payroll', 'ClientEmployeePayrollController');
     Route::apiResource('employee_assigned_post', 'ClientEmployeeAssignedPostController');
+
     Route::apiResource('banks', 'BankController');
     Route::apiResource('expenses', 'ExpensesController');
     Route::apiResource('deposits', 'DepositsController');
