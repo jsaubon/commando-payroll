@@ -83,8 +83,8 @@ class ClientExpensesController extends Controller
         $dataClientExpenses = $request->validate([
             'client_id' => 'required|exists:clients,id',
             'expenses_id' => 'required|exists:expenses,id',
-            'amount' => 'nullable|numeric',
-            'date' => 'nullable|date',
+            'amount' => 'required|numeric',
+            'date' => 'required|date',
             'notes' => 'nullable|string',
 
         ]);
