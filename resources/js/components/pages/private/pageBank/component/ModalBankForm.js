@@ -168,7 +168,19 @@ export default function ModalBankForm(props) {
                         className="mb-15"
                         rules={[validateRules.required()]}
                     >
-                        <Input name="account_number" />
+                        <Input
+                            name="account_number"
+                            onKeyDown={event => {
+                                const allowedKeys = /[0-9.-]/;
+                                const controlKeys = ["Backspace", "Delete"];
+                                if (
+                                    !allowedKeys.test(event.key) &&
+                                    !controlKeys.includes(event.key)
+                                ) {
+                                    event.preventDefault();
+                                }
+                            }}
+                        />
                     </Form.Item>
                     <Form.Item
                         label="Expiration Date"

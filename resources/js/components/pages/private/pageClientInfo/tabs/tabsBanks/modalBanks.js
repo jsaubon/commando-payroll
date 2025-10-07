@@ -45,7 +45,6 @@ export default function ModalBanks(props) {
                         message: "Bank",
                         description: res.message
                     });
-                    setFormLoadingClientBank(false);
                     refreshClientBanks();
 
                     setTogglemodalBanks({ open: false, data: null });
@@ -54,9 +53,7 @@ export default function ModalBanks(props) {
             })
             .catch(err => {
                 notificationErrors(err);
-                setFormLoadingClientBank(false);
             });
-        setFormLoadingClientBank(false);
     };
 
     useEffect(() => {
@@ -75,7 +72,10 @@ export default function ModalBanks(props) {
         <Modal
             title={togglemodalBanks.data ? "Edit Bank" : "Add Bank"}
             visible={togglemodalBanks.open}
-            onCancel={() => setTogglemodalBanks({ open: false, data: null })}
+            onCancel={() => {
+                setTogglemodalBanks({ open: false, data: null });
+                form.resetFields();
+            }}
             footer={[
                 <>
                     <Button

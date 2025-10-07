@@ -16,7 +16,7 @@ class ClientDepositController extends Controller
     public function index(Request $request)
     {
         $deposit_name = "(SELECT `deposit_name` FROM `deposits` WHERE `deposits`.id=client_deposits.deposit_id)";
-        $date_formatted = "DATE_FORMAT(date, '%Y/%m/%d')";
+        $date_formatted = "DATE_FORMAT(date, '%Y-%m-%d')";
 
 
         $data = ClientDeposit::select([

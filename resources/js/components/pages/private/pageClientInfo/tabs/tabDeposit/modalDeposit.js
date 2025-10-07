@@ -58,7 +58,6 @@ export default function ModalDeposit(props) {
                         message: "Deposit",
                         description: res.message
                     });
-                    setFormLoadingClientDeposit(false);
 
                     refreshClientDeposits();
                     setTogglemodalDeposit({ open: false, data: null });
@@ -66,11 +65,8 @@ export default function ModalDeposit(props) {
                 }
             })
             .catch(err => {
-                console.log("err", err);
                 notificationErrors(err);
-                setFormLoadingClientDeposit(false);
             });
-        setFormLoadingClientDeposit(true);
     };
 
     useEffect(() => {
@@ -92,7 +88,10 @@ export default function ModalDeposit(props) {
         <Modal
             title={togglemodalDeposit.data ? "Edit Deposit" : "Add Deposit"}
             visible={togglemodalDeposit.open}
-            onCancel={() => setTogglemodalDeposit({ open: false, data: null })}
+            onCancel={() => {
+                setTogglemodalDeposit({ open: false, data: null });
+                form.resetFields();
+            }}
             footer={[
                 <>
                     <Button
@@ -155,7 +154,20 @@ export default function ModalDeposit(props) {
                         name="amount"
                         rules={[validateRules.required()]}
                     >
-                        <Input placeholder="Amount"></Input>
+                        <Input
+                            placeholder="Amount"
+                            type="numeric"
+                            onKeyDown={event => {
+                                const allowedKeys = /[0-9.-]/;
+                                const controlKeys = ["Backspace", "Delete"];
+                                if (
+                                    !allowedKeys.test(event.key) &&
+                                    !controlKeys.includes(event.key)
+                                ) {
+                                    event.preventDefault();
+                                }
+                            }}
+                        ></Input>
                     </Form.Item>
 
                     <Form.Item label="Date" name="date">

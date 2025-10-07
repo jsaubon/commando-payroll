@@ -16,7 +16,7 @@ class BankController extends Controller
      */
     public function index(Request $request)
     {
-        $expiration_date_formatted = "DATE_FORMAT(expiration_date, '%Y/%m/%d')";
+        $expiration_date_formatted = "DATE_FORMAT(expiration_date, '%Y-%m-%d')";
 
         $data = Bank::select([
             "*",

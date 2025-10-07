@@ -16,7 +16,7 @@ class ClientExpensesController extends Controller
     public function index(Request $request)
     {
         $expense_name = "(SELECT `expense_name` FROM `expenses` WHERE `expenses`.id=client_expenses.expenses_id)";
-        $date_formatted = "DATE_FORMAT(date, '%Y/%m/%d')";
+        $date_formatted = "DATE_FORMAT(date, '%Y-%m-%d')";
 
 
         $data = ClientExpenses::select([

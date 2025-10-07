@@ -58,7 +58,6 @@ export default function ModalExpenses(props) {
                         message: "Expenses",
                         description: res.message
                     });
-                    setFormLoadingClientExpenses(false);
                     refreshClientExpenses();
 
                     setTogglemodalExpenses({ open: false, data: null });
@@ -66,11 +65,8 @@ export default function ModalExpenses(props) {
                 }
             })
             .catch(err => {
-                console.log("err", err);
                 notificationErrors(err);
-                setFormLoadingClientExpenses(false);
             });
-        setFormLoadingClientExpenses(true);
     };
 
     useEffect(() => {
@@ -92,7 +88,10 @@ export default function ModalExpenses(props) {
         <Modal
             title={togglemodalExpenses.data ? "Edit Expenses" : "Add Expenses"}
             visible={togglemodalExpenses.open}
-            onCancel={() => setTogglemodalExpenses({ open: false, data: null })}
+            onCancel={() => {
+                setTogglemodalExpenses({ open: false, data: null });
+                form.resetFields();
+            }}
             footer={[
                 <>
                     <Button
@@ -155,8 +154,22 @@ export default function ModalExpenses(props) {
                         name="amount"
                         required
                         rules={[validateRules.required()]}
+                        type="number"
                     >
-                        <Input placeholder="Amount"></Input>
+                        <Input
+                            placeholder="Amount"
+                            type="numeric"
+                            onKeyDown={event => {
+                                const allowedKeys = /[0-9.-]/;
+                                const controlKeys = ["Backspace", "Delete"];
+                                if (
+                                    !allowedKeys.test(event.key) &&
+                                    !controlKeys.includes(event.key)
+                                ) {
+                                    event.preventDefault();
+                                }
+                            }}
+                        ></Input>
                     </Form.Item>
                     <Form.Item
                         label="Date"
