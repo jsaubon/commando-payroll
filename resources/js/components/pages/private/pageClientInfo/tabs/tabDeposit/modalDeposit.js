@@ -25,6 +25,9 @@ export default function ModalDeposit(props) {
 
     const [form] = Form.useForm();
     const [dataDeposit, setDataDeposit] = useState(null);
+    const [formLoadingClientDeposit, setFormLoadingClientDeposit] = useState(
+        false
+    );
     // console.log(dataDeposit);
 
     useEffect(() => {
@@ -36,13 +39,7 @@ export default function ModalDeposit(props) {
         return () => {};
     }, []);
 
-    const [formLoadingClientDeposit, setFormLoadingClientDeposit] = useState(
-        false
-    );
-
     const onFinish = values => {
-        console.log("Success:", values);
-
         let data = {
             ...values,
             id: togglemodalDeposit.data ? togglemodalDeposit.data.id : null,
@@ -52,7 +49,6 @@ export default function ModalDeposit(props) {
 
         fetchData("POST", "api/client_deposits", data)
             .then(res => {
-                console.log(res);
                 if (res.success) {
                     notification.success({
                         message: "Deposit",
