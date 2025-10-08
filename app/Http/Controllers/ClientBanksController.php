@@ -17,11 +17,13 @@ class ClientBanksController extends Controller
     {
         $bank_name = "(SELECT `bank_name` FROM `banks` WHERE `banks`.id=client_banks.bank_id)";
 
-        $data = ClientBanks::select([
-            "*",
-            DB::raw("($bank_name) bank_name"),
+        $data = ClientBanks::with(['bank', 'client'])
+            ->select([
+                "*",
+                DB::raw("($bank_name) bank_name"),
 
-        ]);
+            ]);
+        $client = \App\Client::find($request->client_id);
 
         $data = $data->where(function ($query) use ($request, $bank_name) {
             if ($request->search) {
@@ -58,7 +60,8 @@ class ClientBanksController extends Controller
 
         return response()->json([
             'success'   => true,
-            'data'      => $data
+            'data'      => $data,
+            'client'    => $client
         ], 200);
     }
 
