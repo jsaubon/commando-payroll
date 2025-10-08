@@ -54,6 +54,7 @@ export default function ModalBanks(props) {
             .catch(err => {
                 notificationErrors(err);
             });
+        setFormLoadingClientBank(true);
     };
 
     useEffect(() => {

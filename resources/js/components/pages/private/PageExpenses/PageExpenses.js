@@ -51,65 +51,6 @@ export default function PageExpenses() {
         return () => {};
     }, []);
 
-    const columns = [
-        {
-            title: "Expense Name",
-            dataIndex: "expense_name",
-            key: "expense_name"
-        },
-        {
-            title: "Expense Description",
-            dataIndex: "expense_description",
-            key: "expense_description"
-        },
-
-        {
-            title: "Action",
-            key: "action",
-            width: 100,
-            render: (text, record) => {
-                return (
-                    <>
-                        {userdata.role != "Staff" && (
-                            <ButtonGroup>
-                                <Button
-                                    size="small"
-                                    type="primary"
-                                    icon={<EditOutlined />}
-                                    onClick={e =>
-                                        setToggleModalExpensesForm({
-                                            open: true,
-                                            data: record
-                                        })
-                                    }
-                                >
-                                    Edit
-                                </Button>
-                                <Button
-                                    size="small"
-                                    type="primary"
-                                    danger
-                                    icon={<DeleteOutlined />}
-                                >
-                                    <Popconfirm
-                                        title="Are you sure delete this data?"
-                                        onConfirm={e =>
-                                            handleDeleteExpense(record)
-                                        }
-                                        okText="Yes"
-                                        cancelText="No"
-                                    >
-                                        Delete
-                                    </Popconfirm>
-                                </Button>
-                            </ButtonGroup>
-                        )}
-                    </>
-                );
-            }
-        }
-    ];
-
     return (
         <div>
             <Typography.Title level={1}>Expenses</Typography.Title>
@@ -127,11 +68,69 @@ export default function PageExpenses() {
 
             <Card className="mt-10">
                 <Table
-                    columns={columns}
+                    rowKey={record => record.id}
                     dataSource={dataExpenses}
                     pagination={false}
-                    size="small"
-                />
+                >
+                    <Table.Column
+                        title="Expense Name"
+                        dataIndex="expense_name"
+                        key="expense_name"
+                    />
+                    <Table.Column
+                        title="Expense Description"
+                        dataIndex="expense_description"
+                        key="expense_description"
+                    />
+                    <Table.Column
+                        title="Action"
+                        key="action"
+                        width={100}
+                        align="center"
+                        render={(text, record) => {
+                            return (
+                                <>
+                                    {userdata.role != "Staff" && (
+                                        <ButtonGroup>
+                                            <Button
+                                                size="small"
+                                                type="primary"
+                                                icon={<EditOutlined />}
+                                                onClick={e =>
+                                                    setToggleModalExpensesForm({
+                                                        open: true,
+                                                        data: record
+                                                    })
+                                                }
+                                            >
+                                                Edit
+                                            </Button>
+                                            <Button
+                                                size="small"
+                                                type="primary"
+                                                danger
+                                                icon={<DeleteOutlined />}
+                                            >
+                                                <Popconfirm
+                                                    title="Are you sure delete this data?"
+                                                    onConfirm={e =>
+                                                        handleDeleteExpense(
+                                                            record
+                                                        )
+                                                    }
+                                                    okText="Yes"
+                                                    cancelText="No"
+                                                >
+                                                    Delete
+                                                </Popconfirm>
+                                            </Button>
+                                        </ButtonGroup>
+                                    )}
+                                </>
+                            );
+                        }}
+                    />
+                </Table>
             </Card>
 
             <ModalExpensesForm

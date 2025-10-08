@@ -14,13 +14,13 @@ import { fetchData } from "../../../../axios";
 import ModalDepositsForm from "./component/ModalDepositsForm";
 
 export default function PageDeposits() {
+    const userdata = JSON.parse(localStorage.userdata);
+    const [dataDeposit, setDataDeposit] = useState([]);
+
     const [toggleModalDepositsForm, setToggleModalDepositsForm] = useState({
         data: null,
         open: false
     });
-    const userdata = JSON.parse(localStorage.userdata);
-
-    const [dataDeposit, setDataDeposit] = useState([]);
 
     const getDeposits = () => {
         fetchData("GET", "api/deposits").then(res => {
@@ -49,65 +49,6 @@ export default function PageDeposits() {
         return () => {};
     }, []);
 
-    const columns = [
-        {
-            title: "Deposit  Name",
-            dataIndex: "deposit_name",
-            key: "deposit_name"
-        },
-        {
-            title: "Deposit Description",
-            dataIndex: "deposit_description",
-            key: "deposit_description"
-        },
-
-        {
-            title: "Action",
-            key: "action",
-            width: 100,
-            render: (text, record) => {
-                return (
-                    <>
-                        {userdata.role != "Staff" && (
-                            <ButtonGroup>
-                                <Button
-                                    size="small"
-                                    type="primary"
-                                    icon={<EditOutlined />}
-                                    onClick={e =>
-                                        setToggleModalDepositsForm({
-                                            open: true,
-                                            data: record
-                                        })
-                                    }
-                                >
-                                    Edit
-                                </Button>
-                                <Button
-                                    size="small"
-                                    type="primary"
-                                    danger
-                                    icon={<DeleteOutlined />}
-                                >
-                                    <Popconfirm
-                                        title="Are you sure delete this data?"
-                                        onConfirm={e =>
-                                            handleDeleteDeposit(record)
-                                        }
-                                        okText="Yes"
-                                        cancelText="No"
-                                    >
-                                        Delete
-                                    </Popconfirm>
-                                </Button>
-                            </ButtonGroup>
-                        )}
-                    </>
-                );
-            }
-        }
-    ];
-
     return (
         <div>
             <Typography.Title level={1}>Deposits</Typography.Title>
@@ -125,11 +66,76 @@ export default function PageDeposits() {
 
             <Card className="mt-10">
                 <Table
-                    columns={columns}
+                    rowKey={record => record.id}
                     dataSource={dataDeposit}
                     pagination={false}
                     size="small"
-                />
+                >
+                    <Table.Column
+                        title="Deposit Name"
+                        dataIndex="deposit_name"
+                        key="deposit_name"
+                    />
+                    <Table.Column
+                        title="Deposit Description"
+                        dataIndex="deposit_description"
+                        key="deposit_description"
+                    />
+
+                    <Table.Column
+                        title="Action"
+                        key="action"
+                        width={100}
+                        align="center"
+                        render={(text, record) => {
+                            return (
+                                <>
+                                    {" "}
+                                    {userdata.role != "Staff" && (
+                                        <ButtonGroup>
+                                            {" "}
+                                            <Button
+                                                size="small"
+                                                type="primary"
+                                                icon={<EditOutlined />}
+                                                onClick={e =>
+                                                    setToggleModalDepositsForm({
+                                                        open: true,
+                                                        data: record
+                                                    })
+                                                }
+                                            >
+                                                {" "}
+                                                Edit{" "}
+                                            </Button>{" "}
+                                            <Button
+                                                size="small"
+                                                type="primary"
+                                                danger
+                                                icon={<DeleteOutlined />}
+                                            >
+                                                {" "}
+                                                <Popconfirm
+                                                    title="Are you sure delete this data?"
+                                                    onConfirm={e =>
+                                                        handleDeleteDeposit(
+                                                            record
+                                                        )
+                                                    }
+                                                    okText="Yes"
+                                                    cancelText="No"
+                                                >
+                                                    {" "}
+                                                    Delete{" "}
+                                                </Popconfirm>{" "}
+                                            </Button>{" "}
+                                        </ButtonGroup>
+                                    )}{" "}
+                                </>
+                            );
+                        }}
+                    />
+                </Table>
             </Card>
 
             <ModalDepositsForm

@@ -8,21 +8,20 @@ import ModalDeposit from "./modalDeposit";
 export default function TabsContentDeposit(props) {
     const { client_id } = props;
 
+    let userdata = JSON.parse(localStorage.userdata);
+    const [dataClientDeposit, setDataClientDeposit] = useState([]);
+
+    const [tableFilter, setTableFilter] = useState({
+        search: "",
+        page: 1,
+        size: 20,
+        order: "id",
+        sort: "asc"
+    });
+
     const [togglemodalDeposit, setTogglemodalDeposit] = useState({
         open: false,
         data: null
-    });
-
-    const [dataClientDeposit, setDataClientDeposit] = useState([]);
-    const [
-        clientDepositTableSettings,
-        setClientDepositTableSettings
-    ] = useState({
-        size: 20,
-        page: 1,
-        search: "",
-        order: "id",
-        sort: "asc"
     });
 
     const getClientDeposit = () => {
@@ -30,111 +29,26 @@ export default function TabsContentDeposit(props) {
             "GET",
             "api/client_deposits?client_id=" +
                 client_id +
-                "&search=" +
-                clientDepositTableSettings.search +
-                "&page=" +
-                clientDepositTableSettings.page +
-                "&size=" +
-                clientDepositTableSettings.size +
-                "&order=" +
-                clientDepositTableSettings.order +
-                "&sort=" +
-                clientDepositTableSettings.sort
+                "&tableFilter=" +
+                new URLSearchParams(tableFilter)
         ).then(res => {
             if (res.success) {
                 setDataClientDeposit(res.data);
             }
         });
     };
-    const columns = [
-        {
-            title: "Deposit Name",
-            dataIndex: "deposit_name",
-            key: "deposit_name"
-        },
 
-        {
-            title: "Amount",
-            dataIndex: "amount",
-            key: "amount"
-        },
-        {
-            title: "Date",
-            dataIndex: "date_formatted",
-            key: "date_formatted"
-        },
-        {
-            title: "Notes",
-            dataIndex: "notes",
-            key: "notes"
-        }
-
-        // {
-        //     title: "Action",
-        //     key: "action",
-        //     width: "20%",
-        //     render: (text, record) => {
-        //         return (
-        //             <Space size="middle" key={record.id}>
-        //                 {userdata.role != "Staff" && (
-        //                     <ButtonGroup>
-        //                         <Button
-        //                             size="small"
-        //                             type="primary"
-        //                             icon={<EditOutlined />}
-        //                             onClick={e => setTogglemodalDeposit(record)}
-        //                         >
-        //                             Edit
-        //                         </Button>
-
-        //                         <Popconfirm
-        //                             title="Are you sure to delete this data?"
-        //                             okText="Yes"
-        //                             cancelText="No"
-        //                         >
-        //                             <Button
-        //                                 size="small"
-        //                                 type="primary"
-        //                                 danger
-        //                                 icon={<DeleteOutlined />}
-        //                             >
-        //                                 Delete
-        //                             </Button>
-        //                         </Popconfirm>
-        //                     </ButtonGroup>
-        //                 )}
-        //             </Space>
-        //         );
-        //     }
-        // }
-    ];
-    let userdata = JSON.parse(localStorage.userdata);
-
-    const handleOnPageChange = (page, pageSize) => {
-        setClientDepositTableSettings({
-            ...clientDepositTableSettings,
-            page: page,
-            size: pageSize
-        });
-    };
-    const handleOnPageSizeChange = (page, pageSize) => {
-        setClientDepositTableSettings({
-            ...clientDepositTableSettings,
-            page: page,
-            size: pageSize
+    const onChangeTable = (key, value) => {
+        setTableFilter({
+            ...tableFilter,
+            [key]: value
         });
     };
 
-    const handleSearchDeposit = search => {
-        setClientDepositTableSettings({
-            ...clientDepositTableSettings,
-            search: search
-        });
-    };
     useEffect(() => {
         getClientDeposit();
         return () => {};
-    }, [clientDepositTableSettings]);
+    }, [tableFilter]);
 
     return (
         <>
@@ -159,35 +73,34 @@ export default function TabsContentDeposit(props) {
                         <Input.Search
                             allowClear
                             placeholder="Search Deposit"
-                            onSearch={value => handleSearchDeposit(value)}
                             style={{ width: "100%" }}
                             className="pull-right"
-                            onChange={e => handleSearchDeposit(e.target.value)}
+                            onChange={e =>
+                                onChangeTable("search", e.target.value)
+                            }
                         />
                     </div>
                 </Col>
             </Row>
             <Table
-                columns={columns}
                 dataSource={dataClientDeposit}
                 rowKey={record => record.id}
-                pagination={{
-                    onChange: (page, pageSize) =>
-                        handleOnPageChange(page, pageSize),
-                    onShowSizeChange: (current, size) =>
-                        handleOnPageSizeChange(current, size),
-                    total: clientDepositTableSettings.total
-                }}
-                onChange={(pagination, filters, sorter) => {
-                    setClientDepositTableSettings({
-                        ...clientDepositTableSettings,
-                        order: sorter.columnKey ? sorter.columnKey : "id",
-                        sort: sorter.order
-                            ? sorter.order.replace("end", "")
-                            : "asc"
-                    });
-                }}
-            />
+                pagination={true}
+                onChange={onChangeTable}
+            >
+                <Table.Column
+                    title="Deposit Name"
+                    dataIndex="deposit_name"
+                    key="deposit_name"
+                />
+                <Table.Column title="Amount" dataIndex="amount" key="amount" />
+                <Table.Column
+                    title="Date"
+                    dataIndex="date_formatted"
+                    key="date_formatted"
+                />
+                <Table.Column title="Notes" dataIndex="notes" key="notes" />
+            </Table>
 
             <ModalDeposit
                 togglemodalDeposit={togglemodalDeposit}

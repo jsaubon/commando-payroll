@@ -30,18 +30,15 @@ export default function ModalExpensesForm(props) {
                         message: "Expense",
                         description: res.message
                     });
-                    setFormLoadingExpenses(false);
                     refreshExpenses();
-
                     setToggleModalExpensesForm({ open: false, data: null });
                     form.resetFields();
                 }
             })
             .catch(err => {
                 notificationErrors(err);
-                setFormLoadingExpenses(false);
             });
-        setFormLoadingExpenses(false);
+        setFormLoadingExpenses(true);
     };
 
     useEffect(() => {
@@ -62,11 +59,11 @@ export default function ModalExpensesForm(props) {
             title={
                 toggleModalExpensesForm.data ? "Edit Expense" : "Add Expense"
             }
-            afterClose={() => form.resetFields()}
             visible={toggleModalExpensesForm.open}
-            onCancel={() =>
-                setToggleModalExpensesForm({ open: false, data: null })
-            }
+            onCancel={() => {
+                setToggleModalExpensesForm({ open: false, data: null });
+                form.resetFields();
+            }}
             footer={[
                 <>
                     <Button

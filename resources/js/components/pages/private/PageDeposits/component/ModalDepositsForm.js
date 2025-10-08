@@ -30,18 +30,15 @@ export default function ModalDepositsForm(props) {
                         message: "Deposit",
                         description: res.description
                     });
-                    setFormLoadingDeposits(false);
                     refreshDeposits();
-
                     setToggleModalDepositsForm({ open: false, data: null });
                     form.resetFields();
                 }
             })
             .catch(err => {
                 notificationErrors(err);
-                setFormLoadingDeposits(false);
             });
-        setFormLoadingDeposits(false);
+        setFormLoadingDeposits(true);
     };
 
     const [form] = Form.useForm();
@@ -63,9 +60,10 @@ export default function ModalDepositsForm(props) {
                 toggleModalDepositsForm.data ? "Edit Deposit" : "Add Deposit"
             }
             visible={toggleModalDepositsForm.open}
-            onCancel={() =>
-                setToggleModalDepositsForm({ open: false, data: null })
-            }
+            onCancel={() => {
+                setToggleModalDepositsForm({ open: false, data: null });
+                form.resetFields();
+            }}
             footer={[
                 <>
                     <Button

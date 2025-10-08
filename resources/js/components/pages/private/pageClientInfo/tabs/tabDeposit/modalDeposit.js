@@ -67,6 +67,7 @@ export default function ModalDeposit(props) {
             .catch(err => {
                 notificationErrors(err);
             });
+        setFormLoadingClientDeposit(true);
     };
 
     useEffect(() => {

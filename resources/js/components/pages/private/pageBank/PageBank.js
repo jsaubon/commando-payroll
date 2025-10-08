@@ -14,19 +14,13 @@ import { fetchData } from "../../../../axios";
 import ModalBankForm from "./component/ModalBankForm";
 
 export default function PageBank() {
+    const userdata = JSON.parse(localStorage.userdata);
+    const [dataBanks, setDataBanks] = useState([]);
+
     const [toggleModalBankForm, setToggleModalBankForm] = useState({
         open: false,
         data: null
     });
-
-    const userdata = JSON.parse(localStorage.userdata);
-
-    const [dataBanks, setDataBanks] = useState([]);
-
-    useEffect(() => {
-        getBanks();
-        return () => {};
-    }, []);
 
     const getBanks = () => {
         fetchData("GET", "api/banks").then(res => {
@@ -50,85 +44,11 @@ export default function PageBank() {
         });
     };
 
-    const columns = [
-        {
-            title: "Bank Name",
-            dataIndex: "bank_name",
-            key: "bank_name"
-        },
-        {
-            title: "Bank Branch",
-            dataIndex: "bank_branch",
-            key: "bank_branch"
-        },
-        {
-            title: "Account Name",
-            dataIndex: "account_name",
-            key: "account_name"
-        },
-        {
-            title: "Account Type",
-            dataIndex: "account_type",
-            key: "account_type"
-        },
-        {
-            title: "Account Number",
-            dataIndex: "account_number",
-            key: "account_number"
-        },
-        {
-            title: "Expiration Date",
-            dataIndex: "expiration_date",
-            key: "expiration_date"
-        },
+    useEffect(() => {
+        getBanks();
+        return () => {};
+    }, []);
 
-        {
-            title: "Action",
-            key: "action",
-            width: 100,
-            render: (text, record) => {
-                return (
-                    <>
-                        {userdata.role != "Staff" && (
-                            <ButtonGroup>
-                                <Button
-                                    size="small"
-                                    type="primary"
-                                    icon={<EditOutlined />}
-                                    onClick={e =>
-                                        setToggleModalBankForm({
-                                            open: true,
-                                            data: record
-                                        })
-                                    }
-                                >
-                                    Edit
-                                </Button>
-
-                                <Button
-                                    size="small"
-                                    type="primary"
-                                    danger
-                                    icon={<DeleteOutlined />}
-                                >
-                                    <Popconfirm
-                                        title="Are you sure delete this data?"
-                                        onConfirm={e =>
-                                            handleDeleteBank(record)
-                                        }
-                                        okText="Yes"
-                                        cancelText="No"
-                                    >
-                                        Delete
-                                    </Popconfirm>
-                                </Button>
-                            </ButtonGroup>
-                        )}
-                    </>
-                );
-            }
-        }
-    ];
     return (
         <div>
             <Typography.Title level={1}>Banks</Typography.Title>
@@ -146,11 +66,90 @@ export default function PageBank() {
 
             <Card className="mt-10">
                 <Table
-                    columns={columns}
                     dataSource={dataBanks}
+                    rowKey={record => record.id}
                     pagination={false}
                     size="small"
-                />
+                >
+                    <Table.Column
+                        title="Bank Name"
+                        dataIndex="bank_name"
+                        key="bank_name"
+                    />
+                    <Table.Column
+                        title="Bank Branch"
+                        dataIndex="bank_branch"
+                        key="bank_branch"
+                    />
+                    <Table.Column
+                        title="Account Name"
+                        dataIndex="account_name"
+                        key="account_name"
+                    />
+                    <Table.Column
+                        title="Account Type"
+                        dataIndex="account_type"
+                        key="account_type"
+                    />
+                    <Table.Column
+                        title="Account Number"
+                        dataIndex="account_number"
+                        key="account_number"
+                    />
+                    <Table.Column
+                        title="Expiration Date"
+                        dataIndex="expiration_date"
+                        key="expiration_date"
+                    />
+
+                    <Table.Column
+                        title="Action"
+                        key="action"
+                        align="center"
+                        width={100}
+                        render={(text, record) => {
+                            return (
+                                <>
+                                    {userdata.role != "Staff" && (
+                                        <ButtonGroup>
+                                            <Button
+                                                size="small"
+                                                type="primary"
+                                                icon={<EditOutlined />}
+                                                onClick={e =>
+                                                    setToggleModalBankForm({
+                                                        open: true,
+                                                        data: record
+                                                    })
+                                                }
+                                            >
+                                                Edit
+                                            </Button>
+
+                                            <Button
+                                                size="small"
+                                                type="primary"
+                                                danger
+                                                icon={<DeleteOutlined />}
+                                            >
+                                                <Popconfirm
+                                                    title="Are you sure delete this data?"
+                                                    onConfirm={e =>
+                                                        handleDeleteBank(record)
+                                                    }
+                                                    okText="Yes"
+                                                    cancelText="No"
+                                                >
+                                                    Delete
+                                                </Popconfirm>
+                                            </Button>
+                                        </ButtonGroup>
+                                    )}
+                                </>
+                            );
+                        }}
+                    />
+                </Table>
             </Card>
 
             <ModalBankForm

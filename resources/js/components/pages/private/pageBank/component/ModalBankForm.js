@@ -72,8 +72,13 @@ export default function ModalBankForm(props) {
         <Modal
             title={toggleModalBankForm.data ? "Edit Bank" : "Add Bank"}
             visible={toggleModalBankForm.open}
-            afterClose={() => form.resetFields()}
-            onCancel={() => setToggleModalBankForm({ open: false, data: null })}
+            onCancel={() => {
+                setToggleModalBankForm({
+                    open: false,
+                    data: null
+                });
+                form.resetFields();
+            }}
             footer={[
                 <>
                     <Button

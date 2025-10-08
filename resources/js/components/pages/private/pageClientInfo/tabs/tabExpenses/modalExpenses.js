@@ -25,6 +25,9 @@ export default function ModalExpenses(props) {
 
     const [form] = Form.useForm();
     const [dataExpensesName, setDataExpensesName] = useState(null);
+    const [formLoadingClientExpenses, setFormLoadingClientExpenses] = useState(
+        false
+    );
 
     useEffect(() => {
         fetchData("GET", "api/expenses?sort=asc").then(res => {
@@ -35,10 +38,6 @@ export default function ModalExpenses(props) {
         });
         return () => {};
     }, []);
-
-    const [formLoadingClientExpenses, setFormLoadingClientExpenses] = useState(
-        false
-    );
 
     const onFinish = values => {
         console.log("Success:", values);
@@ -64,9 +63,11 @@ export default function ModalExpenses(props) {
                     form.resetFields();
                 }
             })
+
             .catch(err => {
                 notificationErrors(err);
             });
+        setFormLoadingClientExpenses(true);
     };
 
     useEffect(() => {
