@@ -58,6 +58,7 @@ export default function ModalDeposit(props) {
                     refreshClientDeposits();
                     setTogglemodalDeposit({ open: false, data: null });
                     form.resetFields();
+                    setFormLoadingClientDeposit(false);
                 }
             })
             .catch(err => {
@@ -167,11 +168,12 @@ export default function ModalDeposit(props) {
                         ></Input>
                     </Form.Item>
 
-                    <Form.Item label="Date" name="date">
-                        <DatePicker
-                            style={{ width: "100%" }}
-                            rules={[validateRules.required()]}
-                        />
+                    <Form.Item
+                        label="Date"
+                        name="date"
+                        rules={[validateRules.required()]}
+                    >
+                        <DatePicker style={{ width: "100%" }} />
                     </Form.Item>
                     <Form.Item label="Notes" name="notes">
                         <Input.TextArea placeholder="Notes"></Input.TextArea>

@@ -5,6 +5,7 @@ import TabReportsPayroll from "./pageReports/tabReportsPayroll";
 import TabReportsDebitCredit from "./pageReports/tabReportsDebitCredit";
 import PrintProvider, { Print, NoPrint } from "react-easy-print";
 import TabReportsCashbond from "./pageReports/tabReportsCashbond";
+import TabReportsDailyDisbursement from "./pageReports/tabReportsDailyDisbursement";
 
 const PageReports = () => {
     return (
@@ -19,6 +20,9 @@ const PageReports = () => {
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="Cashbond" key="3">
                     <TabReportsCashbond />
+                </Tabs.TabPane>
+                <Tabs.TabPane tab="Daily Disbursement" key="4">
+                    <TabReportsDailyDisbursement />
                 </Tabs.TabPane>
             </Tabs>
         </NoPrint>

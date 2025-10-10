@@ -14,6 +14,7 @@ export default function ModalBanks(props) {
 
     const [form] = Form.useForm();
     const [dataBankName, setDataBankName] = useState(null);
+    const [formLoadingClientBank, setFormLoadingClientBank] = useState(false);
     // console.log(dataBankName);
 
     useEffect(() => {
@@ -26,8 +27,6 @@ export default function ModalBanks(props) {
         return () => {};
     }, []);
 
-    const [formLoadingClientBank, setFormLoadingClientBank] = useState(false);
-
     const onFinish = values => {
         console.log("Success:", values);
 
@@ -39,7 +38,6 @@ export default function ModalBanks(props) {
 
         fetchData("POST", "api/client_banks", data)
             .then(res => {
-                console.log(res);
                 if (res.success) {
                     notification.success({
                         message: "Bank",
@@ -49,6 +47,8 @@ export default function ModalBanks(props) {
 
                     setTogglemodalBanks({ open: false, data: null });
                     form.resetFields();
+
+                    setFormLoadingClientBank(false);
                 }
             })
             .catch(err => {

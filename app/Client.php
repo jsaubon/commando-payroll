@@ -13,19 +13,36 @@ class Client extends Model
         return $this->morphMany('App\OtherInfo', 'other_infoable');
     }
 
-    public function employees() {
-        return $this->hasMany('App\Employee','client_id');
+    public function employees()
+    {
+        return $this->hasMany('App\Employee', 'client_id');
     }
 
-    public function client_payrolls() {
-        return $this->hasMany('App\ClientPayroll','client_id');
+    public function client_payrolls()
+    {
+        return $this->hasMany('App\ClientPayroll', 'client_id');
     }
 
-    public function client_accounting_entries() {
-        return $this->hasMany('App\ClientAccountingEntry','client_id');
+    public function client_accounting_entries()
+    {
+        return $this->hasMany('App\ClientAccountingEntry', 'client_id');
     }
 
-    public function client_employee_assigned_posts() {
-        return $this->hasMany('App\ClientEmployeeAssignedPost','client_id');
+    public function client_employee_assigned_posts()
+    {
+        return $this->hasMany('App\ClientEmployeeAssignedPost', 'client_id');
+    }
+
+    public function client_banks()
+    {
+        return $this->hasMany('App\ClientBanks', 'client_id');
+    }
+    public function client_expenses()
+    {
+        return $this->hasMany('App\ClientExpenses', 'client_id');
+    }
+    public function client_deposits()
+    {
+        return $this->hasMany('App\ClientDeposit', 'client_id');
     }
 }
