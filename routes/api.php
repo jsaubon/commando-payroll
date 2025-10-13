@@ -51,7 +51,7 @@ Route::get('testing', function () {
 
     dd($employees);
 });
-Route::get('client_daily_disbursement', function () {
+Route::get('get_report_daily_disbursement', function () {
     $client_id = request()->client_id ?? null;
     $month_start = request()->month_start ? date('Y-m-01', strtotime(request()->month_start)) : null;
     $month_end = request()->month_end ? date('Y-m-t', strtotime(request()->month_end)) : null;
@@ -96,6 +96,8 @@ Route::get('client_daily_disbursement', function () {
     $dataResult = [];
 
     foreach ($bankGroups as $bank_id => $bankGroup) {
+
+
         $client_ids = $bankGroup['client_ids'];
 
         $forwarded_balance = 0;
@@ -135,6 +137,8 @@ Route::get('client_daily_disbursement', function () {
             ->orderBy('date', 'asc')
             ->get();
 
+        $total_deposits = 0;
+
         $total_deposits = $dataClientDeposits->sum('amount');
 
         $client_expense_client_name = "(SELECT name FROM clients WHERE clients.id=client_expenses.client_id) AS client_expense_client_name";
@@ -150,6 +154,11 @@ Route::get('client_daily_disbursement', function () {
             ])
             ->orderBy('date', 'asc')
             ->get();
+
+        $total_expenses = 0;
+        $subtotal_deposits = 0;
+        $subtotal_expenses = 0;
+        $total_daily_disbursement = 0;
 
         $total_expenses = $dataClientExpenses->sum('amount');
 

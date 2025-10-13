@@ -28,7 +28,7 @@ export default function TabReportsDailyDisbursement() {
 
     useEffect(() => {
         const urlParams = new URLSearchParams(tableFilter).toString();
-        fetchData("GET", `api/client_daily_disbursement?${urlParams}`).then(
+        fetchData("GET", `api/get_report_daily_disbursement?${urlParams}`).then(
             res => {
                 if (res.success) setDataDailyDisbursement(res.data);
             }
