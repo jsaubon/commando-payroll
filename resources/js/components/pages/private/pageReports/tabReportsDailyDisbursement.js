@@ -36,6 +36,9 @@ export default function TabReportsDailyDisbursement() {
     }, [tableFilter]);
 
     const onChangeTable = (key, value) => {
+        if (key === "client_id" && value === "") {
+            setSelectedType(null);
+        }
         setTableFilter(prev => ({ ...prev, [key]: value }));
     };
 
@@ -189,6 +192,7 @@ export default function TabReportsDailyDisbursement() {
                         Daily Disbursement
                     </Title>
                 </div>
+                <br />
                 <div ref={componentRef}>
                     <Text>
                         {dataDailyDisbursement &&
@@ -232,8 +236,8 @@ export default function TabReportsDailyDisbursement() {
                                         >
                                             <strong>
                                                 Forwarded Balance :{" "}
-                                                {group.forwarded_balance_range
-                                                    ? `(${group.forwarded_balance_range.end_date})`
+                                                {group.forwarded_balance_month_range
+                                                    ? `(${group.forwarded_balance_month_range.end_date})`
                                                     : ""}
                                             </strong>
                                             <div
