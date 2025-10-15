@@ -67,7 +67,6 @@ export default function ModalExpenses(props) {
             .catch(err => {
                 notificationErrors(err);
             });
-        setFormLoadingClientExpenses(true);
     };
 
     useEffect(() => {
@@ -141,6 +140,7 @@ export default function ModalExpenses(props) {
                             required
                             label="Select Expenses Name"
                             placeholder="Select Expenses Name"
+                            showSearch
                         >
                             {dataExpensesName &&
                                 dataExpensesName.map((item, index) => (

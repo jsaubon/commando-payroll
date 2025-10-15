@@ -1,3 +1,4 @@
+// src/pages/reports/TabReportsDailyDisbursement.jsx
 import { useReactToPrint } from "react-to-print";
 import React, { useState, useEffect, useRef } from "react";
 import Text from "antd/lib/typography/Text";
@@ -12,13 +13,11 @@ import {
     Divider,
     Table
 } from "antd";
-
 import { fetchData } from "../../../../axios";
 
 export default function TabReportsDailyDisbursement() {
     const [dataClientName, setDataClientName] = useState(null);
     const [selectedType, setSelectedType] = useState(null);
-
     const [dataDailyDisbursement, setDataDailyDisbursement] = useState(null);
     const [tableFilter, setTableFilter] = useState({
         client_id: "",
@@ -28,9 +27,7 @@ export default function TabReportsDailyDisbursement() {
 
     useEffect(() => {
         fetchData("GET", "api/client?sort=asc").then(res => {
-            if (res.success) {
-                setDataClientName(res.data);
-            }
+            if (res.success) setDataClientName(res.data);
         });
         return () => {};
     }, []);
@@ -45,9 +42,6 @@ export default function TabReportsDailyDisbursement() {
     }, [tableFilter]);
 
     const onChangeTable = (key, value) => {
-        if (key === "client_id" && value === "") {
-            setSelectedType(null);
-        }
         setTableFilter(prev => ({ ...prev, [key]: value }));
     };
 
@@ -58,19 +52,13 @@ export default function TabReportsDailyDisbursement() {
     });
 
     const columnsDeposit = [
+        { title: "Date", dataIndex: "date", key: "date" },
         {
-            title: "Date",
-            dataIndex: "date",
-            key: "date"
-        },
-
-        {
-            title: "Client Name",
-            dataIndex: "client_deposit_client_name",
-            key: "client_deposit_client_name",
+            title: "Deposit Name",
+            dataIndex: "client_deposit_name",
+            key: "client_deposit_name",
             width: 200
         },
-
         {
             title: "Amount",
             dataIndex: "amount",
@@ -84,22 +72,16 @@ export default function TabReportsDailyDisbursement() {
                     : ""
         }
     ];
-    const columnsExpense = [
-        {
-            // title: "Date",
-            dataIndex: "date",
-            key: "date"
-        },
 
+    const columnsExpense = [
+        { dataIndex: "date", key: "date" },
         {
             title: "Expense",
             dataIndex: "client_expense_name",
             key: "client_expense_name",
             width: 200
         },
-
         {
-            // title: "Amount",
             dataIndex: "amount",
             key: "amount",
             align: "right",
@@ -116,7 +98,7 @@ export default function TabReportsDailyDisbursement() {
         <Card>
             <Title level={4}>Daily Disbursement</Title>
 
-            <div>
+            <div id="print-container" ref={componentRef}>
                 <div className="text-center">
                     <Text>
                         <Select
@@ -149,7 +131,6 @@ export default function TabReportsDailyDisbursement() {
                                         const firstCommando = dataClientName.find(
                                             c => c.type === "First Commando"
                                         );
-
                                         const sameId =
                                             commando &&
                                             firstCommando &&
@@ -182,7 +163,7 @@ export default function TabReportsDailyDisbursement() {
                             )}
                         </Select>
 
-                        <br></br>
+                        <br />
                         <i>
                             BUTUAN MAIN OFFICE
                             <br />
@@ -192,16 +173,14 @@ export default function TabReportsDailyDisbursement() {
                         </i>
                     </Text>
 
-                    <Row>
+                    <Row gutter={16} className="mt-10 hide-during-print">
                         <Col xs={12} md={12} className="text-center">
                             <div className="ant-form-item-label">
                                 <label>NAME OF CLIENT </label>
                                 <Select
                                     className="select-br-b-only"
                                     name="client_id"
-                                    style={{
-                                        width: 200
-                                    }}
+                                    style={{ width: 200 }}
                                     allowClear
                                     showSearch
                                     showArrow={false}
@@ -257,167 +236,136 @@ export default function TabReportsDailyDisbursement() {
                     </Title>
                 </div>
                 <br />
-                <div ref={componentRef}>
+
+                {tableFilter.client_id &&
+                tableFilter.month_start &&
+                tableFilter.month_end ? (
                     <Text>
                         {dataDailyDisbursement &&
-                            dataDailyDisbursement.map((group, index) => {
-                                return (
+                        dataDailyDisbursement.length > 0 ? (
+                            dataDailyDisbursement.map((group, index) => (
+                                <div
+                                    key={index}
+                                    className="report-group"
+                                    style={{
+                                        marginBottom: 40,
+                                        backgroundColor: "#f9f9f9",
+                                        border: "1px solid #ccc",
+                                        borderRadius: 6,
+                                        padding: 15
+                                    }}
+                                >
                                     <div
-                                        key={index}
                                         style={{
-                                            marginBottom: 40,
-                                            backgroundColor: "#f9f9f9",
-                                            border: "1px solid #ccc",
-                                            borderRadius: 6,
-                                            padding: 15
+                                            backgroundColor: "#0d5b10",
+                                            padding: "8px 12px",
+                                            fontWeight: "bold",
+                                            borderRadius: 4,
+                                            marginBottom: 10,
+                                            color: "#fff"
+                                        }}
+                                        className="report-header-print"
+                                    >
+                                        {group.client &&
+                                        group.client.type === "Commando"
+                                            ? "COMMANDO SECURITY SERVICE AGENCY, INC.".toUpperCase()
+                                            : group.client &&
+                                              group.client.type ===
+                                                  "First Commando"
+                                            ? "FIRST COMMANDO MANPOWER SERVICES".toUpperCase()
+                                            : group.client_bank_info.toUpperCase()}
+                                    </div>
+
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            justifyContent: "space-between",
+                                            alignItems: "center"
                                         }}
                                     >
+                                        <strong>
+                                            Forwarded Balance :{" "}
+                                            {group.forwarded_balance_month_range
+                                                ? `(${group.forwarded_balance_month_range.end_date})`
+                                                : ""}
+                                        </strong>
                                         <div
                                             style={{
-                                                backgroundColor: "#0d5b10",
-                                                padding: "8px 12px",
                                                 fontWeight: "bold",
-                                                borderRadius: 4,
-                                                marginBottom: 10,
-                                                color: "#fff"
+                                                fontSize: 20
                                             }}
                                         >
-                                            {group.client &&
-                                            group.client.type === "Commando"
-                                                ? "COMMANDO SECURITY SERVICE AGENCY, INC.".toUpperCase()
-                                                : group.client &&
-                                                  group.client.type ===
-                                                      "First Commando"
-                                                ? "FIRST COMMANDO MANPOWER SERVICES".toUpperCase()
-                                                : group.client_bank_info.toUpperCase()}
+                                            {group.forwarded_balance.toLocaleString(
+                                                undefined,
+                                                {
+                                                    minimumFractionDigits: 2
+                                                }
+                                            )}
                                         </div>
+                                    </div>
+
+                                    <div style={{ marginTop: 10 }}>
+                                        <strong
+                                            style={{
+                                                textTransform: "uppercase",
+                                                fontWeight: "bold",
+                                                fontSize: 16
+                                            }}
+                                        >
+                                            Deposits
+                                        </strong>
+                                        <Table
+                                            dataSource={group.deposits}
+                                            columns={columnsDeposit}
+                                            pagination={false}
+                                            bordered={false}
+                                            rowKey={(record, index) => index}
+                                        />
                                         <div
                                             style={{
                                                 display: "flex",
                                                 justifyContent: "space-between",
-                                                alignItems: "center"
+                                                paddingRight: 10,
+                                                marginTop: 10,
+                                                fontWeight: "bold"
                                             }}
                                         >
-                                            <strong>
-                                                Forwarded Balance :{" "}
-                                                {group.forwarded_balance_month_range
-                                                    ? `(${group.forwarded_balance_month_range.end_date})`
-                                                    : ""}
-                                            </strong>
-                                            <div
+                                            <span>Sub-Total</span>
+                                            <span
                                                 style={{
-                                                    fontWeight: "bold",
-                                                    fontSize: 20
+                                                    textAlign: "right",
+                                                    width: 220,
+                                                    fontSize: 20,
+                                                    fontWeight: "bold"
                                                 }}
                                             >
-                                                {group.forwarded_balance.toLocaleString(
+                                                {group.subtotal_deposits.toLocaleString(
                                                     undefined,
                                                     {
                                                         minimumFractionDigits: 2
                                                     }
                                                 )}
-                                            </div>
-                                        </div>
-                                        <div style={{ marginTop: 10 }}>
-                                            <strong
-                                                style={{
-                                                    textTransform: "uppercase",
-                                                    fontWeight: "bold",
-                                                    fontSize: 16
-                                                }}
-                                            >
-                                                Deposits
-                                            </strong>
-
-                                            <Table
-                                                dataSource={group.deposits}
-                                                columns={columnsDeposit}
-                                                pagination={false}
-                                                bordered={false}
-                                                rowKey={(record, index) =>
-                                                    index
-                                                }
-                                            />
-
-                                            <div
-                                                style={{
-                                                    display: "flex",
-                                                    justifyContent:
-                                                        "space-between",
-                                                    paddingRight: 10,
-                                                    marginTop: 10,
-                                                    fontWeight: "bold"
-                                                }}
-                                            >
-                                                <span>Sub-Total</span>
-                                                <span
-                                                    style={{
-                                                        textAlign: "right",
-                                                        width: 220,
-                                                        fontSize: 20,
-                                                        fontWeight: "bold"
-                                                    }}
-                                                >
-                                                    {group.subtotal_deposits.toLocaleString(
-                                                        undefined,
-                                                        {
-                                                            minimumFractionDigits: 2
-                                                        }
-                                                    )}
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <div style={{ marginTop: 10 }}>
-                                            <span
-                                                style={{
-                                                    textTransform: "uppercase",
-                                                    fontWeight: "bold",
-                                                    fontSize: 16
-                                                }}
-                                            >
-                                                Expenses
                                             </span>
-                                            <Table
-                                                columns={columnsExpense}
-                                                dataSource={group.expenses}
-                                                pagination={false}
-                                                bordered={false}
-                                                rowKey={(record, index) =>
-                                                    index
-                                                }
-                                            />
-
-                                            <div
-                                                style={{
-                                                    display: "flex",
-                                                    justifyContent:
-                                                        "space-between",
-                                                    paddingRight: 10,
-                                                    marginTop: 5,
-                                                    fontWeight: "bold"
-                                                }}
-                                            >
-                                                <span>Sub-Total </span>
-                                                <span
-                                                    style={{
-                                                        textAlign: "right",
-                                                        width: 220,
-                                                        fontSize: 18,
-                                                        fontWeight: "bold"
-                                                    }}
-                                                >
-                                                    {group.total_daily_disbursement.toLocaleString(
-                                                        undefined,
-                                                        {
-                                                            minimumFractionDigits: 2
-                                                        }
-                                                    )}
-                                                </span>
-                                            </div>
                                         </div>
+                                    </div>
 
-                                        <Divider />
+                                    <div style={{ marginTop: 10 }}>
+                                        <span
+                                            style={{
+                                                textTransform: "uppercase",
+                                                fontWeight: "bold",
+                                                fontSize: 16
+                                            }}
+                                        >
+                                            Expenses
+                                        </span>
+                                        <Table
+                                            columns={columnsExpense}
+                                            dataSource={group.expenses}
+                                            pagination={false}
+                                            bordered={false}
+                                            rowKey={(record, index) => index}
+                                        />
 
                                         <div
                                             style={{
@@ -428,12 +376,12 @@ export default function TabReportsDailyDisbursement() {
                                                 fontWeight: "bold"
                                             }}
                                         >
-                                            <span> Total </span>
+                                            <span>Sub-Total </span>
                                             <span
                                                 style={{
                                                     textAlign: "right",
                                                     width: 220,
-                                                    fontSize: 20,
+                                                    fontSize: 18,
                                                     fontWeight: "bold"
                                                 }}
                                             >
@@ -446,11 +394,54 @@ export default function TabReportsDailyDisbursement() {
                                             </span>
                                         </div>
                                     </div>
-                                );
-                            })}
+
+                                    <Divider />
+
+                                    <div
+                                        className="report-total"
+                                        style={{
+                                            display: "flex",
+                                            justifyContent: "space-between",
+                                            paddingRight: 10,
+                                            marginTop: 5,
+                                            fontWeight: "bold"
+                                        }}
+                                    >
+                                        <span>Total</span>
+                                        <span
+                                            style={{
+                                                textAlign: "right",
+                                                width: 220,
+                                                fontSize: 20,
+                                                fontWeight: "bold"
+                                            }}
+                                        >
+                                            {group.total_daily_disbursement.toLocaleString(
+                                                undefined,
+                                                {
+                                                    minimumFractionDigits: 2
+                                                }
+                                            )}
+                                        </span>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <div
+                                style={{
+                                    textAlign: "center",
+                                    padding: "40px 0",
+                                    fontStyle: "italic",
+                                    color: "#999"
+                                }}
+                            >
+                                No data available.
+                            </div>
+                        )}
                     </Text>
-                </div>
-                <br />
+                ) : (
+                    <Table></Table>
+                )}
             </div>
 
             <div className="text-right mt-10">

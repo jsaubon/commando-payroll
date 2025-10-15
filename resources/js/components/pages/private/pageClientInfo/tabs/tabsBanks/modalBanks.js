@@ -125,6 +125,7 @@ export default function ModalBanks(props) {
                             required
                             label="Select Bank Name"
                             placeholder="Select Bank Name"
+                            showSearch
                         >
                             {dataBankName &&
                                 dataBankName.map((item, index) => (

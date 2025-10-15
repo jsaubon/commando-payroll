@@ -38,7 +38,6 @@ export default function ModalDepositsForm(props) {
             .catch(err => {
                 notificationErrors(err);
             });
-        setFormLoadingDeposits(true);
     };
 
     const [form] = Form.useForm();

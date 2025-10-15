@@ -58,13 +58,11 @@ export default function ModalDeposit(props) {
                     refreshClientDeposits();
                     setTogglemodalDeposit({ open: false, data: null });
                     form.resetFields();
-                    setFormLoadingClientDeposit(false);
                 }
             })
             .catch(err => {
                 notificationErrors(err);
             });
-        setFormLoadingClientDeposit(true);
     };
 
     useEffect(() => {
@@ -125,6 +123,7 @@ export default function ModalDeposit(props) {
                     <Form.Item
                         label="Deposit Name"
                         name="deposit_id"
+                        showSearch
                         rules={[
                             {
                                 required: true,
@@ -138,6 +137,7 @@ export default function ModalDeposit(props) {
                             required
                             label="Select Deposit Name"
                             placeholder="Select Deposit Name"
+                            showSearch
                         >
                             {dataDeposit &&
                                 dataDeposit.map((item, index) => (
