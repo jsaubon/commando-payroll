@@ -97,11 +97,9 @@ Route::get('get_report_daily_disbursement', function () {
 
     foreach ($bankGroups as $bank_id => $bankGroup) {
 
-
         $client_ids = $bankGroup['client_ids'];
-
         $forwarded_balance = 0;
-        $forwarded_balance_range = null;
+        $forwarded_balance_month_range = null;
 
         if ($month_start) {
             $first_deposit = \App\ClientDeposit::whereIn('client_id', $client_ids)
@@ -109,7 +107,7 @@ Route::get('get_report_daily_disbursement', function () {
                 ->first();
 
             if ($first_deposit) {
-                $forwarded_balance_range = [
+                $forwarded_balance_month_range = [
                     'start_date' => $first_deposit->date,
                     'end_date' => date('Y-m-d', strtotime($month_start . ' -1 day')),
                 ];
@@ -169,7 +167,7 @@ Route::get('get_report_daily_disbursement', function () {
         $dataResult[] = [
             'client_bank_info' => $bankGroup['client_bank_info'],
             'forwarded_balance' => $forwarded_balance,
-            'forwarded_balance_range' => $forwarded_balance_range,
+            'forwarded_balance_month_range' => $forwarded_balance_month_range,
             'deposits' => $dataClientDeposits,
             'expenses' => $dataClientExpenses,
             'subtotal_deposits' => $subtotal_deposits,

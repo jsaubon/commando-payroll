@@ -2,7 +2,16 @@ import { useReactToPrint } from "react-to-print";
 import React, { useState, useEffect, useRef } from "react";
 import Text from "antd/lib/typography/Text";
 import Title from "antd/lib/typography/Title";
-import { Card, Col, DatePicker, Row, Select, Button, Divider } from "antd";
+import {
+    Card,
+    Col,
+    DatePicker,
+    Row,
+    Select,
+    Button,
+    Divider,
+    Table
+} from "antd";
 
 import { fetchData } from "../../../../axios";
 
@@ -47,6 +56,61 @@ export default function TabReportsDailyDisbursement() {
     const handlePrintDailyDisbursementReport = useReactToPrint({
         content: () => componentRef.current
     });
+
+    const columnsDeposit = [
+        {
+            title: "Date",
+            dataIndex: "date",
+            key: "date"
+        },
+
+        {
+            title: "Client Name",
+            dataIndex: "client_deposit_client_name",
+            key: "client_deposit_client_name",
+            width: 200
+        },
+
+        {
+            title: "Amount",
+            dataIndex: "amount",
+            key: "amount",
+            align: "right",
+            render: value =>
+                value
+                    ? parseFloat(value).toLocaleString(undefined, {
+                          minimumFractionDigits: 2
+                      })
+                    : ""
+        }
+    ];
+    const columnsExpense = [
+        {
+            // title: "Date",
+            dataIndex: "date",
+            key: "date"
+        },
+
+        {
+            title: "Expense",
+            dataIndex: "client_expense_name",
+            key: "client_expense_name",
+            width: 200
+        },
+
+        {
+            // title: "Amount",
+            dataIndex: "amount",
+            key: "amount",
+            align: "right",
+            render: value =>
+                value
+                    ? parseFloat(value).toLocaleString(undefined, {
+                          minimumFractionDigits: 2
+                      })
+                    : ""
+        }
+    ];
 
     return (
         <Card>
@@ -264,85 +328,16 @@ export default function TabReportsDailyDisbursement() {
                                             >
                                                 Deposits
                                             </strong>
-                                            {group.deposits.map((d, idx) => {
-                                                const isLast =
-                                                    idx ===
-                                                    group.deposits.length - 1;
 
-                                                return (
-                                                    <div
-                                                        key={idx}
-                                                        style={{
-                                                            display: "flex",
-                                                            justifyContent:
-                                                                "space-between",
-                                                            alignItems:
-                                                                "center",
-                                                            padding: "4px 10px",
-                                                            borderBottom:
-                                                                "1px dotted #ddd"
-                                                        }}
-                                                    >
-                                                        <div
-                                                            style={{ flex: 1 }}
-                                                        >
-                                                            {d.date
-                                                                ? new Date(
-                                                                      d.date
-                                                                  ).toLocaleDateString()
-                                                                : ""}{" "}
-                                                            -{" "}
-                                                            {d.client_deposit_client_name ||
-                                                                "—"}
-                                                        </div>
-
-                                                        <div
-                                                            style={{
-                                                                width: 90,
-
-                                                                fontSize: 16
-                                                            }}
-                                                        >
-                                                            {d.amount
-                                                                ? parseFloat(
-                                                                      d.amount
-                                                                  ).toLocaleString(
-                                                                      undefined,
-                                                                      {
-                                                                          minimumFractionDigits: 2
-                                                                      }
-                                                                  )
-                                                                : ""}
-                                                        </div>
-
-                                                        <div
-                                                            style={{
-                                                                width: 120,
-                                                                fontWeight:
-                                                                    "bold",
-                                                                fontSize: 18,
-                                                                textAlign:
-                                                                    "right",
-
-                                                                borderBottom: isLast
-                                                                    ? "1px solid #000"
-                                                                    : "none"
-                                                            }}
-                                                        >
-                                                            {isLast && (
-                                                                <span>
-                                                                    {group.total_deposits.toLocaleString(
-                                                                        undefined,
-                                                                        {
-                                                                            minimumFractionDigits: 2
-                                                                        }
-                                                                    )}
-                                                                </span>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                );
-                                            })}
+                                            <Table
+                                                dataSource={group.deposits}
+                                                columns={columnsDeposit}
+                                                pagination={false}
+                                                bordered={false}
+                                                rowKey={(record, index) =>
+                                                    index
+                                                }
+                                            />
 
                                             <div
                                                 style={{
@@ -350,11 +345,11 @@ export default function TabReportsDailyDisbursement() {
                                                     justifyContent:
                                                         "space-between",
                                                     paddingRight: 10,
-                                                    marginTop: 5,
+                                                    marginTop: 10,
                                                     fontWeight: "bold"
                                                 }}
                                             >
-                                                <span>Sub-Total </span>
+                                                <span>Sub-Total</span>
                                                 <span
                                                     style={{
                                                         textAlign: "right",
@@ -372,6 +367,7 @@ export default function TabReportsDailyDisbursement() {
                                                 </span>
                                             </div>
                                         </div>
+
                                         <div style={{ marginTop: 10 }}>
                                             <span
                                                 style={{
@@ -382,85 +378,15 @@ export default function TabReportsDailyDisbursement() {
                                             >
                                                 Expenses
                                             </span>
-                                            {group.expenses.map((ex, idx) => {
-                                                const isLast =
-                                                    idx ===
-                                                    group.expenses.length - 1;
-
-                                                return (
-                                                    <div
-                                                        key={idx}
-                                                        style={{
-                                                            display: "flex",
-                                                            justifyContent:
-                                                                "space-between",
-                                                            alignItems:
-                                                                "center",
-                                                            padding: "4px 10px",
-                                                            borderBottom:
-                                                                "1px dotted #ddd"
-                                                        }}
-                                                    >
-                                                        <div
-                                                            style={{ flex: 1 }}
-                                                        >
-                                                            {ex.date
-                                                                ? new Date(
-                                                                      ex.date
-                                                                  ).toLocaleDateString()
-                                                                : ""}{" "}
-                                                            -{" "}
-                                                            {ex.client_expense_name ||
-                                                                "—"}
-                                                        </div>
-
-                                                        <div
-                                                            style={{
-                                                                width: "90px",
-
-                                                                fontSize: 16
-                                                            }}
-                                                        >
-                                                            {ex.amount
-                                                                ? parseFloat(
-                                                                      ex.amount
-                                                                  ).toLocaleString(
-                                                                      undefined,
-                                                                      {
-                                                                          minimumFractionDigits: 2
-                                                                      }
-                                                                  )
-                                                                : ""}
-                                                        </div>
-
-                                                        <div
-                                                            style={{
-                                                                width: 120,
-                                                                fontWeight:
-                                                                    "bold",
-                                                                fontSize: 18,
-                                                                textAlign:
-                                                                    "right",
-
-                                                                borderBottom: isLast
-                                                                    ? "1px solid #000"
-                                                                    : "none"
-                                                            }}
-                                                        >
-                                                            {isLast && (
-                                                                <span>
-                                                                    {group.total_expenses.toLocaleString(
-                                                                        undefined,
-                                                                        {
-                                                                            minimumFractionDigits: 2
-                                                                        }
-                                                                    )}
-                                                                </span>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                );
-                                            })}
+                                            <Table
+                                                columns={columnsExpense}
+                                                dataSource={group.expenses}
+                                                pagination={false}
+                                                bordered={false}
+                                                rowKey={(record, index) =>
+                                                    index
+                                                }
+                                            />
 
                                             <div
                                                 style={{
