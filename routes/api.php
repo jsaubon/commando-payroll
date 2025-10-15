@@ -123,6 +123,7 @@ Route::get('get_report_daily_disbursement', function () {
         }
 
         $client_deposit_client_name = "(SELECT name FROM clients WHERE clients.id=client_deposits.client_id) AS client_deposit_client_name";
+        $client_deposit_name = "(SELECT deposit_name FROM deposits WHERE deposits.id=client_deposits.deposit_id) AS client_deposit_name";
         $client_deposit_client_description = "(SELECT deposit_description FROM deposits WHERE deposits.id=client_deposits.deposit_id) AS client_deposit_client_description";
 
         $dataClientDeposits = \App\ClientDeposit::whereIn('client_id', $client_ids)
@@ -130,6 +131,7 @@ Route::get('get_report_daily_disbursement', function () {
             ->select([
                 'client_deposits.*',
                 \DB::raw($client_deposit_client_name),
+                \DB::raw($client_deposit_name),
                 \DB::raw($client_deposit_client_description)
             ])
             ->orderBy('date', 'asc')
