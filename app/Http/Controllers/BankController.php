@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Bank;
+use App\ClientBanks;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -141,8 +142,6 @@ class BankController extends Controller
         $findBank = Bank::find($id);
 
         if ($findBank) {
-
-
             if ($findBank->delete()) {
                 $ret  = [
                     "success" => true,

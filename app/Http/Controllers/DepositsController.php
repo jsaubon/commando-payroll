@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Client;
+use App\ClientDeposit;
 use App\Deposits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -13,20 +15,32 @@ class DepositsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index(Request $request)
     {
 
+
+        $bank_name = "(SELECT `bank_name` FROM `banks` WHERE `banks`.id=deposits.bank_id)";
+        $date_request_formatted = "DATE_FORMAT(date_request, '%Y-%m-%d')";
+        $date_transaction_formatted = "DATE_FORMAT(date_transaction, '%Y-%m-%d')";
+
         $data = Deposits::select([
             "*",
+            DB::raw($bank_name . " as bank_name"),
+            DB::raw($date_request_formatted . " as date_request_formatted"),
+            DB::raw($date_transaction_formatted . " as date_transaction_formatted")
 
         ]);
 
-        if ($request->search) {
-            $data = $data->where(function ($query) use ($request) {
-                $query->where('deposit_name', 'like', '%' . $request->search . '%')
-                    ->orWhere('deposit_description', 'like', '%' . $request->search . '%');
-            });
-        }
+        $data = $data->where(function ($query) use ($request, $bank_name, $date_request_formatted, $date_transaction_formatted) {
+            if ($request->search) {
+                $query->orWhere('deposit_name', 'LIKE', "%$request->search%");
+                $query->orWhere('deposit_description', 'LIKE', "%$request->search%");
+                $query->orWhere(DB::raw($bank_name), 'LIKE', "%$request->search%");
+                $query->orWhere(DB::raw($date_request_formatted), 'LIKE', "%$request->search%");
+                $query->orWhere(DB::raw($date_transaction_formatted), 'LIKE', "%$request->search%");
+            }
+        });
 
         if ($request->sort_field && $request->sort_order) {
             if (
@@ -37,6 +51,10 @@ class DepositsController extends Controller
             }
         } else {
             $data = $data->orderBy('id', 'desc');
+        }
+
+        if ($request->bank_id) {
+            $data = $data->where('bank_id', $request->bank_id);
         }
 
         if ($request->page_size) {
@@ -66,8 +84,13 @@ class DepositsController extends Controller
         ];
 
         $dataDeposit = $request->validate([
+            'bank_id' => 'required|exists:banks,id',
             'deposit_name' => 'required|string',
             'deposit_description' => 'required|string',
+            'amount' => 'required|numeric',
+            'date_request' => 'required|date',
+            'date_transaction' => 'nullable|date',
+            'notes' => 'nullable|string',
 
         ]);
 
@@ -134,13 +157,16 @@ class DepositsController extends Controller
         $findDeposit = Deposits::find($id);
 
         if ($findDeposit) {
+            try {
 
-
-            if ($findDeposit->delete()) {
-                $ret  = [
-                    "success" => true,
-                    "message" => "Data deleted successfully"
-                ];
+                if ($findDeposit->delete()) {
+                    $ret = [
+                        "success" => true,
+                        "message" => "Data deleted successfully"
+                    ];
+                }
+            } catch (\Throwable $th) {
+                $ret['message'] = "An error occurred: " . $th->getMessage();
             }
         }
 

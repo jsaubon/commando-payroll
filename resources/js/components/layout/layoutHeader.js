@@ -26,6 +26,12 @@ const LayoutHeader = () => {
                 <Menu.Item key="/payrolls">
                     <Link to="/payrolls">Payrolls</Link>
                 </Menu.Item>
+                <Menu.Item key="/deposits">
+                    <Link to="/deposits">Deposits</Link>
+                </Menu.Item>
+                <Menu.Item key="/expenses">
+                    <Link to="/expenses">Expenses</Link>
+                </Menu.Item>
                 <Menu.Item key="/reports">
                     <Link to="/reports">Reports</Link>
                 </Menu.Item>
@@ -37,12 +43,6 @@ const LayoutHeader = () => {
                 >
                     <Menu.Item key="/banks">
                         <Link to="/banks">Banks</Link>
-                    </Menu.Item>
-                    <Menu.Item key="/expenses">
-                        <Link to="/expenses">Expenses</Link>
-                    </Menu.Item>
-                    <Menu.Item key="/deposits">
-                        <Link to="/deposits">Deposits</Link>
                     </Menu.Item>
                     <Menu.Item key="/users">
                         <Link to="/users">Users</Link>

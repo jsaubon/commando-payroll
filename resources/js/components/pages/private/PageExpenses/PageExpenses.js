@@ -36,7 +36,7 @@ export default function PageExpenses() {
         fetchData("DELETE", "api/expenses/" + record.id).then(res => {
             if (res.success) {
                 notification.success({
-                    message: "Expense",
+                    message: "Expenses",
                     description: res.message
                 });
                 setDataExpenses(prev =>
@@ -73,15 +73,38 @@ export default function PageExpenses() {
                     pagination={false}
                 >
                     <Table.Column
-                        title="Expense Name"
+                        title="Bank"
+                        dataIndex="bank_name"
+                        key="bank_name"
+                    />
+                    <Table.Column
+                        title="Expenses Name"
                         dataIndex="expense_name"
                         key="expense_name"
                     />
                     <Table.Column
-                        title="Expense Description"
+                        title="Expenses Description"
                         dataIndex="expense_description"
                         key="expense_description"
                     />
+                    <Table.Column
+                        title="Amount"
+                        dataIndex="amount"
+                        key="amount"
+                    />
+                    <Table.Column
+                        title="Date"
+                        dataIndex="date_formatted"
+                        key="date_formatted"
+                    />
+                    <Table.Column
+                        title="Out Standing Check"
+                        dataIndex="out_standing_check"
+                        key="out_standing_check"
+                    />
+                    <Table.Column title="PDC" dataIndex="pdc" key="pdc" />
+                    <Table.Column title="Notes" dataIndex="notes" key="notes" />
+
                     <Table.Column
                         title="Action"
                         key="action"

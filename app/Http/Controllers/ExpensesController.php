@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ClientExpenses;
 use App\Expenses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,17 +18,24 @@ class ExpensesController extends Controller
     public function index(Request $request)
     {
 
+
+        $bank_name = "(SELECT `bank_name` FROM `banks` WHERE `banks`.id=expenses.bank_id)";
+        $date_formatted = "DATE_FORMAT(date, '%Y-%m-%d')";
         $data = Expenses::select([
             "*",
+            DB::raw($bank_name . " AS bank_name"),
+            DB::raw($date_formatted . " AS date_formatted")
 
         ]);
 
-        if ($request->search) {
-            $data = $data->where(function ($query) use ($request) {
-                $query->where('expense_name', 'like', '%' . $request->search . '%')
-                    ->orWhere('expense_description', 'like', '%' . $request->search . '%');
-            });
-        }
+        $data = $data->where(function ($query) use ($request, $bank_name, $date_formatted) {
+            if ($request->search) {
+                $query->orWhere('expense_name', 'LIKE', "%$request->search%");
+                $query->orWhere('expense_description', 'LIKE', "%$request->search%");
+                $query->orWhere(DB::raw($bank_name), 'LIKE', "%$request->search%");
+                $query->orWhere(DB::raw($date_formatted), 'LIKE', "%$request->search%");
+            }
+        });
 
         if ($request->sort_field && $request->sort_order) {
             if (
@@ -38,6 +46,10 @@ class ExpensesController extends Controller
             }
         } else {
             $data = $data->orderBy('id', 'desc');
+        }
+
+        if ($request->bank_id) {
+            $data = $data->where('bank_id', $request->bank_id);
         }
 
         if ($request->page_size) {
@@ -68,8 +80,15 @@ class ExpensesController extends Controller
         ];
 
         $dataExpense = $request->validate([
+            'bank_id' => 'required|exists:banks,id',
             'expense_name' => 'required|string',
             'expense_description' => 'required|string',
+            'amount' => 'required|numeric',
+            'date' => 'required|date',
+            'out_standing_check' => 'nullable',
+            'pdc' => 'nullable',
+            'notes' => 'nullable|string',
+
 
         ]);
 
@@ -134,8 +153,6 @@ class ExpensesController extends Controller
         $findExpense = Expenses::find($id);
 
         if ($findExpense) {
-
-
             if ($findExpense->delete()) {
                 $ret  = [
                     "success" => true,

@@ -72,6 +72,11 @@ export default function PageDeposits() {
                     size="small"
                 >
                     <Table.Column
+                        title="Bank"
+                        dataIndex="bank_name"
+                        key="bank_name"
+                    />
+                    <Table.Column
                         title="Deposit Name"
                         dataIndex="deposit_name"
                         key="deposit_name"
@@ -81,6 +86,22 @@ export default function PageDeposits() {
                         dataIndex="deposit_description"
                         key="deposit_description"
                     />
+                    <Table.Column
+                        title="Amount"
+                        dataIndex="amount"
+                        key="amount"
+                    />
+                    <Table.Column
+                        title="Date Request"
+                        dataIndex="date_request_formatted"
+                        key="date_request_formatted"
+                    />
+                    <Table.Column
+                        title="Date Transaction"
+                        dataIndex="date_transaction_formatted"
+                        key="date_transaction_formatted"
+                    />
+                    <Table.Column title="Notes" dataIndex="notes" key="notes" />
 
                     <Table.Column
                         title="Action"

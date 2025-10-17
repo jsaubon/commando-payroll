@@ -111,16 +111,6 @@ const PageClientInfo = ({ match, history }) => {
                                     client_id={client_id}
                                 />
                             </Tabs.TabPane>
-                            <Tabs.TabPane tab="Bank" key="4">
-                                <TabsContentBanks client_id={client_id} />
-                            </Tabs.TabPane>
-
-                            <Tabs.TabPane tab="Deposit" key="5">
-                                <TabsContentDeposit client_id={client_id} />
-                            </Tabs.TabPane>
-                            <Tabs.TabPane tab="Expenses" key="6">
-                                <TabsContentExpenses client_id={client_id} />
-                            </Tabs.TabPane>
                         </Tabs>
                     </Card>
                 </Col>
