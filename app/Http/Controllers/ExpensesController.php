@@ -83,7 +83,7 @@ class ExpensesController extends Controller
             'bank_id' => 'required|exists:banks,id',
             'expense_name' => 'required|string',
             'expense_description' => 'required|string',
-            'amount' => 'required|numeric',
+            'amount' => 'required',
             'date' => 'required|date',
             'out_standing_check' => 'nullable',
             'pdc' => 'nullable',

@@ -165,7 +165,6 @@ export default function ModalExpensesForm(props) {
                     />
                 </Form.Item>
                 <Form.Item
-                    required
                     label="Expenses Description"
                     name="expense_description"
                     className="mb-15"
@@ -200,6 +199,7 @@ export default function ModalExpensesForm(props) {
                 </Form.Item>
                 <Form.Item
                     label="Date"
+                    required
                     name="date"
                     rules={[validateRules.required()]}
                 >

@@ -72,7 +72,7 @@ export default function PageDeposits() {
                     size="small"
                 >
                     <Table.Column
-                        title="Bank"
+                        title="Bank Name"
                         dataIndex="bank_name"
                         key="bank_name"
                     />

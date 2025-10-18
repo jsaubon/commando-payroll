@@ -1,4 +1,3 @@
-// src/pages/reports/TabReportsDailyDisbursement.jsx
 import { useReactToPrint } from "react-to-print";
 import React, { useState, useEffect, useRef } from "react";
 import Text from "antd/lib/typography/Text";
@@ -16,21 +15,10 @@ import {
 import { fetchData } from "../../../../axios";
 
 export default function TabReportsDailyDisbursement() {
-    const [dataClientName, setDataClientName] = useState(null);
-    const [selectedType, setSelectedType] = useState(null);
     const [dataDailyDisbursement, setDataDailyDisbursement] = useState(null);
     const [tableFilter, setTableFilter] = useState({
-        client_id: "",
-        month_start: "",
-        month_end: ""
+        month: ""
     });
-
-    useEffect(() => {
-        fetchData("GET", "api/client?sort=asc").then(res => {
-            if (res.success) setDataClientName(res.data);
-        });
-        return () => {};
-    }, []);
 
     useEffect(() => {
         const urlParams = new URLSearchParams(tableFilter).toString();
@@ -52,53 +40,298 @@ export default function TabReportsDailyDisbursement() {
     });
 
     const columnsDeposit = [
-        { title: "Date", dataIndex: "date", key: "date" },
         {
-            title: "Deposit Name",
-            dataIndex: "client_deposit_name",
-            key: "client_deposit_name",
-            width: 200
+            title: "Date",
+            dataIndex: "date_request_formatted",
+            key: "date_request_formatted"
         },
         {
-            title: "Amount",
+            title: "Deposit Name",
+            dataIndex: "deposit_name",
+            key: "deposit_name"
+        },
+        {
+            title: () => <div>Amount</div>,
             dataIndex: "amount",
             key: "amount",
-            align: "right",
-            render: value =>
-                value
-                    ? parseFloat(value).toLocaleString(undefined, {
-                          minimumFractionDigits: 2
-                      })
-                    : ""
+            align: "left",
+            width: 250,
+            render: (text, record, index) => {
+                const deposits = record.tableData || [];
+                const totalAmount = deposits.reduce(
+                    (sum, item) => sum + Number(item.amount || 0),
+                    0
+                );
+                const isLast = index === deposits.length - 1;
+
+                return (
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            whiteSpace: "nowrap"
+                        }}
+                    >
+                        <span
+                            style={{
+                                width: "50%",
+                                textAlign: "left",
+                                paddingRight: "25px"
+                            }}
+                        >
+                            {Number(text || 0).toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            })}
+                        </span>
+
+                        <span
+                            style={{
+                                width: "50%",
+                                textAlign: "right",
+                                fontWeight: isLast ? "700" : "normal",
+                                borderBottom: isLast ? "2px solid #000" : "none"
+                            }}
+                        >
+                            {isLast
+                                ? Number(totalAmount || 0).toLocaleString(
+                                      undefined,
+                                      {
+                                          minimumFractionDigits: 2,
+                                          maximumFractionDigits: 2
+                                      }
+                                  )
+                                : ""}
+                        </span>
+                    </div>
+                );
+            }
         }
     ];
 
     const columnsExpense = [
         { dataIndex: "date", key: "date" },
         {
-            title: "Expense",
-            dataIndex: "client_expense_name",
-            key: "client_expense_name",
+            title: "Expense Name",
+            dataIndex: "expense_name",
+            key: "expense_name"
+        },
+        {
+            dataIndex: "amount",
+            key: "amount",
+            align: "left",
+            width: 250,
+            render: (text, record, index) => {
+                const expenses = record.tableData || [];
+                const totalAmount = expenses.reduce(
+                    (sum, item) => sum + Number(item.amount || 0),
+                    0
+                );
+                const isLast = index === expenses.length - 1;
+
+                return (
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            whiteSpace: "nowrap"
+                        }}
+                    >
+                        <span
+                            style={{
+                                width: "50%",
+                                textAlign: "left",
+                                paddingRight: "25px"
+                            }}
+                        >
+                            {Number(text || 0).toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            })}
+                        </span>
+
+                        <span
+                            style={{
+                                textAlign: "right",
+                                width: "50%",
+                                fontWeight: isLast ? "700" : "normal",
+                                borderBottom: isLast ? "2px solid #000" : "none"
+                            }}
+                        >
+                            {isLast
+                                ? Number(totalAmount || 0).toLocaleString(
+                                      undefined,
+                                      {
+                                          minimumFractionDigits: 2,
+                                          maximumFractionDigits: 2
+                                      }
+                                  )
+                                : ""}
+                        </span>
+                    </div>
+                );
+            }
+        }
+    ];
+    const columnsOutstandingCheck = [
+        { dataIndex: "date", key: "date" },
+        {
+            dataIndex: "expense_name",
+            key: "expense_name",
             width: 200
         },
         {
             dataIndex: "amount",
             key: "amount",
-            align: "right",
-            render: value =>
-                value
-                    ? parseFloat(value).toLocaleString(undefined, {
-                          minimumFractionDigits: 2
-                      })
-                    : ""
+            align: "left",
+            width: 250,
+            render: (text, record, index) => {
+                const outstanding_checks = record.tableData || [];
+                const totalAmount = outstanding_checks.reduce(
+                    (sum, item) => sum + Number(item.amount || 0),
+                    0
+                );
+                const isLast = index === outstanding_checks.length - 1;
+
+                return (
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            whiteSpace: "nowrap"
+                        }}
+                    >
+                        <span
+                            style={{
+                                width: "50%",
+                                textAlign: "left",
+                                paddingRight: "25px"
+                            }}
+                        >
+                            {Number(text || 0).toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            })}
+                        </span>
+
+                        <span
+                            style={{
+                                textAlign: "right",
+                                width: "50%",
+                                fontWeight: isLast ? "700" : "normal",
+                                borderBottom: isLast ? "2px solid #000" : "none"
+                            }}
+                        >
+                            {isLast
+                                ? Number(totalAmount || 0).toLocaleString(
+                                      undefined,
+                                      {
+                                          minimumFractionDigits: 2,
+                                          maximumFractionDigits: 2
+                                      }
+                                  )
+                                : ""}
+                        </span>
+                    </div>
+                );
+            }
+        }
+    ];
+    const columnsPDC = [
+        { dataIndex: "date", key: "date" },
+        {
+            dataIndex: "expense_name",
+            key: "expense_name",
+            width: 200
+        },
+        {
+            dataIndex: "amount",
+            key: "amount",
+            align: "left",
+            width: 250,
+            render: (text, record, index) => {
+                const pdc = record.tableData || [];
+                const totalAmount = pdc.reduce(
+                    (sum, item) => sum + Number(item.amount || 0),
+                    0
+                );
+                const isLast = index === pdc.length - 1;
+
+                return (
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            whiteSpace: "nowrap"
+                        }}
+                    >
+                        <span
+                            style={{
+                                width: "50%",
+                                textAlign: "left",
+                                paddingRight: "25px"
+                            }}
+                        >
+                            {Number(text || 0).toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            })}
+                        </span>
+
+                        <span
+                            style={{
+                                textAlign: "right",
+                                width: "50%",
+                                fontWeight: isLast ? "700" : "normal",
+                                borderBottom: isLast ? "2px solid #000" : "none"
+                            }}
+                        >
+                            {isLast
+                                ? Number(totalAmount || 0).toLocaleString(
+                                      undefined,
+                                      {
+                                          minimumFractionDigits: 2,
+                                          maximumFractionDigits: 2
+                                      }
+                                  )
+                                : ""}
+                        </span>
+                    </div>
+                );
+            }
         }
     ];
 
     return (
         <Card>
-            <Title level={4}>Daily Disbursement</Title>
+            <Row gutter={16}>
+                <Col xs={24} md={24} lg={20}>
+                    <Title level={4}>Daily Disbursement</Title>
+                </Col>
+                <Col
+                    xs={12}
+                    md={12}
+                    lg={4}
+                    className="pull-right hide-during-print"
+                >
+                    <div className="ant-form-item-label">
+                        <label>Month</label>
+                        <DatePicker
+                            style={{ width: "200px" }}
+                            picker="month"
+                            onChange={dates => {
+                                onChangeTable("month", dates.format("YYYY-MM"));
+                            }}
+                        />
+                    </div>
+                </Col>
+            </Row>
 
-            <div id="print-container" ref={componentRef}>
+            <div id="" ref={componentRef}>
                 <div className="text-center">
                     <Text>
                         <Select
@@ -110,57 +343,19 @@ export default function TabReportsDailyDisbursement() {
                                 border: "none"
                             }}
                             className="select-no-border"
-                            placeholder="Select Company"
-                            value={
-                                selectedType ||
-                                (dataClientName && dataClientName.length > 0
-                                    ? dataClientName[0].id
-                                    : null)
-                            }
-                            onChange={value => {
-                                setSelectedType(value);
-                                onChangeTable("client_id", value);
-                            }}
+                            defaultValue="COMMANDO SECURITY SERVICE AGENCY, INC.
+                                                  (COMMANDO)"
                         >
-                            {dataClientName && (
-                                <>
-                                    {(() => {
-                                        const commando = dataClientName.find(
-                                            c => c.type === "Commando"
-                                        );
-                                        const firstCommando = dataClientName.find(
-                                            c => c.type === "First Commando"
-                                        );
-                                        const sameId =
-                                            commando &&
-                                            firstCommando &&
-                                            commando.id === firstCommando.id;
-
-                                        return (
-                                            <>
-                                                {commando && (
-                                                    <Select.Option
-                                                        value={commando.id}
-                                                    >
-                                                        {sameId
-                                                            ? commando.type.toUpperCase()
-                                                            : "COMMANDO SECURITY SERVICE AGENCY, INC. (COMMANDO)"}
-                                                    </Select.Option>
-                                                )}
-                                                {firstCommando && (
-                                                    <Select.Option
-                                                        value={firstCommando.id}
-                                                    >
-                                                        {sameId
-                                                            ? firstCommando.type.toUpperCase()
-                                                            : "FIRST COMMANDO MANPOWER SERVICES"}
-                                                    </Select.Option>
-                                                )}
-                                            </>
-                                        );
-                                    })()}
-                                </>
-                            )}
+                            <Select.Option
+                                value="COMMANDO SECURITY SERVICE AGENCY, INC.
+                                                      (COMMANDO)"
+                            >
+                                COMMANDO SECURITY SERVICE AGENCY, INC.
+                                (COMMANDO)
+                            </Select.Option>
+                            <Select.Option value="FIRST COMMANDO MANPOWER SERVICES">
+                                FIRST COMMANDO MANPOWER SERVICES
+                            </Select.Option>
                         </Select>
 
                         <br />
@@ -173,73 +368,13 @@ export default function TabReportsDailyDisbursement() {
                         </i>
                     </Text>
 
-                    <Row gutter={16} className="mt-10 hide-during-print">
-                        <Col xs={12} md={12} className="text-center">
-                            <div className="ant-form-item-label">
-                                <label>NAME OF CLIENT </label>
-                                <Select
-                                    className="select-br-b-only"
-                                    name="client_id"
-                                    style={{ width: 200 }}
-                                    allowClear
-                                    showSearch
-                                    showArrow={false}
-                                    value={tableFilter.client_id}
-                                    onChange={value => {
-                                        onChangeTable("client_id", value ?? "");
-                                    }}
-                                >
-                                    {dataClientName &&
-                                        dataClientName.map(
-                                            (clientName, key) => (
-                                                <Select.Option
-                                                    value={clientName.id}
-                                                    key={key}
-                                                >
-                                                    {clientName.name}
-                                                </Select.Option>
-                                            )
-                                        )}
-                                </Select>
-                            </div>
-                        </Col>
-                        <Col xs={12} md={12} className="text-center">
-                            <div className="ant-form-item-label">
-                                <label>Month Range </label>
-                                <DatePicker.RangePicker
-                                    picker="month"
-                                    onChange={dates => {
-                                        onChangeTable(
-                                            "month_start",
-                                            dates
-                                                ? dates[0]
-                                                      .startOf("month")
-                                                      .format("YYYY-MM-DD")
-                                                : ""
-                                        );
-                                        onChangeTable(
-                                            "month_end",
-                                            dates
-                                                ? dates[1]
-                                                      .endOf("month")
-                                                      .format("YYYY-MM-DD")
-                                                : ""
-                                        );
-                                    }}
-                                />
-                            </div>
-                        </Col>
-                    </Row>
-
                     <Title level={4} className="mb-0">
-                        Daily Disbursement
+                        Daily Disbursement Report
                     </Title>
                 </div>
                 <br />
 
-                {tableFilter.client_id &&
-                tableFilter.month_start &&
-                tableFilter.month_end ? (
+                {tableFilter.month ? (
                     <Text>
                         {dataDailyDisbursement &&
                         dataDailyDisbursement.length > 0 ? (
@@ -248,7 +383,7 @@ export default function TabReportsDailyDisbursement() {
                                     key={index}
                                     className="report-group"
                                     style={{
-                                        marginBottom: 40,
+                                        // marginBottom: 40,
                                         backgroundColor: "#f9f9f9",
                                         border: "1px solid #ccc",
                                         borderRadius: 6,
@@ -266,16 +401,8 @@ export default function TabReportsDailyDisbursement() {
                                         }}
                                         className="report-header-print"
                                     >
-                                        {group.client &&
-                                        group.client.type === "Commando"
-                                            ? "COMMANDO SECURITY SERVICE AGENCY, INC.".toUpperCase()
-                                            : group.client &&
-                                              group.client.type ===
-                                                  "First Commando"
-                                            ? "FIRST COMMANDO MANPOWER SERVICES".toUpperCase()
-                                            : group.client_bank_info.toUpperCase()}
+                                        {group.bank_info_formatted}
                                     </div>
-
                                     <div
                                         style={{
                                             display: "flex",
@@ -284,10 +411,11 @@ export default function TabReportsDailyDisbursement() {
                                         }}
                                     >
                                         <strong>
-                                            Forwarded Balance :{" "}
-                                            {group.forwarded_balance_month_range
-                                                ? `(${group.forwarded_balance_month_range.end_date})`
-                                                : ""}
+                                            Forwarded Balance : (
+                                            {
+                                                group.forwarded_balance_month_range
+                                            }
+                                            ){" "}
                                         </strong>
                                         <div
                                             style={{
@@ -295,7 +423,7 @@ export default function TabReportsDailyDisbursement() {
                                                 fontSize: 20
                                             }}
                                         >
-                                            {group.forwarded_balance.toLocaleString(
+                                            {group.forward_balance.toLocaleString(
                                                 undefined,
                                                 {
                                                     minimumFractionDigits: 2
@@ -315,12 +443,18 @@ export default function TabReportsDailyDisbursement() {
                                             Deposits
                                         </strong>
                                         <Table
-                                            dataSource={group.deposits}
+                                            dataSource={group.deposits.map(
+                                                (item, idx, arr) => ({
+                                                    ...item,
+                                                    tableData: arr
+                                                })
+                                            )}
                                             columns={columnsDeposit}
                                             pagination={false}
                                             bordered={false}
                                             rowKey={(record, index) => index}
                                         />
+
                                         <div
                                             style={{
                                                 display: "flex",
@@ -339,18 +473,25 @@ export default function TabReportsDailyDisbursement() {
                                                     fontWeight: "bold"
                                                 }}
                                             >
-                                                {group.subtotal_deposits.toLocaleString(
-                                                    undefined,
-                                                    {
-                                                        minimumFractionDigits: 2
-                                                    }
-                                                )}
+                                                {group.deposits.some(
+                                                    item =>
+                                                        item.amount !== null &&
+                                                        item.amount !==
+                                                            undefined
+                                                )
+                                                    ? group.subtotal_deposits.toLocaleString(
+                                                          undefined,
+                                                          {
+                                                              minimumFractionDigits: 2
+                                                          }
+                                                      )
+                                                    : ""}
                                             </span>
                                         </div>
                                     </div>
 
                                     <div style={{ marginTop: 10 }}>
-                                        <span
+                                        <strong
                                             style={{
                                                 textTransform: "uppercase",
                                                 fontWeight: "bold",
@@ -358,10 +499,15 @@ export default function TabReportsDailyDisbursement() {
                                             }}
                                         >
                                             Expenses
-                                        </span>
+                                        </strong>
                                         <Table
+                                            dataSource={group.expenses.map(
+                                                (item, idx, arr) => ({
+                                                    ...item,
+                                                    tableData: arr
+                                                })
+                                            )}
                                             columns={columnsExpense}
-                                            dataSource={group.expenses}
                                             pagination={false}
                                             bordered={false}
                                             rowKey={(record, index) => index}
@@ -372,25 +518,154 @@ export default function TabReportsDailyDisbursement() {
                                                 display: "flex",
                                                 justifyContent: "space-between",
                                                 paddingRight: 10,
-                                                marginTop: 5,
+                                                marginTop: 10,
                                                 fontWeight: "bold"
                                             }}
                                         >
-                                            <span>Sub-Total </span>
+                                            <span>Sub-Total</span>
                                             <span
                                                 style={{
                                                     textAlign: "right",
                                                     width: 220,
-                                                    fontSize: 18,
+                                                    fontSize: 20,
                                                     fontWeight: "bold"
                                                 }}
                                             >
-                                                {group.total_daily_disbursement.toLocaleString(
+                                                {group.expenses.some(
+                                                    item =>
+                                                        item.amount !== null &&
+                                                        item.amount !==
+                                                            undefined
+                                                )
+                                                    ? group.subtotal_expenses.toLocaleString(
+                                                          undefined,
+                                                          {
+                                                              minimumFractionDigits: 2
+                                                          }
+                                                      )
+                                                    : ""}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div style={{ marginTop: 10 }}>
+                                        <strong
+                                            style={{
+                                                textTransform: "uppercase",
+                                                fontWeight: "bold",
+                                                fontSize: 16
+                                            }}
+                                        >
+                                            Outstanding Checks
+                                        </strong>
+                                        <Table
+                                            dataSource={group.outstanding_checks.map(
+                                                (item, idx, arr) => ({
+                                                    ...item,
+                                                    tableData: arr
+                                                })
+                                            )}
+                                            columns={columnsOutstandingCheck}
+                                            pagination={false}
+                                            bordered={false}
+                                            rowKey={(record, index) => index}
+                                        />
+
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                justifyContent: "space-between",
+                                                paddingRight: 10,
+                                                marginTop: 10,
+                                                fontWeight: "bold"
+                                            }}
+                                        >
+                                            <span>Sub-Total</span>
+                                            <span
+                                                style={{
+                                                    textAlign: "right",
+                                                    width: 220,
+                                                    fontSize: 20,
+                                                    fontWeight: "bold"
+                                                }}
+                                            >
+                                                {/* {group.subtotal_outstandingcheck.toLocaleString(
                                                     undefined,
                                                     {
                                                         minimumFractionDigits: 2
                                                     }
-                                                )}
+                                                )} */}
+                                                {group.outstanding_checks.some(
+                                                    item =>
+                                                        item.amount !== null &&
+                                                        item.amount !==
+                                                            undefined
+                                                )
+                                                    ? group.subtotal_outstandingcheck.toLocaleString(
+                                                          undefined,
+                                                          {
+                                                              minimumFractionDigits: 2
+                                                          }
+                                                      )
+                                                    : ""}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div style={{ marginTop: 10 }}>
+                                        <strong
+                                            style={{
+                                                textTransform: "uppercase",
+                                                fontWeight: "bold",
+                                                fontSize: 16
+                                            }}
+                                        >
+                                            PDC
+                                        </strong>
+                                        <Table
+                                            dataSource={group.pdc.map(
+                                                (item, idx, arr) => ({
+                                                    ...item,
+                                                    tableData: arr
+                                                })
+                                            )}
+                                            columns={columnsPDC}
+                                            pagination={false}
+                                            bordered={false}
+                                            rowKey={(record, index) => index}
+                                        />
+
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                justifyContent: "space-between",
+                                                paddingRight: 10,
+                                                marginTop: 10,
+                                                fontWeight: "bold"
+                                            }}
+                                        >
+                                            <span>Sub-Total</span>
+                                            <span
+                                                style={{
+                                                    textAlign: "right",
+                                                    width: 220,
+                                                    fontSize: 20,
+                                                    fontWeight: "bold"
+                                                }}
+                                            >
+                                                {group.pdc.some(
+                                                    item =>
+                                                        item.amount !== null &&
+                                                        item.amount !==
+                                                            undefined
+                                                )
+                                                    ? group.subtotal_pdc.toLocaleString(
+                                                          undefined,
+                                                          {
+                                                              minimumFractionDigits: 2
+                                                          }
+                                                      )
+                                                    : ""}
                                             </span>
                                         </div>
                                     </div>
@@ -407,7 +682,13 @@ export default function TabReportsDailyDisbursement() {
                                             fontWeight: "bold"
                                         }}
                                     >
-                                        <span>Total</span>
+                                        <span
+                                            style={{
+                                                fontSize: 18
+                                            }}
+                                        >
+                                            Total
+                                        </span>
                                         <span
                                             style={{
                                                 textAlign: "right",
@@ -452,6 +733,76 @@ export default function TabReportsDailyDisbursement() {
                     Print
                 </Button>
             </div>
+
+            <style>
+                {`
+                    
+                    
+                    @media print {
+    @page {
+        size: A4 portrait;
+        margin: 10mm;
+    }
+
+    html, body {
+        width: 220mm;
+        height: 297mm;
+        margin: 0;
+        padding: 0;
+        -webkit-print-color-adjust: exact !important;
+        color-adjust: exact !important;
+        overflow: hidden !important;
+    }
+
+    #print-container {
+        transform: scale(0.85); 
+        transform-origin: top center;
+        width: 100%;
+        margin: 0 auto;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+    .ant-card {
+        box-shadow: none !important;
+        border: none !important;
+    }
+
+    .hide-during-print {
+        display: none !important;
+    }
+
+    .report-group {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+    table {
+        width: 100% !important;
+        table-layout: fixed !important;
+        border-collapse: collapse !important;
+    }
+
+    th, td {
+        font-size: 11px !important;
+        padding: 4px 6px !important;
+        word-wrap: break-word !important;
+    }
+
+    .report-header-print {
+        background-color: #0d5b10 !important;
+        color: #fff !important;
+        font-weight: bold !important;
+        padding: 6px 10px !important;
+        border-radius: 4px !important;
+        margin-bottom: 8px !important;
+        text-transform: uppercase;
+        font-size: 12px !important;
+    }
+        
+}
+`}
+            </style>
         </Card>
     );
 }

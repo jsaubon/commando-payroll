@@ -73,7 +73,7 @@ export default function PageExpenses() {
                     pagination={false}
                 >
                     <Table.Column
-                        title="Bank"
+                        title="Bank Name"
                         dataIndex="bank_name"
                         key="bank_name"
                     />

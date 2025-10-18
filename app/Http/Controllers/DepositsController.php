@@ -87,7 +87,7 @@ class DepositsController extends Controller
             'bank_id' => 'required|exists:banks,id',
             'deposit_name' => 'required|string',
             'deposit_description' => 'required|string',
-            'amount' => 'required|numeric',
+            'amount' => 'required',
             'date_request' => 'required|date',
             'date_transaction' => 'nullable|date',
             'notes' => 'nullable|string',

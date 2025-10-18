@@ -166,11 +166,9 @@ export default function ModalDepositsForm(props) {
                         />
                     </Form.Item>
                     <Form.Item
-                        required
                         label="Deposit Description"
                         name="deposit_description"
                         className="mb-15"
-                        rules={[validateRules.required()]}
                     >
                         <Input
                             name="deposit_description"
@@ -181,6 +179,7 @@ export default function ModalDepositsForm(props) {
                         label="Amount"
                         name="amount"
                         rules={[validateRules.required()]}
+                        required
                     >
                         <Input
                             placeholder="Amount"
@@ -198,18 +197,10 @@ export default function ModalDepositsForm(props) {
                         ></Input>
                     </Form.Item>
 
-                    <Form.Item
-                        label="Date Request"
-                        name="date_request"
-                        rules={[validateRules.required()]}
-                    >
+                    <Form.Item label="Date Request" name="date_request">
                         <DatePicker style={{ width: "100%" }} />
                     </Form.Item>
-                    <Form.Item
-                        label="Date Transaction"
-                        name="date_transaction"
-                        rules={[validateRules.required()]}
-                    >
+                    <Form.Item label="Date Transaction" name="date_transaction">
                         <DatePicker style={{ width: "100%" }} />
                     </Form.Item>
                     <Form.Item label="Notes" name="notes">
