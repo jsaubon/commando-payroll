@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Input, Row, Table } from "antd";
+import { Button, Col, Input, notification, Row, Table } from "antd";
 
 import { fetchData } from "../../../../../../axios";
 import ModalExpenses from "./modalExpenses";
@@ -17,7 +17,7 @@ export default function TabsContentExpenses(props) {
         sort: "asc"
     });
 
-    const [togglemodalExpenses, setTogglemodalExpenses] = useState({
+    const [togglemodalClientExpenses, setTogglemodalClientExpenses] = useState({
         open: false,
         data: null
     });
@@ -32,6 +32,20 @@ export default function TabsContentExpenses(props) {
         ).then(res => {
             if (res.success) {
                 setDataClientExpenses(res.data);
+            }
+        });
+    };
+
+    const handleDeleteClientExpenses = record => {
+        fetchData("DELETE", "api/client_expenses/" + record.id).then(res => {
+            if (res.success) {
+                notification.success({
+                    message: res.message,
+                    description: res.message
+                });
+                setDataClientExpenses(prev =>
+                    prev.filter(clientExpense => clientExpense.id !== record.id)
+                );
             }
         });
     };
@@ -56,7 +70,7 @@ export default function TabsContentExpenses(props) {
                         <Button
                             type="primary"
                             onClick={e =>
-                                setTogglemodalExpenses({
+                                setTogglemodalClientExpenses({
                                     open: true,
                                     data: null
                                 })
@@ -98,11 +112,65 @@ export default function TabsContentExpenses(props) {
                     key="date_formatted"
                 />
                 <Table.Column title="Notes" dataIndex="notes" key="notes" />
+
+                {/* <Table.Column
+                    title="Action"
+                    key="action"
+                    width={100}
+                    align="center"
+                    render={(text, record) => {
+                        return (
+                            <>
+                                {" "}
+                                {userdata.role != "Staff" && (
+                                    <ButtonGroup>
+                                        {" "}
+                                        <Button
+                                            size="small"
+                                            type="primary"
+                                            icon={<EditOutlined />}
+                                            onClick={e =>
+                                                setTogglemodalClientDeposit({
+                                                    open: true,
+                                                    data: record
+                                                })
+                                            }
+                                        >
+                                            {" "}
+                                            Edit{" "}
+                                        </Button>{" "}
+                                        <Button
+                                            size="small"
+                                            type="primary"
+                                            danger
+                                            icon={<DeleteOutlined />}
+                                        >
+                                            {" "}
+                                            <Popconfirm
+                                                title="Are you sure delete this data?"
+                                                onConfirm={e =>
+                                                    handleDeleteClientExpenses(
+                                                        record
+                                                    )
+                                                }
+                                                okText="Yes"
+                                                cancelText="No"
+                                            >
+                                                {" "}
+                                                Delete{" "}
+                                            </Popconfirm>{" "}
+                                        </Button>{" "}
+                                    </ButtonGroup>
+                                )}{" "}
+                            </>
+                        );
+                    }}
+                /> */}
             </Table>
 
             <ModalExpenses
-                togglemodalExpenses={togglemodalExpenses}
-                setTogglemodalExpenses={setTogglemodalExpenses}
+                togglemodalClientExpenses={togglemodalClientExpenses}
+                setTogglemodalClientExpenses={setTogglemodalClientExpenses}
                 client_id={client_id}
                 refreshClientExpenses={getClientExpenses}
             />

@@ -137,8 +137,6 @@ Route::get('get_report_daily_disbursement', function () {
         $forwarded_balance = 0;
         $forwarded_balance_month_range = null;
 
-
-
         $deposits_total_amount = $dataDeposit->where('bank_id', $bankId)->sum('amount');
         $expenses_total_amount = $dataExpenses->where('bank_id', $bankId)->sum('amount');
         $total_outstandingcheck_amount = $dataOutStandingChecks->where('bank_id', $bankId)->sum('amount');
@@ -188,8 +186,6 @@ Route::get('get_report_daily_disbursement', function () {
 
             $forwarded_balance = $prevDeposits - $prevExpenses - $prevOutstanding - $prevPdc;
         }
-
-
 
 
         $groupedData[] = [

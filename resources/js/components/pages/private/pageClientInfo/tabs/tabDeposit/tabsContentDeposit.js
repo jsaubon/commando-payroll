@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-import { Button, Col, Input, Popconfirm, Row, Table } from "antd";
+import { Button, Col, Input, notification, Popconfirm, Row, Table } from "antd";
 
 import { fetchData } from "../../../../../../axios";
 import ModalDeposit from "./modalDeposit";
+import ButtonGroup from "antd/lib/button/button-group";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 export default function TabsContentDeposit(props) {
     const { client_id } = props;
@@ -19,7 +21,7 @@ export default function TabsContentDeposit(props) {
         sort: "asc"
     });
 
-    const [togglemodalDeposit, setTogglemodalDeposit] = useState({
+    const [togglemodalClientDeposit, setTogglemodalClientDeposit] = useState({
         open: false,
         data: null
     });
@@ -34,6 +36,20 @@ export default function TabsContentDeposit(props) {
         ).then(res => {
             if (res.success) {
                 setDataClientDeposit(res.data);
+            }
+        });
+    };
+
+    const handleDeleteClientDeposit = record => {
+        fetchData("DELETE", "api/client_deposits/" + record.id).then(res => {
+            if (res.success) {
+                notification.success({
+                    message: res.message,
+                    description: res.message
+                });
+                setDataClientDeposit(prev =>
+                    prev.filter(clientDeposit => clientDeposit.id !== record.id)
+                );
             }
         });
     };
@@ -58,7 +74,7 @@ export default function TabsContentDeposit(props) {
                         <Button
                             type="primary"
                             onClick={e =>
-                                setTogglemodalDeposit({
+                                setTogglemodalClientDeposit({
                                     open: true,
                                     data: null
                                 })
@@ -100,11 +116,65 @@ export default function TabsContentDeposit(props) {
                     key="date_formatted"
                 />
                 <Table.Column title="Notes" dataIndex="notes" key="notes" />
+
+                {/* <Table.Column
+                    title="Action"
+                    key="action"
+                    width={100}
+                    align="center"
+                    render={(text, record) => {
+                        return (
+                            <>
+                                {" "}
+                                {userdata.role != "Staff" && (
+                                    <ButtonGroup>
+                                        {" "}
+                                        <Button
+                                            size="small"
+                                            type="primary"
+                                            icon={<EditOutlined />}
+                                            onClick={e =>
+                                                setTogglemodalClientDeposit({
+                                                    open: true,
+                                                    data: record
+                                                })
+                                            }
+                                        >
+                                            {" "}
+                                            Edit{" "}
+                                        </Button>{" "}
+                                        <Button
+                                            size="small"
+                                            type="primary"
+                                            danger
+                                            icon={<DeleteOutlined />}
+                                        >
+                                            {" "}
+                                            <Popconfirm
+                                                title="Are you sure delete this data?"
+                                                onConfirm={e =>
+                                                    handleDeleteClientDeposit(
+                                                        record
+                                                    )
+                                                }
+                                                okText="Yes"
+                                                cancelText="No"
+                                            >
+                                                {" "}
+                                                Delete{" "}
+                                            </Popconfirm>{" "}
+                                        </Button>{" "}
+                                    </ButtonGroup>
+                                )}{" "}
+                            </>
+                        );
+                    }}
+                /> */}
             </Table>
 
             <ModalDeposit
-                togglemodalDeposit={togglemodalDeposit}
-                setTogglemodalDeposit={setTogglemodalDeposit}
+                togglemodalClientDeposit={togglemodalClientDeposit}
+                setTogglemodalClientDeposit={setTogglemodalClientDeposit}
                 client_id={client_id}
                 refreshClientDeposits={getClientDeposit}
             />

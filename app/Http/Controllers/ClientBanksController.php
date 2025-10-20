@@ -134,8 +134,31 @@ class ClientBanksController extends Controller
      * @param  \App\ClientBanks  $clientBanks
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ClientBanks $clientBanks)
+    public function destroy($id)
     {
+        $ret  = [
+            "success" => false,
+            "message" => "Data not deleted"
+        ];
+
+        $findClientBClientBanks = ClientBanks::find($id);
+
+        if ($findClientBClientBanks) {
+            try {
+
+                if ($findClientBClientBanks->delete()) {
+                    $ret = [
+                        "success" => true,
+                        "message" => "Data deleted successfully"
+                    ];
+                }
+            } catch (\Throwable $th) {
+                $ret['message'] = "An error occurred: " . $th->getMessage();
+            }
+        }
+
         //
+
+        return response()->json($ret, 200);
     }
 }

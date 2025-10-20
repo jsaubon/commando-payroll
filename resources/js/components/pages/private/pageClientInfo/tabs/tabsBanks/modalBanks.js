@@ -6,8 +6,8 @@ import { notificationErrors } from "../../../../../notificationErrors";
 
 export default function ModalBanks(props) {
     const {
-        togglemodalBanks,
-        setTogglemodalBanks,
+        togglemodalClientBanks,
+        setTogglemodalClientBanks,
         client_id,
         refreshClientBanks
     } = props;
@@ -32,7 +32,7 @@ export default function ModalBanks(props) {
 
         let data = {
             ...values,
-            id: togglemodalBanks.data?.id || "",
+            id: togglemodalClientBanks.data?.id || "",
             client_id: client_id
         };
 
@@ -45,7 +45,7 @@ export default function ModalBanks(props) {
                     });
                     refreshClientBanks();
 
-                    setTogglemodalBanks({ open: false, data: null });
+                    setTogglemodalClientBanks({ open: false, data: null });
                     form.resetFields();
 
                     setFormLoadingClientBank(false);
@@ -58,12 +58,12 @@ export default function ModalBanks(props) {
     };
 
     useEffect(() => {
-        if (togglemodalBanks.open) {
+        if (togglemodalClientBanks.open) {
             form.setFieldsValue({
-                ...togglemodalBanks.data
+                ...togglemodalClientBanks.data
             });
         }
-    }, [togglemodalBanks.data]);
+    }, [togglemodalClientBanks.data]);
 
     const layout = {
         labelCol: { span: 8 },
@@ -71,10 +71,10 @@ export default function ModalBanks(props) {
     };
     return (
         <Modal
-            title={togglemodalBanks.data ? "Edit Bank" : "Add Bank"}
-            visible={togglemodalBanks.open}
+            title={togglemodalClientBanks.data ? "Edit Bank" : "Add Bank"}
+            visible={togglemodalClientBanks.open}
             onCancel={() => {
-                setTogglemodalBanks({ open: false, data: null });
+                setTogglemodalClientBanks({ open: false, data: null });
                 form.resetFields();
             }}
             footer={[
@@ -86,7 +86,7 @@ export default function ModalBanks(props) {
                         disabled={formLoadingClientBank}
                         onClick={() => {
                             form.resetFields();
-                            setTogglemodalBanks({
+                            setTogglemodalClientBanks({
                                 open: false,
                                 data: null
                             });

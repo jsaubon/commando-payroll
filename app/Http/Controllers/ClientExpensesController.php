@@ -140,8 +140,31 @@ class ClientExpensesController extends Controller
      * @param  \App\ClientExpenses  $clientExpenses
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ClientExpenses $clientExpenses)
+    public function destroy($id)
     {
+        $ret  = [
+            "success" => false,
+            "message" => "Data not deleted"
+        ];
+
+        $findClientExpenses = ClientExpenses::find($id);
+
+        if ($findClientExpenses) {
+            try {
+
+                if ($findClientExpenses->delete()) {
+                    $ret = [
+                        "success" => true,
+                        "message" => "Data deleted successfully"
+                    ];
+                }
+            } catch (\Throwable $th) {
+                $ret['message'] = "An error occurred: " . $th->getMessage();
+            }
+        }
+
         //
+
+        return response()->json($ret, 200);
     }
 }

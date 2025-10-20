@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-import { Button, Col, Input, Popconfirm, Row, Table } from "antd";
+import { Button, Col, Input, notification, Popconfirm, Row, Table } from "antd";
 
 import { fetchData } from "../../../../../../axios";
 import ModalBanks from "./modalBanks";
+import ButtonGroup from "antd/lib/button/button-group";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 export default function TabsContentBanks(props) {
     const { client_id } = props;
@@ -11,7 +13,7 @@ export default function TabsContentBanks(props) {
     let userdata = JSON.parse(localStorage.userdata);
     const [dataClientBanks, setDataClientBanks] = useState([]);
 
-    const [togglemodalBanks, setTogglemodalBanks] = useState({
+    const [togglemodalClientBanks, setTogglemodalClientBanks] = useState({
         open: false,
         data: null
     });
@@ -45,6 +47,19 @@ export default function TabsContentBanks(props) {
         });
     };
 
+    const handleDeleteClientBanks = record => {
+        fetchData("DELETE", "api/client_banks/" + record.id).then(res => {
+            if (res.success) {
+                notification.success({
+                    message: "Bank",
+                    description: res.message
+                });
+                setDataClientBanks(prev =>
+                    prev.filter(clientBank => clientBank.id !== record.id)
+                );
+            }
+        });
+    };
     useEffect(() => {
         getClientBank();
         return () => {};
@@ -58,7 +73,10 @@ export default function TabsContentBanks(props) {
                         <Button
                             type="primary"
                             onClick={e =>
-                                setTogglemodalBanks({ open: true, data: null })
+                                setTogglemodalClientBanks({
+                                    open: true,
+                                    data: null
+                                })
                             }
                         >
                             New
@@ -91,11 +109,65 @@ export default function TabsContentBanks(props) {
                     dataIndex="bank_name"
                 />
                 <Table.Column title="Notes" key="notes" dataIndex="notes" />
+
+                {/* <Table.Column
+                    title="Action"
+                    key="action"
+                    width={100}
+                    align="center"
+                    render={(text, record) => {
+                        return (
+                            <>
+                                {" "}
+                                {userdata.role != "Staff" && (
+                                    <ButtonGroup>
+                                        {" "}
+                                        <Button
+                                            size="small"
+                                            type="primary"
+                                            icon={<EditOutlined />}
+                                            onClick={e =>
+                                                setTogglemodalClientBanks({
+                                                    open: true,
+                                                    data: record
+                                                })
+                                            }
+                                        >
+                                            {" "}
+                                            Edit{" "}
+                                        </Button>{" "}
+                                        <Button
+                                            size="small"
+                                            type="primary"
+                                            danger
+                                            icon={<DeleteOutlined />}
+                                        >
+                                            {" "}
+                                            <Popconfirm
+                                                title="Are you sure delete this data?"
+                                                onConfirm={e =>
+                                                    handleDeleteClientBanks(
+                                                        record
+                                                    )
+                                                }
+                                                okText="Yes"
+                                                cancelText="No"
+                                            >
+                                                {" "}
+                                                Delete{" "}
+                                            </Popconfirm>{" "}
+                                        </Button>{" "}
+                                    </ButtonGroup>
+                                )}{" "}
+                            </>
+                        );
+                    }}
+                /> */}
             </Table>
 
             <ModalBanks
-                togglemodalBanks={togglemodalBanks}
-                setTogglemodalBanks={setTogglemodalBanks}
+                togglemodalClientBanks={togglemodalClientBanks}
+                setTogglemodalClientBanks={setTogglemodalClientBanks}
                 client_id={client_id}
                 refreshClientBanks={getClientBank}
             />

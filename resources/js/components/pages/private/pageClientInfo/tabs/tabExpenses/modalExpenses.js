@@ -17,8 +17,8 @@ import { notificationErrors } from "../../../../../notificationErrors";
 
 export default function ModalExpenses(props) {
     const {
-        togglemodalExpenses,
-        setTogglemodalExpenses,
+        togglemodalClientExpenses,
+        setTogglemodalClientExpenses,
         client_id,
         refreshClientExpenses
     } = props;
@@ -44,7 +44,7 @@ export default function ModalExpenses(props) {
 
         let data = {
             ...values,
-            id: togglemodalExpenses.data?.id || "",
+            id: togglemodalClientExpenses.data?.id || "",
             client_id: client_id,
             date: values.date ? moment(values.date).format("YYYY-MM-DD") : ""
         };
@@ -59,7 +59,7 @@ export default function ModalExpenses(props) {
                     });
                     refreshClientExpenses();
 
-                    setTogglemodalExpenses({ open: false, data: null });
+                    setTogglemodalClientExpenses({ open: false, data: null });
                     form.resetFields();
                 }
             })
@@ -70,15 +70,15 @@ export default function ModalExpenses(props) {
     };
 
     useEffect(() => {
-        if (togglemodalExpenses.open) {
+        if (togglemodalClientExpenses.open) {
             form.setFieldsValue({
-                ...togglemodalExpenses.data,
-                date: togglemodalExpenses.data?.date
-                    ? moment(togglemodalExpenses.data.date, "YYYY-MM-DD")
+                ...togglemodalClientExpenses.data,
+                date: togglemodalClientExpenses.data?.date
+                    ? moment(togglemodalClientExpenses.data.date, "YYYY-MM-DD")
                     : null
             });
         }
-    }, [togglemodalExpenses.data]);
+    }, [togglemodalClientExpenses.data]);
 
     const layout = {
         labelCol: { span: 8 },
@@ -86,10 +86,14 @@ export default function ModalExpenses(props) {
     };
     return (
         <Modal
-            title={togglemodalExpenses.data ? "Edit Expenses" : "Add Expenses"}
-            visible={togglemodalExpenses.open}
+            title={
+                togglemodalClientExpenses.data
+                    ? "Edit Expenses"
+                    : "Add Expenses"
+            }
+            visible={togglemodalClientExpenses.open}
             onCancel={() => {
-                setTogglemodalExpenses({ open: false, data: null });
+                setTogglemodalClientExpenses({ open: false, data: null });
                 form.resetFields();
             }}
             footer={[
@@ -101,7 +105,7 @@ export default function ModalExpenses(props) {
                         disabled={formLoadingClientExpenses}
                         onClick={() => {
                             form.resetFields();
-                            setTogglemodalExpenses({
+                            setTogglemodalClientExpenses({
                                 open: false,
                                 data: null
                             });

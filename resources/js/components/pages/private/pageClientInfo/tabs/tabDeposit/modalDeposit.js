@@ -17,8 +17,8 @@ import { notificationErrors } from "../../../../../notificationErrors";
 
 export default function ModalDeposit(props) {
     const {
-        togglemodalDeposit,
-        setTogglemodalDeposit,
+        togglemodalClientDeposit,
+        setTogglemodalClientDeposit,
         client_id,
         refreshClientDeposits
     } = props;
@@ -42,7 +42,9 @@ export default function ModalDeposit(props) {
     const onFinish = values => {
         let data = {
             ...values,
-            id: togglemodalDeposit.data ? togglemodalDeposit.data.id : null,
+            id: togglemodalClientDeposit.data
+                ? togglemodalClientDeposit.data.id
+                : null,
             client_id: client_id,
             date: values.date ? moment(values.date).format("YYYY-MM-DD") : ""
         };
@@ -56,7 +58,7 @@ export default function ModalDeposit(props) {
                     });
 
                     refreshClientDeposits();
-                    setTogglemodalDeposit({ open: false, data: null });
+                    setTogglemodalClientDeposit({ open: false, data: null });
                     form.resetFields();
                 }
             })
@@ -66,15 +68,15 @@ export default function ModalDeposit(props) {
     };
 
     useEffect(() => {
-        if (togglemodalDeposit.open) {
+        if (togglemodalClientDeposit.open) {
             form.setFieldsValue({
-                ...togglemodalDeposit.data,
-                date: togglemodalDeposit.data?.date
-                    ? moment(togglemodalDeposit.data.date)
+                ...togglemodalClientDeposit.data,
+                date: togglemodalClientDeposit.data?.date
+                    ? moment(togglemodalClientDeposit.data.date)
                     : null
             });
         }
-    }, [togglemodalDeposit.data]);
+    }, [togglemodalClientDeposit.data]);
 
     const layout = {
         labelCol: { span: 8 },
@@ -82,10 +84,12 @@ export default function ModalDeposit(props) {
     };
     return (
         <Modal
-            title={togglemodalDeposit.data ? "Edit Deposit" : "Add Deposit"}
-            visible={togglemodalDeposit.open}
+            title={
+                togglemodalClientDeposit.data ? "Edit Deposit" : "Add Deposit"
+            }
+            visible={togglemodalClientDeposit.open}
             onCancel={() => {
-                setTogglemodalDeposit({ open: false, data: null });
+                setTogglemodalClientDeposit({ open: false, data: null });
                 form.resetFields();
             }}
             footer={[
@@ -97,7 +101,7 @@ export default function ModalDeposit(props) {
                         disabled={formLoadingClientDeposit}
                         onClick={() => {
                             form.resetFields();
-                            setTogglemodalDeposit({
+                            setTogglemodalClientDeposit({
                                 open: false,
                                 data: null
                             });

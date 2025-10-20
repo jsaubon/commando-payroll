@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Client;
 use App\ClientDeposit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -139,8 +140,31 @@ class ClientDepositController extends Controller
      * @param  \App\ClientDeposit  $clientDeposit
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ClientDeposit $clientDeposit)
+    public function destroy($id)
     {
+        $ret  = [
+            "success" => false,
+            "message" => "Data not deleted"
+        ];
+
+        $findClientDeposit = ClientDeposit::find($id);
+
+        if ($findClientDeposit) {
+            try {
+
+                if ($findClientDeposit->delete()) {
+                    $ret = [
+                        "success" => true,
+                        "message" => "Data deleted successfully"
+                    ];
+                }
+            } catch (\Throwable $th) {
+                $ret['message'] = "An error occurred: " . $th->getMessage();
+            }
+        }
+
         //
+
+        return response()->json($ret, 200);
     }
 }
