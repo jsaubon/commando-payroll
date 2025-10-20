@@ -383,7 +383,7 @@ export default function TabReportsDailyDisbursement() {
                                     key={index}
                                     className="report-group"
                                     style={{
-                                        // marginBottom: 40,
+                                        marginBottom: 40,
                                         backgroundColor: "#f9f9f9",
                                         border: "1px solid #ccc",
                                         borderRadius: 6,
@@ -738,7 +738,7 @@ export default function TabReportsDailyDisbursement() {
                 {`
                     
                     
-                    @media print {
+    @media print {
     @page {
         size: A4 portrait;
         margin: 10mm;
