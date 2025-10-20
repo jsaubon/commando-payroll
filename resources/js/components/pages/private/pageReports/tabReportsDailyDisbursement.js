@@ -179,8 +179,7 @@ export default function TabReportsDailyDisbursement() {
         { dataIndex: "date", key: "date" },
         {
             dataIndex: "expense_name",
-            key: "expense_name",
-            width: 200
+            key: "expense_name"
         },
         {
             dataIndex: "amount",
@@ -241,11 +240,10 @@ export default function TabReportsDailyDisbursement() {
         }
     ];
     const columnsPDC = [
-        { dataIndex: "date", key: "date" },
+        { dataIndex: "date", key: "date", width: "36%" },
         {
             dataIndex: "expense_name",
-            key: "expense_name",
-            width: 200
+            key: "expense_name"
         },
         {
             dataIndex: "amount",
@@ -383,7 +381,7 @@ export default function TabReportsDailyDisbursement() {
                                     key={index}
                                     className="report-group"
                                     style={{
-                                        marginBottom: 40,
+                                        marginBottom: 30,
                                         backgroundColor: "#f9f9f9",
                                         border: "1px solid #ccc",
                                         borderRadius: 6,
