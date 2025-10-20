@@ -4,6 +4,8 @@ import ButtonGroup from "antd/lib/button/button-group";
 import {
     Button,
     Card,
+    Col,
+    Input,
     notification,
     Popconfirm,
     Table,
@@ -18,12 +20,21 @@ export default function PageExpenses() {
         open: false,
         data: null
     });
+
+    const [tableFilter, setTableFilter] = useState({
+        page: 1,
+        page_size: 50,
+        search: ""
+    });
     const userdata = JSON.parse(localStorage.userdata);
 
     const [dataExpenses, setDataExpenses] = useState([]);
 
     const getExpenses = () => {
-        fetchData("GET", "api/expenses").then(res => {
+        fetchData(
+            "GET",
+            "api/expenses?" + new URLSearchParams(tableFilter)
+        ).then(res => {
             // console.log("dataExpenses", res.data);
 
             if (res.success) {
@@ -49,28 +60,55 @@ export default function PageExpenses() {
     useEffect(() => {
         getExpenses();
         return () => {};
-    }, []);
+    }, [tableFilter]);
+
+    const onChangeTable = (key, value) => {
+        setTableFilter(prev => ({
+            ...prev,
+            [key]: value
+        }));
+    };
 
     return (
         <div>
             <Typography.Title level={1}>Expenses</Typography.Title>
+            <Col xs={24} md={6} className="px-0 mb-10">
+                {userdata.role != "Staff" && (
+                    <Button
+                        type="primary"
+                        onClick={e =>
+                            setToggleModalExpensesForm({
+                                open: true,
+                                data: null
+                            })
+                        }
+                    >
+                        New
+                    </Button>
+                )}
+            </Col>
 
-            {userdata.role != "Staff" && (
-                <Button
-                    type="primary"
-                    onClick={e =>
-                        setToggleModalExpensesForm({ open: true, data: null })
-                    }
-                >
-                    New
-                </Button>
-            )}
+            <Col xs={24} md={6} className="px-0">
+                <div style={{ display: "flex" }}>
+                    <Input.Search
+                        allowClear
+                        placeholder="Search Expenses"
+                        style={{ width: "100%" }}
+                        className="pull-right"
+                        onChange={e => onChangeTable("search", e.target.value)}
+                    />
+                </div>
+            </Col>
 
             <Card className="mt-10">
                 <Table
                     rowKey={record => record.id}
-                    dataSource={dataExpenses}
-                    pagination={false}
+                    dataSource={
+                        dataExpenses && dataExpenses.data
+                            ? dataExpenses.data
+                            : dataExpenses
+                    }
+                    pagination={true}
                 >
                     <Table.Column
                         title="Bank Name"

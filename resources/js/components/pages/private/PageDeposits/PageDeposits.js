@@ -4,6 +4,8 @@ import ButtonGroup from "antd/lib/button/button-group";
 import {
     Button,
     Card,
+    Col,
+    Input,
     notification,
     Popconfirm,
     Table,
@@ -17,13 +19,22 @@ export default function PageDeposits() {
     const userdata = JSON.parse(localStorage.userdata);
     const [dataDeposit, setDataDeposit] = useState([]);
 
+    const [tableFilter, setTableFilter] = useState({
+        page: 1,
+        page_size: 50,
+        search: ""
+    });
+
     const [toggleModalDepositsForm, setToggleModalDepositsForm] = useState({
         data: null,
         open: false
     });
 
     const getDeposits = () => {
-        fetchData("GET", "api/deposits").then(res => {
+        fetchData(
+            "GET",
+            "api/deposits?" + new URLSearchParams(tableFilter)
+        ).then(res => {
             if (res.success) {
                 setDataDeposit(res.data);
             }
@@ -47,28 +58,55 @@ export default function PageDeposits() {
     useEffect(() => {
         getDeposits();
         return () => {};
-    }, []);
+    }, [tableFilter]);
+
+    const onChangeTable = (key, value) => {
+        setTableFilter(prev => ({
+            ...prev,
+            [key]: value
+        }));
+    };
 
     return (
         <div>
             <Typography.Title level={1}>Deposits</Typography.Title>
 
-            {userdata.role != "Staff" && (
-                <Button
-                    type="primary"
-                    onClick={e =>
-                        setToggleModalDepositsForm({ open: true, data: null })
-                    }
-                >
-                    New
-                </Button>
-            )}
+            <Col xs={24} md={18} className="px-0 mb-10">
+                {userdata.role != "Staff" && (
+                    <Button
+                        type="primary"
+                        onClick={e =>
+                            setToggleModalDepositsForm({
+                                open: true,
+                                data: null
+                            })
+                        }
+                    >
+                        New
+                    </Button>
+                )}
+            </Col>
+            <Col xs={24} md={6} className="px-0">
+                <div style={{ display: "flex" }}>
+                    <Input.Search
+                        allowClear
+                        placeholder="Search Deposit"
+                        style={{ width: "100%" }}
+                        className="pull-right"
+                        onChange={e => onChangeTable("search", e.target.value)}
+                    />
+                </div>
+            </Col>
 
             <Card className="mt-10">
                 <Table
                     rowKey={record => record.id}
-                    dataSource={dataDeposit}
-                    pagination={false}
+                    dataSource={
+                        dataDeposit && dataDeposit.data
+                            ? dataDeposit.data
+                            : dataDeposit
+                    }
+                    pagination={true}
                     size="small"
                 >
                     <Table.Column
