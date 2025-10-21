@@ -21,19 +21,22 @@ class ExpensesController extends Controller
 
         $bank_name = "(SELECT `bank_name` FROM `banks` WHERE `banks`.id=expenses.bank_id)";
         $date_formatted = "DATE_FORMAT(date, '%Y-%m-%d')";
+        $bank_transaction_date = "DATE_FORMAT(bank_transaction_date, '%Y-%m-%d')";
         $data = Expenses::select([
             "*",
             DB::raw($bank_name . " AS bank_name"),
-            DB::raw($date_formatted . " AS date_formatted")
+            DB::raw($date_formatted . " AS date_formatted"),
+            DB::raw($bank_transaction_date . " AS bank_transaction_date"),
 
         ]);
 
-        $data = $data->where(function ($query) use ($request, $bank_name, $date_formatted) {
+        $data = $data->where(function ($query) use ($request, $bank_name, $date_formatted, $bank_transaction_date) {
             if ($request->search) {
                 $query->orWhere('expense_name', 'LIKE', "%$request->search%");
                 $query->orWhere('expense_description', 'LIKE', "%$request->search%");
                 $query->orWhere(DB::raw($bank_name), 'LIKE', "%$request->search%");
                 $query->orWhere(DB::raw($date_formatted), 'LIKE', "%$request->search%");
+                $query->orWhere(DB::raw($bank_transaction_date), 'LIKE', "%$request->search%");
             }
         });
 
@@ -84,10 +87,11 @@ class ExpensesController extends Controller
             'expense_name' => 'required|string',
             'expense_description' => 'nullable',
             'amount' => 'required',
-            'date' => 'required|date',
+            'date' => 'nullable|date',
             'out_standing_check' => 'nullable',
             'pdc' => 'nullable',
             'notes' => 'nullable',
+            'bank_transaction_date' => 'nullable|date',
 
 
         ]);

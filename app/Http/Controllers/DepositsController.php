@@ -21,24 +21,25 @@ class DepositsController extends Controller
 
 
         $bank_name = "(SELECT `bank_name` FROM `banks` WHERE `banks`.id=deposits.bank_id)";
-        $date_request_formatted = "DATE_FORMAT(date_request, '%Y-%m-%d')";
-        $date_transaction_formatted = "DATE_FORMAT(date_transaction, '%Y-%m-%d')";
+        $date_deposited_formatted = "DATE_FORMAT(date_deposited, '%Y-%m-%d')";
+        $bank_transaction_date = "DATE_FORMAT(bank_transaction_date, '%Y-%m-%d')";
+
 
         $data = Deposits::select([
             "*",
             DB::raw($bank_name . " as bank_name"),
-            DB::raw($date_request_formatted . " as date_request_formatted"),
-            DB::raw($date_transaction_formatted . " as date_transaction_formatted")
+            DB::raw($date_deposited_formatted . " as date_deposited_formatted"),
+            DB::raw($bank_transaction_date . " as bank_transaction_date_formatted")
 
         ]);
 
-        $data = $data->where(function ($query) use ($request, $bank_name, $date_request_formatted, $date_transaction_formatted) {
+        $data = $data->where(function ($query) use ($request, $bank_name, $date_deposited_formatted, $bank_transaction_date) {
             if ($request->search) {
                 $query->orWhere('deposit_name', 'LIKE', "%$request->search%");
                 $query->orWhere('deposit_description', 'LIKE', "%$request->search%");
                 $query->orWhere(DB::raw($bank_name), 'LIKE', "%$request->search%");
-                $query->orWhere(DB::raw($date_request_formatted), 'LIKE', "%$request->search%");
-                $query->orWhere(DB::raw($date_transaction_formatted), 'LIKE', "%$request->search%");
+                $query->orWhere(DB::raw($date_deposited_formatted), 'LIKE', "%$request->search%");
+                $query->orWhere(DB::raw($bank_transaction_date), 'LIKE', "%$request->search%");
             }
         });
 
@@ -88,8 +89,8 @@ class DepositsController extends Controller
             'deposit_name' => 'required|string',
             'deposit_description' => 'nullable',
             'amount' => 'required',
-            // 'date_request' => 'nullable|date',
-            'date_transaction' => 'nullable|date',
+            'date_deposited' => 'nullable|date',
+            'bank_transaction_date' => 'nullable|date',
             'notes' => 'nullable|string',
 
         ]);

@@ -16,9 +16,16 @@ import { fetchData } from "../../../../axios";
 
 export default function TabReportsDailyDisbursement() {
     const [dataDailyDisbursement, setDataDailyDisbursement] = useState(null);
+    const [dataBanks, setDataBanks] = useState([]);
     const [tableFilter, setTableFilter] = useState({
         month: ""
     });
+
+    useEffect(() => {
+        fetchData("GET", `api/banks`).then(res => {
+            if (res.success) setDataBanks(res.data);
+        });
+    }, []);
 
     useEffect(() => {
         const urlParams = new URLSearchParams(tableFilter).toString();
@@ -36,301 +43,377 @@ export default function TabReportsDailyDisbursement() {
     const componentRef = useRef();
 
     const handlePrintDailyDisbursementReport = useReactToPrint({
-        content: () => componentRef.current
+        content: () => componentRef.current,
+        removeAfterPrint: true
     });
 
     const columnsDeposit = [
         {
-            title: "Date",
-            dataIndex: "date_transaction_formatted",
-            key: "date_transaction_formatted"
+            title: "Date Deposited",
+            dataIndex: "date_deposited_formatted",
+            key: "date_deposited_formatted",
+            width: 100
+        },
+        {
+            title: "Bank Transaction Date",
+            dataIndex: "bank_transaction_date_formatted",
+            key: "bank_transaction_date_formatted",
+            width: 100
         },
         {
             title: "Deposit Name",
             dataIndex: "deposit_name",
-            key: "deposit_name"
+            key: "deposit_name",
+            width: 250
         },
         {
-            title: () => <div>Amount</div>,
+            title: "Amount",
             dataIndex: "amount",
             key: "amount",
-            align: "left",
-            width: 250,
-            render: (text, record, index) => {
-                const deposits = record.tableData || [];
-                const totalAmount = deposits.reduce(
-                    (sum, item) => sum + Number(item.amount || 0),
-                    0
-                );
-                const isLast = index === deposits.length - 1;
+            align: "right",
+            width: 50
+            // render: (text, record, index) => {
+            //     const deposits = record.tableData || [];
+            //     const totalAmount = deposits.reduce(
+            //         (sum, item) => sum + Number(item.amount || 0),
+            //         0
+            //     );
+            //     const isLast = index === deposits.length - 1;
 
-                return (
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            whiteSpace: "nowrap"
-                        }}
-                    >
-                        <span
-                            style={{
-                                width: "50%",
-                                textAlign: "left",
-                                paddingRight: "25px"
-                            }}
-                        >
-                            {Number(text || 0).toLocaleString(undefined, {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2
-                            })}
-                        </span>
+            //     return (
+            //         <div
+            //             style={{
+            //                 display: "flex",
+            //                 justifyContent: "space-between",
+            //                 alignItems: "left",
+            //                 whiteSpace: "nowrap"
+            //             }}
+            //         >
+            //             <span
+            //                 style={{
+            //                     width: "50%",
+            //                     textAlign: "left",
+            //                     paddingRight: "25px"
+            //                 }}
+            //             >
+            //                 {Number(text || 0).toLocaleString(undefined, {
+            //                     minimumFractionDigits: 2,
+            //                     maximumFractionDigits: 2
+            //                 })}
+            //             </span>
 
-                        <span
-                            style={{
-                                width: "50%",
-                                textAlign: "right",
-                                fontWeight: isLast ? "700" : "normal",
-                                borderBottom: isLast ? "2px solid #000" : "none"
-                            }}
-                        >
-                            {isLast
-                                ? Number(totalAmount || 0).toLocaleString(
-                                      undefined,
-                                      {
-                                          minimumFractionDigits: 2,
-                                          maximumFractionDigits: 2
-                                      }
-                                  )
-                                : ""}
-                        </span>
-                    </div>
-                );
-            }
+            //             <span
+            //                 style={{
+            //                     width: "5pc",
+            //                     textAlign: "right",
+            //                     fontWeight: isLast ? "700" : "normal",
+            //                     borderBottom: isLast ? "2px solid #000" : "none"
+            //                 }}
+            //             >
+            //                 {isLast
+            //                     ? Number(totalAmount || 0).toLocaleString(
+            //                           undefined,
+            //                           {
+            //                               minimumFractionDigits: 2,
+            //                               maximumFractionDigits: 2
+            //                           }
+            //                       )
+            //                     : ""}
+            //             </span>
+            //         </div>
+            //     );
+            // }
         }
     ];
 
     const columnsExpense = [
-        { dataIndex: "date", key: "date" },
+        { title: "Date ", dataIndex: "date", key: "date", width: 100 },
+        {
+            dataIndex: "bank_transaction_date",
+            key: "bank_transaction_date",
+            width: 100
+        },
         {
             title: "Expense Name",
             dataIndex: "expense_name",
-            key: "expense_name"
+            key: "expense_name",
+            width: 250
         },
         {
             dataIndex: "amount",
             key: "amount",
-            align: "left",
-            width: 250,
-            render: (text, record, index) => {
-                const expenses = record.tableData || [];
-                const totalAmount = expenses.reduce(
-                    (sum, item) => sum + Number(item.amount || 0),
-                    0
-                );
-                const isLast = index === expenses.length - 1;
+            align: "right",
+            width: 50
+            // render: (text, record, index) => {
+            //     const expenses = record.tableData || [];
+            //     const totalAmount = expenses.reduce(
+            //         (sum, item) => sum + Number(item.amount || 0),
+            //         0
+            //     );
+            //     const isLast = index === expenses.length - 1;
 
-                return (
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            whiteSpace: "nowrap"
-                        }}
-                    >
-                        <span
-                            style={{
-                                width: "50%",
-                                textAlign: "left",
-                                paddingRight: "25px"
-                            }}
-                        >
-                            {Number(text || 0).toLocaleString(undefined, {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2
-                            })}
-                        </span>
+            //     return (
+            //         <div
+            //             style={{
+            //                 display: "flex",
+            //                 justifyContent: "space-between",
+            //                 alignItems: "center",
+            //                 whiteSpace: "nowrap"
+            //             }}
+            //         >
+            //             <span
+            //                 style={{
+            //                     width: "50%",
+            //                     textAlign: "left",
+            //                     paddingRight: "25px"
+            //                 }}
+            //             >
+            //                 {Number(text || 0).toLocaleString(undefined, {
+            //                     minimumFractionDigits: 2,
+            //                     maximumFractionDigits: 2
+            //                 })}
+            //             </span>
 
-                        <span
-                            style={{
-                                textAlign: "right",
-                                width: "50%",
-                                fontWeight: isLast ? "700" : "normal",
-                                borderBottom: isLast ? "2px solid #000" : "none"
-                            }}
-                        >
-                            {isLast
-                                ? Number(totalAmount || 0).toLocaleString(
-                                      undefined,
-                                      {
-                                          minimumFractionDigits: 2,
-                                          maximumFractionDigits: 2
-                                      }
-                                  )
-                                : ""}
-                        </span>
-                    </div>
-                );
-            }
+            //             <span
+            //                 style={{
+            //                     textAlign: "right",
+            //                     width: "50%",
+            //                     fontWeight: isLast ? "700" : "normal",
+            //                     borderBottom: isLast ? "2px solid #000" : "none"
+            //                 }}
+            //             >
+            //                 {isLast
+            //                     ? Number(totalAmount || 0).toLocaleString(
+            //                           undefined,
+            //                           {
+            //                               minimumFractionDigits: 2,
+            //                               maximumFractionDigits: 2
+            //                           }
+            //                       )
+            //                     : ""}
+            //             </span>
+            //         </div>
+            //     );
+            // }
         }
     ];
     const columnsOutstandingCheck = [
-        { dataIndex: "date", key: "date" },
+        { dataIndex: "date", key: "date", width: 100 },
+        {
+            dataIndex: "bank_transaction_date",
+            key: "bank_transaction_date",
+            width: 100
+        },
         {
             dataIndex: "expense_name",
-            key: "expense_name"
+            key: "expense_name",
+            width: 250
         },
         {
             dataIndex: "amount",
             key: "amount",
-            align: "left",
-            width: 250,
-            render: (text, record, index) => {
-                const outstanding_checks = record.tableData || [];
-                const totalAmount = outstanding_checks.reduce(
-                    (sum, item) => sum + Number(item.amount || 0),
-                    0
-                );
-                const isLast = index === outstanding_checks.length - 1;
+            align: "right",
+            width: 50
+            // render: (text, record, index) => {
+            //     const outstanding_checks = record.tableData || [];
+            //     const totalAmount = outstanding_checks.reduce(
+            //         (sum, item) => sum + Number(item.amount || 0),
+            //         0
+            //     );
+            //     const isLast = index === outstanding_checks.length - 1;
 
-                return (
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            whiteSpace: "nowrap"
-                        }}
-                    >
-                        <span
-                            style={{
-                                width: "50%",
-                                textAlign: "left",
-                                paddingRight: "25px"
-                            }}
-                        >
-                            {Number(text || 0).toLocaleString(undefined, {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2
-                            })}
-                        </span>
+            //     return (
+            //         <div
+            //             style={{
+            //                 display: "flex",
+            //                 justifyContent: "space-between",
+            //                 alignItems: "center",
+            //                 whiteSpace: "nowrap"
+            //             }}
+            //         >
+            //             <span
+            //                 style={{
+            //                     width: "50%",
+            //                     textAlign: "left",
+            //                     paddingRight: "25px"
+            //                 }}
+            //             >
+            //                 {Number(text || 0).toLocaleString(undefined, {
+            //                     minimumFractionDigits: 2,
+            //                     maximumFractionDigits: 2
+            //                 })}
+            //             </span>
 
-                        <span
-                            style={{
-                                textAlign: "right",
-                                width: "50%",
-                                fontWeight: isLast ? "700" : "normal",
-                                borderBottom: isLast ? "2px solid #000" : "none"
-                            }}
-                        >
-                            {isLast
-                                ? Number(totalAmount || 0).toLocaleString(
-                                      undefined,
-                                      {
-                                          minimumFractionDigits: 2,
-                                          maximumFractionDigits: 2
-                                      }
-                                  )
-                                : ""}
-                        </span>
-                    </div>
-                );
-            }
+            //             <span
+            //                 style={{
+            //                     textAlign: "right",
+            //                     width: "50%",
+            //                     fontWeight: isLast ? "700" : "normal",
+            //                     borderBottom: isLast ? "2px solid #000" : "none"
+            //                 }}
+            //             >
+            //                 {isLast
+            //                     ? Number(totalAmount || 0).toLocaleString(
+            //                           undefined,
+            //                           {
+            //                               minimumFractionDigits: 2,
+            //                               maximumFractionDigits: 2
+            //                           }
+            //                       )
+            //                     : ""}
+            //             </span>
+            //         </div>
+            //     );
+            // }
         }
     ];
     const columnsPDC = [
-        { dataIndex: "date", key: "date", width: "36%" },
+        { dataIndex: "date", key: "date" },
+
+        {
+            dataIndex: "bank_transaction_date",
+            key: "bank_transaction_date",
+            width: 100
+        },
+
         {
             dataIndex: "expense_name",
-            key: "expense_name"
+            key: "expense_name",
+            width: 250
         },
         {
             dataIndex: "amount",
             key: "amount",
-            align: "left",
-            width: 250,
-            render: (text, record, index) => {
-                const pdc = record.tableData || [];
-                const totalAmount = pdc.reduce(
-                    (sum, item) => sum + Number(item.amount || 0),
-                    0
-                );
-                const isLast = index === pdc.length - 1;
+            align: "right",
+            width: 50
+            // render: (text, record, index) => {
+            //     const pdc = record.tableData || [];
+            //     const totalAmount = pdc.reduce(
+            //         (sum, item) => sum + Number(item.amount || 0),
+            //         0
+            //     );
+            //     const isLast = index === pdc.length - 1;
 
-                return (
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            whiteSpace: "nowrap"
-                        }}
-                    >
-                        <span
-                            style={{
-                                width: "50%",
-                                textAlign: "left",
-                                paddingRight: "25px"
-                            }}
-                        >
-                            {Number(text || 0).toLocaleString(undefined, {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2
-                            })}
-                        </span>
+            //     return (
+            //         <div
+            //             style={{
+            //                 display: "flex",
+            //                 justifyContent: "space-between",
+            //                 alignItems: "center",
+            //                 whiteSpace: "nowrap"
+            //             }}
+            //         >
+            //             <span
+            //                 style={{
+            //                     width: "50%",
+            //                     textAlign: "left",
+            //                     paddingRight: "25px"
+            //                 }}
+            //             >
+            //                 {Number(text || 0).toLocaleString(undefined, {
+            //                     minimumFractionDigits: 2,
+            //                     maximumFractionDigits: 2
+            //                 })}
+            //             </span>
 
-                        <span
-                            style={{
-                                textAlign: "right",
-                                width: "50%",
-                                fontWeight: isLast ? "700" : "normal",
-                                borderBottom: isLast ? "2px solid #000" : "none"
-                            }}
-                        >
-                            {isLast
-                                ? Number(totalAmount || 0).toLocaleString(
-                                      undefined,
-                                      {
-                                          minimumFractionDigits: 2,
-                                          maximumFractionDigits: 2
-                                      }
-                                  )
-                                : ""}
-                        </span>
-                    </div>
-                );
-            }
+            //             <span
+            //                 style={{
+            //                     textAlign: "right",
+            //                     width: "50%",
+            //                     fontWeight: isLast ? "700" : "normal",
+            //                     borderBottom: isLast ? "2px solid #000" : "none"
+            //                 }}
+            //             >
+            //                 {isLast
+            //                     ? Number(totalAmount || 0).toLocaleString(
+            //                           undefined,
+            //                           {
+            //                               minimumFractionDigits: 2,
+            //                               maximumFractionDigits: 2
+            //                           }
+            //                       )
+            //                     : ""}
+            //             </span>
+            //         </div>
+            //     );
+            // }
         }
     ];
 
     return (
-        <Card>
+        <Card
+            style={{
+                backgroundColor: "white",
+                border: "1px solid #000"
+            }}
+        >
             <Row gutter={16}>
-                <Col xs={24} md={24} lg={20}>
+                <Col xs={24} md={24} lg={16}>
                     <Title level={4}>Daily Disbursement</Title>
                 </Col>
-                <Col
-                    xs={12}
-                    md={12}
-                    lg={4}
-                    className="pull-right hide-during-print"
-                >
-                    <div className="ant-form-item-label">
-                        <label>Month</label>
-                        <DatePicker
-                            style={{ width: "200px" }}
-                            picker="month"
-                            onChange={dates => {
-                                onChangeTable("month", dates.format("YYYY-MM"));
-                            }}
-                        />
-                    </div>
+                <Col xs={24} md={24} lg={8}>
+                    <Row gutter={16}>
+                        <Col
+                            xs={12}
+                            md={12}
+                            lg={12}
+                            className="pull-right hide-during-print"
+                        >
+                            <div className="ant-form-item-label">
+                                <label>Bank</label>
+                                <Select
+                                    onChange={value => {
+                                        onChangeTable("bank_id", value);
+                                    }}
+                                    style={{
+                                        width: "200px",
+                                        textAlign: "left"
+                                    }}
+                                    placeholder="Select Bank"
+                                    allowClear
+                                >
+                                    <Select.Option value="">
+                                        All Banks
+                                    </Select.Option>
+                                    {dataBanks &&
+                                        dataBanks.length > 0 &&
+                                        dataBanks.map(bank => (
+                                            <Select.Option
+                                                key={bank.id}
+                                                value={bank.id}
+                                            >
+                                                {bank.bank_name}
+                                            </Select.Option>
+                                        ))}
+                                </Select>
+                            </div>
+                        </Col>
+                        <Col
+                            xs={12}
+                            md={12}
+                            lg={12}
+                            className="pull-right hide-during-print"
+                        >
+                            <div className="ant-form-item-label">
+                                <label>Month</label>
+                                <DatePicker
+                                    style={{ width: "200px" }}
+                                    picker="month"
+                                    onChange={dates => {
+                                        onChangeTable(
+                                            "month",
+                                            dates.format("YYYY-MM")
+                                        );
+                                    }}
+                                />
+                            </div>
+                        </Col>
+                    </Row>
                 </Col>
             </Row>
 
-            <div id="" ref={componentRef}>
-                <div className="text-center">
+            <div id="print-table-area" ref={componentRef}>
+                <div className="text-center" id="print-header">
                     <Text>
                         <Select
                             style={{
@@ -342,11 +425,11 @@ export default function TabReportsDailyDisbursement() {
                             }}
                             className="select-no-border"
                             defaultValue="COMMANDO SECURITY SERVICE AGENCY, INC.
-                                                  (COMMANDO)"
+                                                        (COMMANDO)"
                         >
                             <Select.Option
                                 value="COMMANDO SECURITY SERVICE AGENCY, INC.
-                                                      (COMMANDO)"
+                                                            (COMMANDO)"
                             >
                                 COMMANDO SECURITY SERVICE AGENCY, INC.
                                 (COMMANDO)
@@ -452,7 +535,37 @@ export default function TabReportsDailyDisbursement() {
                                             bordered={false}
                                             rowKey={(record, index) => index}
                                         />
-
+                                        {/* 
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                justifyContent: "space-between",
+                                                paddingRight: 10,
+                                                marginTop: 10,
+                                                fontWeight: "bold"
+                                            }}
+                                        >
+                                            <span
+                                                style={{
+                                                    width: "90%"
+                                                }}
+                                            >
+                                                <span>Total Deposits : </span>
+                                                {group.deposits.some(
+                                                    item =>
+                                                        item.amount !== null &&
+                                                        item.amount !==
+                                                            undefined
+                                                )
+                                                    ? group.subtotal_deposits.toLocaleString(
+                                                          undefined,
+                                                          {
+                                                              minimumFractionDigits: 2
+                                                          }
+                                                      )
+                                                    : ""}
+                                            </span>
+                                        </div> */}
                                         <div
                                             style={{
                                                 display: "flex",
@@ -588,11 +701,11 @@ export default function TabReportsDailyDisbursement() {
                                                 }}
                                             >
                                                 {/* {group.subtotal_outstandingcheck.toLocaleString(
-                                                    undefined,
-                                                    {
-                                                        minimumFractionDigits: 2
-                                                    }
-                                                )} */}
+                                                            undefined,
+                                                            {
+                                                                minimumFractionDigits: 2
+                                                            }
+                                                        )} */}
                                                 {group.outstanding_checks.some(
                                                     item =>
                                                         item.amount !== null &&
@@ -734,13 +847,13 @@ export default function TabReportsDailyDisbursement() {
 
             <style>
                 {`
-                    
-                    
-    @media print {
-    @page {
-        size: A4 portrait;
-        margin: 10mm;
-    }
+                            
+                            
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 10mm;
+            }
 
     html, body {
         width: 220mm;
@@ -749,11 +862,13 @@ export default function TabReportsDailyDisbursement() {
         padding: 0;
         -webkit-print-color-adjust: exact !important;
         color-adjust: exact !important;
+        background: #ffffff !important; 
         overflow: hidden !important;
     }
 
-    #print-container {
-        transform: scale(0.85); 
+    #print-table-area {
+        background: #ffffff !important; 
+        transform: scale(0.85);
         transform-origin: top center;
         width: 100%;
         margin: 0 auto;
@@ -762,6 +877,7 @@ export default function TabReportsDailyDisbursement() {
     }
 
     .ant-card {
+        background: #ffffff !important;
         box-shadow: none !important;
         border: none !important;
     }
@@ -769,8 +885,10 @@ export default function TabReportsDailyDisbursement() {
     .hide-during-print {
         display: none !important;
     }
+        
 
     .report-group {
+        background: #ffffff !important; /* ✅ Remove gray in each report group */
         page-break-inside: avoid !important;
         break-inside: avoid !important;
     }
@@ -782,7 +900,7 @@ export default function TabReportsDailyDisbursement() {
     }
 
     th, td {
-        font-size: 11px !important;
+        font-size: 16px !important;
         padding: 4px 6px !important;
         word-wrap: break-word !important;
     }
@@ -797,9 +915,9 @@ export default function TabReportsDailyDisbursement() {
         text-transform: uppercase;
         font-size: 12px !important;
     }
-        
 }
-`}
+
+        `}
             </style>
         </Card>
     );

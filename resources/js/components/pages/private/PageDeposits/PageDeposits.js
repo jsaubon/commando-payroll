@@ -48,9 +48,10 @@ export default function PageDeposits() {
                     message: "Deposit",
                     description: res.message
                 });
-                setDataDeposit(prev =>
-                    prev.filter(deposit => deposit.id !== record.id)
-                );
+                setDataDeposit(prev => ({
+                    ...prev,
+                    data: prev.data.filter(deposit => deposit.id !== record.id)
+                }));
             }
         });
     };
@@ -128,15 +129,15 @@ export default function PageDeposits() {
                         dataIndex="amount"
                         key="amount"
                     />
-                    {/* <Table.Column
-                        title="Date Request"
-                        dataIndex="date_request_formatted"
-                        key="date_request_formatted"
-                    /> */}
                     <Table.Column
-                        title="Date Transaction"
-                        dataIndex="date_transaction_formatted"
-                        key="date_transaction_formatted"
+                        title="Date Deposited"
+                        dataIndex="date_deposited_formatted"
+                        key="date_deposited_formatted"
+                    />
+                    <Table.Column
+                        title="Bank Transaction Date"
+                        dataIndex="bank_transaction_date_formatted"
+                        key="bank_transaction_date_formatted"
                     />
                     <Table.Column title="Notes" dataIndex="notes" key="notes" />
 

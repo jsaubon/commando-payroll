@@ -51,6 +51,7 @@ Route::get('testing', function () {
 
 Route::get('get_report_daily_disbursement', function () {
     $month = request()->month;
+    $bank_id = request()->bank_id;
 
     $year = null;
     $monthNum = null;
@@ -86,14 +87,18 @@ Route::get('get_report_daily_disbursement', function () {
         )
     FROM banks WHERE banks.id = expenses.bank_id)";
 
-    $date_transaction_formatted = "DATE_FORMAT(date_transaction, '%Y-%m-%d')";
+    $date_deposited_formatted = "DATE_FORMAT(date_deposited, '%Y-%m-%d')";
+    $bank_transaction_date = "DATE_FORMAT(bank_transaction_date, '%Y-%m-%d')";
+
+
 
     $dataDeposit = App\Deposits::selectRaw("
         deposits.*,
         {$bank_info_formatted} AS bank_info_formatted,
-        {$date_transaction_formatted} AS date_transaction_formatted
-")
-        ->when($year && $monthNum, fn($q) => $q->whereYear('date_transaction', $year)->whereMonth('date_transaction', $monthNum))
+        {$date_deposited_formatted} AS date_deposited_formatted,
+        {$bank_transaction_date} AS bank_transaction_date_formatted")
+        ->when($bank_id, fn($q) => $q->where('bank_id', $bank_id))
+        ->when($year && $monthNum, fn($q) => $q->whereYear('date_deposited', $year)->whereMonth('date_deposited', $monthNum))
         ->where('amount', '>', 0)
         ->get();
 
@@ -103,6 +108,8 @@ Route::get('get_report_daily_disbursement', function () {
 
     ])
         ->when($year && $monthNum, fn($q) => $q->whereYear('date', $year)->whereMonth('date', $monthNum))
+        ->when($bank_id, fn($q) => $q->where('bank_id', $bank_id))
+
         ->where('pdc', 0)
         ->where('out_standing_check', 0)
         ->get();
@@ -111,8 +118,10 @@ Route::get('get_report_daily_disbursement', function () {
         'expenses.*',
         \DB::raw($bank_info_formatted_expenses . ' AS bank_info_formatted'),
 
+
     ])
         ->when($year && $monthNum, fn($q) => $q->whereYear('date', $year)->whereMonth('date', $monthNum))
+        ->when($bank_id, fn($q) => $q->where('bank_id', $bank_id))
         ->where('out_standing_check', 1)
         ->get();
 
@@ -122,6 +131,8 @@ Route::get('get_report_daily_disbursement', function () {
 
     ])
         ->when($year && $monthNum, fn($q) => $q->whereYear('date', $year)->whereMonth('date', $monthNum))
+        ->when($bank_id, fn($q) => $q->where('bank_id', $bank_id))
+
         ->where('pdc', 1)
         ->get();
 
@@ -155,14 +166,14 @@ Route::get('get_report_daily_disbursement', function () {
             ?? $dataPDC->where('bank_id', $bankId)->first()->bank_info_formatted
             ?? '';
 
-
+        // Calculate forwarded balance from previous month
         if ($month) {
             $prevMonth = date('Y-m', strtotime($month . '-01 -1 month'));
             $forwarded_balance_month_range = date('Y-m-t', strtotime($prevMonth));
 
-            $prevDeposits = \App\Deposits::where('bank_id', $bankId)
-                ->whereYear('date_transaction', date('Y', strtotime($prevMonth)))
-                ->whereMonth('date_transaction', date('m', strtotime($prevMonth)))
+            $fbmoDeposits = \App\Deposits::where('bank_id', $bankId)
+                ->whereYear('date_deposited', date('Y', strtotime($prevMonth)))
+                ->whereMonth('date_deposited', date('m', strtotime($prevMonth)))
                 ->sum('amount', $deposits_total_amount);
 
             $prevExpenses = \App\Expenses::where('bank_id', $bankId)
@@ -184,7 +195,7 @@ Route::get('get_report_daily_disbursement', function () {
                 ->where('pdc', 1)
                 ->sum('amount', $total_pdc_amount);
 
-            $forwarded_balance = $prevDeposits - $prevExpenses - $prevOutstanding - $prevPdc;
+            $forwarded_balance = $fbmoDeposits - $prevExpenses - $prevOutstanding - $prevPdc;
         }
 
 

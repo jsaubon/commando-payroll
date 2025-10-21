@@ -39,11 +39,11 @@ export default function ModalDepositsForm(props) {
         let data = {
             ...values,
             id: toggleModalDepositsForm.data?.id || "",
-            // date_request: values.date_request
-            //     ? moment(values.date_request).format("YYYY-MM-DD")
-            //     : "",
-            date_transaction: values.date_transaction
-                ? moment(values.date_transaction).format("YYYY-MM-DD")
+            date_deposited: values.date_deposited
+                ? moment(values.date_deposited).format("YYYY-MM-DD")
+                : "",
+            bank_transaction_date: values.bank_transaction_date
+                ? moment(values.bank_transaction_date).format("YYYY-MM-DD")
                 : ""
         };
 
@@ -70,11 +70,12 @@ export default function ModalDepositsForm(props) {
             form.setFieldsValue({
                 ...toggleModalDepositsForm.data,
 
-                // date_request: toggleModalDepositsForm.data?.date_request
-                //     ? moment(toggleModalDepositsForm.data.date_request)
-                //     : null,
-                date_transaction: toggleModalDepositsForm.data?.date_transaction
-                    ? moment(toggleModalDepositsForm.data.date_transaction)
+                date_deposited: toggleModalDepositsForm.data?.date_deposited
+                    ? moment(toggleModalDepositsForm.data.date_deposited)
+                    : null,
+                bank_transaction_date: toggleModalDepositsForm.data
+                    ?.bank_transaction_date
+                    ? moment(toggleModalDepositsForm.data.bank_transaction_date)
                     : null
             });
         }
@@ -197,10 +198,13 @@ export default function ModalDepositsForm(props) {
                         ></Input>
                     </Form.Item>
 
-                    {/* <Form.Item label="Date Request" name="date_request">
+                    <Form.Item label="Date Deposited" name="date_deposited">
                         <DatePicker style={{ width: "100%" }} />
-                    </Form.Item> */}
-                    <Form.Item label="Date Transaction" name="date_transaction">
+                    </Form.Item>
+                    <Form.Item
+                        label="Bank Transaction Date"
+                        name="bank_transaction_date"
+                    >
                         <DatePicker style={{ width: "100%" }} />
                     </Form.Item>
                     <Form.Item label="Notes" name="notes">

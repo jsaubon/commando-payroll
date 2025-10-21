@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+    DeleteOutlined,
+    EditOutlined,
+    SortAscendingOutlined,
+    SortDescendingOutlined
+} from "@ant-design/icons";
 import ButtonGroup from "antd/lib/button/button-group";
 import {
     Button,
@@ -24,7 +29,8 @@ export default function PageExpenses() {
     const [tableFilter, setTableFilter] = useState({
         page: 1,
         page_size: 50,
-        search: ""
+        search: "",
+        sort_order: "desc"
     });
     const userdata = JSON.parse(localStorage.userdata);
 
@@ -50,9 +56,10 @@ export default function PageExpenses() {
                     message: "Expenses",
                     description: res.message
                 });
-                setDataExpenses(prev =>
-                    prev.filter(expense => expense.id !== record.id)
-                );
+                setDataExpenses(prev => ({
+                    ...prev,
+                    data: prev.data.filter(expense => expense.id !== record.id)
+                }));
             }
         });
     };
@@ -88,15 +95,33 @@ export default function PageExpenses() {
                 )}
             </Col>
 
-            <Col xs={24} md={6} className="px-0">
+            <Col xs={24} md={6}>
                 <div style={{ display: "flex" }}>
                     <Input.Search
-                        allowClear
                         placeholder="Search Expenses"
                         style={{ width: "100%" }}
                         className="pull-right"
                         onChange={e => onChangeTable("search", e.target.value)}
                     />
+                    {/* <Button
+                        type="link"
+                        onClick={() => {
+                            onChangeTable("sort_field", "bank_name");
+                            onChangeTable(
+                                "sort_order",
+                                tableFilter.sort_order === "asc"
+                                    ? "desc"
+                                    : "asc"
+                            );
+                        }}
+                    >
+                        {tableFilter.sort_field === "bank_name" &&
+                        tableFilter.sort_order === "asc" ? (
+                            <SortAscendingOutlined style={{ fontSize: 20 }} />
+                        ) : (
+                            <SortDescendingOutlined style={{ fontSize: 20 }} />
+                        )}
+                    </Button> */}
                 </div>
             </Col>
 
@@ -134,6 +159,11 @@ export default function PageExpenses() {
                         title="Date"
                         dataIndex="date_formatted"
                         key="date_formatted"
+                    />
+                    <Table.Column
+                        title="Bank Transaction Date"
+                        dataIndex="bank_transaction_date"
+                        key="bank_transaction_date"
                     />
                     <Table.Column
                         title="Out Standing Check"

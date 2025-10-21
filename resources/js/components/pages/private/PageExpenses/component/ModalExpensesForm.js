@@ -41,6 +41,9 @@ export default function ModalExpensesForm(props) {
             ...values,
             id: toggleModalExpensesForm.data?.id || "",
             date: values.date ? moment(values.date).format("YYYY-MM-DD") : null,
+            bank_transaction_date: values.bank_transaction_date
+                ? moment(values.bank_transaction_date).format("YYYY-MM-DD")
+                : null,
             out_standing_check: values.out_standing_check ? 1 : 0,
             pdc: values.pdc ? 1 : 0
         };
@@ -70,6 +73,10 @@ export default function ModalExpensesForm(props) {
                 ...toggleModalExpensesForm.data,
                 date: toggleModalExpensesForm.data?.date
                     ? moment(toggleModalExpensesForm.data.date)
+                    : null,
+                bank_transaction_date: toggleModalExpensesForm.data
+                    ?.bank_transaction_date
+                    ? moment(toggleModalExpensesForm.data.bank_tra)
                     : null,
                 out_standing_check:
                     toggleModalExpensesForm.data?.out_standing_check == 1,
@@ -176,11 +183,7 @@ export default function ModalExpensesForm(props) {
                     />
                 </Form.Item>
 
-                <Form.Item
-                    label="Amount"
-                    name="amount"
-                    rules={[validateRules.required()]}
-                >
+                <Form.Item label="Amount" name="amount">
                     <Input
                         placeholder="Amount"
                         type="numeric"
@@ -196,11 +199,12 @@ export default function ModalExpensesForm(props) {
                         }}
                     ></Input>
                 </Form.Item>
+                <Form.Item label="Date" name="date">
+                    <DatePicker style={{ width: "100%" }} />
+                </Form.Item>
                 <Form.Item
-                    label="Date"
-                    required
-                    name="date"
-                    rules={[validateRules.required()]}
+                    label="Bank Transaction Date"
+                    name="bank_transaction_date"
                 >
                     <DatePicker style={{ width: "100%" }} />
                 </Form.Item>
