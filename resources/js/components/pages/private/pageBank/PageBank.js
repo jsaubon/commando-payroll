@@ -96,11 +96,6 @@ export default function PageBank() {
                         dataIndex="account_number"
                         key="account_number"
                     />
-                    <Table.Column
-                        title="Expiration Date"
-                        dataIndex="expiration_date"
-                        key="expiration_date"
-                    />
 
                     <Table.Column
                         title="Action"

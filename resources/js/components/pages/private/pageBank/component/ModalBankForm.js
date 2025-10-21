@@ -187,18 +187,6 @@ export default function ModalBankForm(props) {
                             }}
                         />
                     </Form.Item>
-                    <Form.Item
-                        label="Expiration Date"
-                        name="expiration_date"
-                        className="mb-15"
-                        required
-                        rules={[validateRules.required()]}
-                    >
-                        <DatePicker
-                            name="expiration_date"
-                            style={{ width: "100%" }}
-                        />
-                    </Form.Item>
                 </Col>
             </Form>
         </Modal>

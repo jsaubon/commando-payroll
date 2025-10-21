@@ -107,7 +107,6 @@ export default function PageDeposits() {
                             : dataDeposit
                     }
                     pagination={true}
-                    size="small"
                 >
                     <Table.Column
                         title="Bank Name"
@@ -129,11 +128,11 @@ export default function PageDeposits() {
                         dataIndex="amount"
                         key="amount"
                     />
-                    <Table.Column
+                    {/* <Table.Column
                         title="Date Request"
                         dataIndex="date_request_formatted"
                         key="date_request_formatted"
-                    />
+                    /> */}
                     <Table.Column
                         title="Date Transaction"
                         dataIndex="date_transaction_formatted"

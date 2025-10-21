@@ -168,7 +168,6 @@ export default function ModalExpensesForm(props) {
                     label="Expenses Description"
                     name="expense_description"
                     className="mb-15"
-                    rules={[validateRules.required()]}
                 >
                     <Input
                         name="expense_description"

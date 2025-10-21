@@ -42,8 +42,8 @@ export default function TabReportsDailyDisbursement() {
     const columnsDeposit = [
         {
             title: "Date",
-            dataIndex: "date_request_formatted",
-            key: "date_request_formatted"
+            dataIndex: "date_transaction_formatted",
+            key: "date_transaction_formatted"
         },
         {
             title: "Deposit Name",

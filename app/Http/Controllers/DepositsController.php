@@ -86,9 +86,9 @@ class DepositsController extends Controller
         $dataDeposit = $request->validate([
             'bank_id' => 'required|exists:banks,id',
             'deposit_name' => 'required|string',
-            'deposit_description' => 'required|string',
+            'deposit_description' => 'nullable',
             'amount' => 'required',
-            'date_request' => 'required|date',
+            // 'date_request' => 'nullable|date',
             'date_transaction' => 'nullable|date',
             'notes' => 'nullable|string',
 

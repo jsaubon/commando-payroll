@@ -78,7 +78,7 @@ class BankController extends Controller
             'account_name'    => 'required|string',
             'account_type'    => 'required|string',
             'account_number'  => 'required|regex:/^\d+(-\d+)*$/',
-            'expiration_date' => 'required|date',
+            // 'expiration_date' => 'required|date',
         ]);
 
         try {

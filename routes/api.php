@@ -86,14 +86,14 @@ Route::get('get_report_daily_disbursement', function () {
         )
     FROM banks WHERE banks.id = expenses.bank_id)";
 
-    $date_request_formatted = "DATE_FORMAT(date_request, '%Y-%m-%d')";
+    $date_transaction_formatted = "DATE_FORMAT(date_transaction, '%Y-%m-%d')";
 
     $dataDeposit = App\Deposits::selectRaw("
         deposits.*,
         {$bank_info_formatted} AS bank_info_formatted,
-        {$date_request_formatted} AS date_request_formatted
+        {$date_transaction_formatted} AS date_transaction_formatted
 ")
-        ->when($year && $monthNum, fn($q) => $q->whereYear('date_request', $year)->whereMonth('date_request', $monthNum))
+        ->when($year && $monthNum, fn($q) => $q->whereYear('date_transaction', $year)->whereMonth('date_transaction', $monthNum))
         ->where('amount', '>', 0)
         ->get();
 
@@ -161,8 +161,8 @@ Route::get('get_report_daily_disbursement', function () {
             $forwarded_balance_month_range = date('Y-m-t', strtotime($prevMonth));
 
             $prevDeposits = \App\Deposits::where('bank_id', $bankId)
-                ->whereYear('date_request', date('Y', strtotime($prevMonth)))
-                ->whereMonth('date_request', date('m', strtotime($prevMonth)))
+                ->whereYear('date_transaction', date('Y', strtotime($prevMonth)))
+                ->whereMonth('date_transaction', date('m', strtotime($prevMonth)))
                 ->sum('amount', $deposits_total_amount);
 
             $prevExpenses = \App\Expenses::where('bank_id', $bankId)

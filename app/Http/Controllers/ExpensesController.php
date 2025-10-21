@@ -82,12 +82,12 @@ class ExpensesController extends Controller
         $dataExpense = $request->validate([
             'bank_id' => 'required|exists:banks,id',
             'expense_name' => 'required|string',
-            'expense_description' => 'required|string',
+            'expense_description' => 'nullable',
             'amount' => 'required',
             'date' => 'required|date',
             'out_standing_check' => 'nullable',
             'pdc' => 'nullable',
-            'notes' => 'nullable|string',
+            'notes' => 'nullable',
 
 
         ]);

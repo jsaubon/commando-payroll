@@ -39,9 +39,9 @@ export default function ModalDepositsForm(props) {
         let data = {
             ...values,
             id: toggleModalDepositsForm.data?.id || "",
-            date_request: values.date_request
-                ? moment(values.date_request).format("YYYY-MM-DD")
-                : "",
+            // date_request: values.date_request
+            //     ? moment(values.date_request).format("YYYY-MM-DD")
+            //     : "",
             date_transaction: values.date_transaction
                 ? moment(values.date_transaction).format("YYYY-MM-DD")
                 : ""
@@ -70,9 +70,9 @@ export default function ModalDepositsForm(props) {
             form.setFieldsValue({
                 ...toggleModalDepositsForm.data,
 
-                date_request: toggleModalDepositsForm.data?.date_request
-                    ? moment(toggleModalDepositsForm.data.date_request)
-                    : null,
+                // date_request: toggleModalDepositsForm.data?.date_request
+                //     ? moment(toggleModalDepositsForm.data.date_request)
+                //     : null,
                 date_transaction: toggleModalDepositsForm.data?.date_transaction
                     ? moment(toggleModalDepositsForm.data.date_transaction)
                     : null
@@ -197,9 +197,9 @@ export default function ModalDepositsForm(props) {
                         ></Input>
                     </Form.Item>
 
-                    <Form.Item label="Date Request" name="date_request">
+                    {/* <Form.Item label="Date Request" name="date_request">
                         <DatePicker style={{ width: "100%" }} />
-                    </Form.Item>
+                    </Form.Item> */}
                     <Form.Item label="Date Transaction" name="date_transaction">
                         <DatePicker style={{ width: "100%" }} />
                     </Form.Item>
