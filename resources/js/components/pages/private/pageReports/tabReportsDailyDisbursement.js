@@ -360,7 +360,7 @@ export default function TabReportsDailyDisbursement() {
                             className="pull-right hide-during-print"
                         >
                             <div className="ant-form-item-label">
-                                <label>Bank</label>
+                                <label>Banks</label>
                                 <Select
                                     onChange={value => {
                                         onChangeTable("bank_id", value);
@@ -369,7 +369,8 @@ export default function TabReportsDailyDisbursement() {
                                         width: "200px",
                                         textAlign: "left"
                                     }}
-                                    placeholder="Select Bank"
+                                    placeholder="Select Banks"
+                                    label="Select Banks"
                                     allowClear
                                 >
                                     <Select.Option value="">
@@ -395,9 +396,11 @@ export default function TabReportsDailyDisbursement() {
                             className="pull-right hide-during-print"
                         >
                             <div className="ant-form-item-label">
-                                <label>Month</label>
+                                <label>Months</label>
                                 <DatePicker
                                     style={{ width: "200px" }}
+                                    label="Select Months"
+                                    placeholder="Select Months"
                                     picker="month"
                                     onChange={dates => {
                                         onChangeTable(

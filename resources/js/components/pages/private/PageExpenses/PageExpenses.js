@@ -95,7 +95,7 @@ export default function PageExpenses() {
                 )}
             </Col>
 
-            <Col xs={24} md={6}>
+            <Col xs={24} md={6} className="px-0">
                 <div style={{ display: "flex" }}>
                     <Input.Search
                         placeholder="Search Expenses"
