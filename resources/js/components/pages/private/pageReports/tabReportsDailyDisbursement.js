@@ -112,7 +112,7 @@ export default function TabReportsDailyDisbursement() {
             )
         },
         {
-            title: "Expense Name",
+            title: "Expenses Name",
             dataIndex: "expense_name",
             key: "expense_name",
             width: "35%",
@@ -157,7 +157,7 @@ export default function TabReportsDailyDisbursement() {
             )
         },
         {
-            title: "Expense Name",
+            title: "Expenses Name",
             dataIndex: "expense_name",
             key: "expense_name",
             width: "35%",
@@ -202,7 +202,7 @@ export default function TabReportsDailyDisbursement() {
             )
         },
         {
-            title: "Expense Name",
+            title: "Expenses Name",
             dataIndex: "expense_name",
             key: "expense_name",
             width: "35%",
@@ -394,7 +394,7 @@ export default function TabReportsDailyDisbursement() {
                                                     borderRadius: "1px",
                                                     marginBottom: "4px",
                                                     color: "#fff",
-                                                    fontSize: "12px"
+                                                    fontSize: "15px !important"
                                                 }}
                                             >
                                                 {group.bank_info_formatted}
@@ -832,9 +832,16 @@ export default function TabReportsDailyDisbursement() {
             height: auto !important;
             page-break-after: auto !important;
         }
-            .bank-info-formatted {
+        .bank-info-formatted {
                 color: #fff !important;
-            }
+                background-color: #0d5b10 !important;
+                padding: 3px 5px !important;
+                font-weight: bold !important;
+                border-radius: 1px !important;
+                margin-bottom: 4px !important;
+             
+
+         }
 
         .print-only-header {
             display: block !important;
@@ -859,13 +866,12 @@ export default function TabReportsDailyDisbursement() {
                    margin-bottom: 10px !important;
                     box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
                     padding: 3px !important;
-                    border: 1px solid #000 !important;
+                    border: 1px solid #ddd !important;
                     background: white !important;
                     page-break-inside: auto !important; 
                     break-inside: auto !important;
                     border-radius: 0 !important;
-                
-        }
+                     }
 
         .bank-section-print:not(:first-child) {
             page-break-before: always !important;
