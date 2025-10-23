@@ -43,310 +43,192 @@ export default function TabReportsDailyDisbursement() {
     const componentRef = useRef();
 
     const handlePrintDailyDisbursementReport = useReactToPrint({
-        content: () => componentRef.current,
-        removeAfterPrint: true
+        content: () => componentRef.current
+        // removeAfterPrint: true
     });
 
     const columnsDeposit = [
         {
-            title: "Date Deposited",
+            title: "Date",
             dataIndex: "date_deposited_formatted",
             key: "date_deposited_formatted",
-            width: 100
+            width: "25%",
+            render: text => (
+                <div style={{ fontSize: "10px", lineHeight: "1" }}>{text}</div>
+            )
         },
         {
-            title: "Bank Transaction Date",
+            title: "Bank Date",
             dataIndex: "bank_transaction_date_formatted",
             key: "bank_transaction_date_formatted",
-            width: 100
+            width: "25%",
+            render: text => (
+                <div style={{ fontSize: "10px", lineHeight: "1" }}>{text}</div>
+            )
         },
         {
             title: "Deposit Name",
             dataIndex: "deposit_name",
             key: "deposit_name",
-            width: 250
+            width: "35%",
+            render: text => (
+                <div style={{ fontSize: "10px", lineHeight: "1" }}>{text}</div>
+            )
         },
         {
             title: "Amount",
             dataIndex: "amount",
             key: "amount",
             align: "right",
-            width: 50
-            // render: (text, record, index) => {
-            //     const deposits = record.tableData || [];
-            //     const totalAmount = deposits.reduce(
-            //         (sum, item) => sum + Number(item.amount || 0),
-            //         0
-            //     );
-            //     const isLast = index === deposits.length - 1;
-
-            //     return (
-            //         <div
-            //             style={{
-            //                 display: "flex",
-            //                 justifyContent: "space-between",
-            //                 alignItems: "left",
-            //                 whiteSpace: "nowrap"
-            //             }}
-            //         >
-            //             <span
-            //                 style={{
-            //                     width: "50%",
-            //                     textAlign: "left",
-            //                     paddingRight: "25px"
-            //                 }}
-            //             >
-            //                 {Number(text || 0).toLocaleString(undefined, {
-            //                     minimumFractionDigits: 2,
-            //                     maximumFractionDigits: 2
-            //                 })}
-            //             </span>
-
-            //             <span
-            //                 style={{
-            //                     width: "5pc",
-            //                     textAlign: "right",
-            //                     fontWeight: isLast ? "700" : "normal",
-            //                     borderBottom: isLast ? "2px solid #000" : "none"
-            //                 }}
-            //             >
-            //                 {isLast
-            //                     ? Number(totalAmount || 0).toLocaleString(
-            //                           undefined,
-            //                           {
-            //                               minimumFractionDigits: 2,
-            //                               maximumFractionDigits: 2
-            //                           }
-            //                       )
-            //                     : ""}
-            //             </span>
-            //         </div>
-            //     );
-            // }
+            width: "15%",
+            render: text => (
+                <div style={{ fontSize: "10px", lineHeight: "1" }}>
+                    {Number(text || 0).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })}
+                </div>
+            )
         }
     ];
 
     const columnsExpense = [
-        { title: "Date ", dataIndex: "date", key: "date", width: 100 },
         {
+            title: "Date",
+            dataIndex: "date",
+            key: "date",
+            width: "25%",
+            render: text => (
+                <div style={{ fontSize: "10px", lineHeight: "1" }}>{text}</div>
+            )
+        },
+        {
+            title: "Bank Date",
             dataIndex: "bank_transaction_date",
             key: "bank_transaction_date",
-            width: 100
+            width: "25%",
+            render: text => (
+                <div style={{ fontSize: "10px", lineHeight: "1" }}>{text}</div>
+            )
         },
         {
             title: "Expense Name",
             dataIndex: "expense_name",
             key: "expense_name",
-            width: 250
+            width: "35%",
+            render: text => (
+                <div style={{ fontSize: "10px", lineHeight: "1" }}>{text}</div>
+            )
         },
         {
+            title: "Amount",
             dataIndex: "amount",
             key: "amount",
             align: "right",
-            width: 50
-            // render: (text, record, index) => {
-            //     const expenses = record.tableData || [];
-            //     const totalAmount = expenses.reduce(
-            //         (sum, item) => sum + Number(item.amount || 0),
-            //         0
-            //     );
-            //     const isLast = index === expenses.length - 1;
-
-            //     return (
-            //         <div
-            //             style={{
-            //                 display: "flex",
-            //                 justifyContent: "space-between",
-            //                 alignItems: "center",
-            //                 whiteSpace: "nowrap"
-            //             }}
-            //         >
-            //             <span
-            //                 style={{
-            //                     width: "50%",
-            //                     textAlign: "left",
-            //                     paddingRight: "25px"
-            //                 }}
-            //             >
-            //                 {Number(text || 0).toLocaleString(undefined, {
-            //                     minimumFractionDigits: 2,
-            //                     maximumFractionDigits: 2
-            //                 })}
-            //             </span>
-
-            //             <span
-            //                 style={{
-            //                     textAlign: "right",
-            //                     width: "50%",
-            //                     fontWeight: isLast ? "700" : "normal",
-            //                     borderBottom: isLast ? "2px solid #000" : "none"
-            //                 }}
-            //             >
-            //                 {isLast
-            //                     ? Number(totalAmount || 0).toLocaleString(
-            //                           undefined,
-            //                           {
-            //                               minimumFractionDigits: 2,
-            //                               maximumFractionDigits: 2
-            //                           }
-            //                       )
-            //                     : ""}
-            //             </span>
-            //         </div>
-            //     );
-            // }
+            width: "15%",
+            render: text => (
+                <div style={{ fontSize: "10px", lineHeight: "1" }}>
+                    {Number(text || 0).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })}
+                </div>
+            )
         }
     ];
+
     const columnsOutstandingCheck = [
-        { dataIndex: "date", key: "date", width: 100 },
         {
+            title: "Date",
+            dataIndex: "date",
+            key: "date",
+            width: "25%",
+            render: text => (
+                <div style={{ fontSize: "10px", lineHeight: "1" }}>{text}</div>
+            )
+        },
+        {
+            title: "Bank Date",
             dataIndex: "bank_transaction_date",
             key: "bank_transaction_date",
-            width: 100
+            width: "25%",
+            render: text => (
+                <div style={{ fontSize: "10px", lineHeight: "1" }}>{text}</div>
+            )
         },
         {
+            title: "Expense Name",
             dataIndex: "expense_name",
             key: "expense_name",
-            width: 250
+            width: "35%",
+            render: text => (
+                <div style={{ fontSize: "10px", lineHeight: "1" }}>{text}</div>
+            )
         },
         {
+            title: "Amount",
             dataIndex: "amount",
             key: "amount",
             align: "right",
-            width: 50
-            // render: (text, record, index) => {
-            //     const outstanding_checks = record.tableData || [];
-            //     const totalAmount = outstanding_checks.reduce(
-            //         (sum, item) => sum + Number(item.amount || 0),
-            //         0
-            //     );
-            //     const isLast = index === outstanding_checks.length - 1;
-
-            //     return (
-            //         <div
-            //             style={{
-            //                 display: "flex",
-            //                 justifyContent: "space-between",
-            //                 alignItems: "center",
-            //                 whiteSpace: "nowrap"
-            //             }}
-            //         >
-            //             <span
-            //                 style={{
-            //                     width: "50%",
-            //                     textAlign: "left",
-            //                     paddingRight: "25px"
-            //                 }}
-            //             >
-            //                 {Number(text || 0).toLocaleString(undefined, {
-            //                     minimumFractionDigits: 2,
-            //                     maximumFractionDigits: 2
-            //                 })}
-            //             </span>
-
-            //             <span
-            //                 style={{
-            //                     textAlign: "right",
-            //                     width: "50%",
-            //                     fontWeight: isLast ? "700" : "normal",
-            //                     borderBottom: isLast ? "2px solid #000" : "none"
-            //                 }}
-            //             >
-            //                 {isLast
-            //                     ? Number(totalAmount || 0).toLocaleString(
-            //                           undefined,
-            //                           {
-            //                               minimumFractionDigits: 2,
-            //                               maximumFractionDigits: 2
-            //                           }
-            //                       )
-            //                     : ""}
-            //             </span>
-            //         </div>
-            //     );
-            // }
+            width: "15%",
+            render: text => (
+                <div style={{ fontSize: "10px", lineHeight: "1" }}>
+                    {Number(text || 0).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })}
+                </div>
+            )
         }
     ];
-    const columnsPDC = [
-        { dataIndex: "date", key: "date" },
 
+    const columnsPDC = [
         {
+            title: "Date",
+            dataIndex: "date",
+            key: "date",
+            width: "25%",
+            render: text => (
+                <div style={{ fontSize: "10px", lineHeight: "1" }}>{text}</div>
+            )
+        },
+        {
+            title: "Bank Date",
             dataIndex: "bank_transaction_date",
             key: "bank_transaction_date",
-            width: 100
+            width: "25%",
+            render: text => (
+                <div style={{ fontSize: "10px", lineHeight: "1" }}>{text}</div>
+            )
         },
-
         {
+            title: "Expense Name",
             dataIndex: "expense_name",
             key: "expense_name",
-            width: 250
+            width: "35%",
+            render: text => (
+                <div style={{ fontSize: "10px", lineHeight: "1" }}>{text}</div>
+            )
         },
         {
+            title: "Amount",
             dataIndex: "amount",
             key: "amount",
             align: "right",
-            width: 50
-            // render: (text, record, index) => {
-            //     const pdc = record.tableData || [];
-            //     const totalAmount = pdc.reduce(
-            //         (sum, item) => sum + Number(item.amount || 0),
-            //         0
-            //     );
-            //     const isLast = index === pdc.length - 1;
-
-            //     return (
-            //         <div
-            //             style={{
-            //                 display: "flex",
-            //                 justifyContent: "space-between",
-            //                 alignItems: "center",
-            //                 whiteSpace: "nowrap"
-            //             }}
-            //         >
-            //             <span
-            //                 style={{
-            //                     width: "50%",
-            //                     textAlign: "left",
-            //                     paddingRight: "25px"
-            //                 }}
-            //             >
-            //                 {Number(text || 0).toLocaleString(undefined, {
-            //                     minimumFractionDigits: 2,
-            //                     maximumFractionDigits: 2
-            //                 })}
-            //             </span>
-
-            //             <span
-            //                 style={{
-            //                     textAlign: "right",
-            //                     width: "50%",
-            //                     fontWeight: isLast ? "700" : "normal",
-            //                     borderBottom: isLast ? "2px solid #000" : "none"
-            //                 }}
-            //             >
-            //                 {isLast
-            //                     ? Number(totalAmount || 0).toLocaleString(
-            //                           undefined,
-            //                           {
-            //                               minimumFractionDigits: 2,
-            //                               maximumFractionDigits: 2
-            //                           }
-            //                       )
-            //                     : ""}
-            //             </span>
-            //         </div>
-            //     );
-            // }
+            width: "15%",
+            render: text => (
+                <div style={{ fontSize: "10px", lineHeight: "1" }}>
+                    {Number(text || 0).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })}
+                </div>
+            )
         }
     ];
 
     return (
-        <Card
-            style={{
-                backgroundColor: "white",
-                border: "1px solid #000"
-            }}
-        >
+        <Card style={{ backgroundColor: "white" }}>
             <Row gutter={16}>
                 <Col xs={24} md={24} lg={16}>
                     <Title level={4}>Daily Disbursement</Title>
@@ -415,24 +297,22 @@ export default function TabReportsDailyDisbursement() {
                 </Col>
             </Row>
 
-            <div id="print-table-area" ref={componentRef}>
+            <div>
                 <div className="text-center" id="print-header">
                     <Text>
                         <Select
                             style={{
-                                width: "100%",
-                                textAlign: "center",
                                 fontSize: 20,
                                 fontStyle: "italic",
                                 border: "none"
                             }}
                             className="select-no-border"
                             defaultValue="COMMANDO SECURITY SERVICE AGENCY, INC.
-                                                        (COMMANDO)"
+                            (COMMANDO)"
                         >
                             <Select.Option
                                 value="COMMANDO SECURITY SERVICE AGENCY, INC.
-                                                            (COMMANDO)"
+                                (COMMANDO)"
                             >
                                 COMMANDO SECURITY SERVICE AGENCY, INC.
                                 (COMMANDO)
@@ -441,402 +321,486 @@ export default function TabReportsDailyDisbursement() {
                                 FIRST COMMANDO MANPOWER SERVICES
                             </Select.Option>
                         </Select>
-
-                        <br />
-                        <i>
+                        <div
+                            style={{
+                                fontSize: "10px",
+                                fontStyle: "italic"
+                            }}
+                        >
                             BUTUAN MAIN OFFICE
                             <br />
                             126 T. Calo Ext., 8600 Butuan City
                             <br />
                             Tel. No. (085) 342-8283 and (085) 341-3214
-                        </i>
+                        </div>
+                        <Title level={4}>Daily DisbursementReport</Title>
                     </Text>
-
-                    <Title level={4} className="mb-0">
-                        Daily Disbursement Report
-                    </Title>
                 </div>
-                <br />
 
-                {tableFilter.month ? (
-                    <Text>
-                        {dataDailyDisbursement &&
-                        dataDailyDisbursement.length > 0 ? (
-                            dataDailyDisbursement.map((group, index) => (
+                <div id="print-table-area" ref={componentRef}>
+                    {tableFilter.month ? (
+                        <div>
+                            {dataDailyDisbursement &&
+                            dataDailyDisbursement.length > 0 ? (
+                                dataDailyDisbursement.map((group, index) => {
+                                    return (
+                                        <div
+                                            key={index}
+                                            className="bank-section"
+                                            style={{
+                                                marginBottom: "6px",
+                                                backgroundColor: "#ffffff",
+                                                // border: "1px solid #ddd",
+                                                // borderRadius: "2px",
+                                                padding: "4px"
+                                            }}
+                                        >
+                                            <div
+                                                className="text-center"
+                                                style={{
+                                                    marginBottom: "10px",
+                                                    paddingBottom: "5px"
+                                                }}
+                                            >
+                                                <div
+                                                    style={{
+                                                        fontSize: "12px",
+                                                        fontWeight: "bold",
+                                                        marginBottom: "2px"
+                                                    }}
+                                                >
+                                                    COMMANDO SECURITY SERVICE
+                                                    AGENCY, INC. (COMMANDO)
+                                                </div>
+                                                <div
+                                                    style={{
+                                                        fontSize: "10px",
+                                                        fontStyle: "italic"
+                                                    }}
+                                                >
+                                                    BUTUAN MAIN OFFICE
+                                                    <br />
+                                                    126 T. Calo Ext., 8600
+                                                    Butuan City
+                                                    <br />
+                                                    Tel. No. (085) 342-8283 and
+                                                    (085) 341-3214
+                                                    <br />
+                                                </div>
+                                                <div
+                                                    style={{
+                                                        fontSize: "14px",
+                                                        fontWeight: "bold"
+                                                    }}
+                                                >
+                                                    Daily Disbursement Report
+                                                </div>
+                                            </div>
+
+                                            <div
+                                                style={{
+                                                    backgroundColor: "#0d5b10",
+                                                    padding: "3px 5px",
+                                                    fontWeight: "bold",
+                                                    borderRadius: "1px",
+                                                    marginBottom: "4px",
+                                                    color: "#fff",
+                                                    fontSize: "12px"
+                                                }}
+                                            >
+                                                {group.bank_info_formatted}
+                                            </div>
+
+                                            <div
+                                                style={{
+                                                    display: "flex",
+                                                    justifyContent:
+                                                        "space-between",
+                                                    alignItems: "center",
+                                                    marginBottom: "6px",
+                                                    fontSize: "12px",
+                                                    padding: "3px",
+                                                    backgroundColor: "#f8f9fa",
+                                                    borderRadius: "1px"
+                                                }}
+                                            >
+                                                <strong
+                                                    style={{ color: "#000" }}
+                                                >
+                                                    Forwarded Balance (
+                                                    {
+                                                        group.forwarded_balance_month_range
+                                                    }
+                                                    )
+                                                </strong>
+                                                <strong
+                                                    style={{
+                                                        fontSize: "12px",
+                                                        color: "#000"
+                                                    }}
+                                                >
+                                                    {group.forward_balance.toLocaleString(
+                                                        undefined,
+                                                        {
+                                                            minimumFractionDigits: 2
+                                                        }
+                                                    )}
+                                                </strong>
+                                            </div>
+
+                                            <div
+                                                style={{ marginBottom: "6px" }}
+                                            >
+                                                <strong
+                                                    style={{
+                                                        fontSize: "12px",
+                                                        textTransform:
+                                                            "uppercase",
+                                                        display: "block",
+                                                        marginBottom: "2px",
+                                                        color: "#000"
+                                                    }}
+                                                >
+                                                    Deposits
+                                                </strong>
+                                                <Table
+                                                    className="fixed-width-table"
+                                                    dataSource={
+                                                        group.deposits &&
+                                                        group.deposits.length >
+                                                            0
+                                                            ? group.deposits
+                                                            : []
+                                                    }
+                                                    columns={columnsDeposit}
+                                                    pagination={false}
+                                                    rowKey={(record, index) =>
+                                                        index
+                                                    }
+                                                    size="small"
+                                                    style={{
+                                                        marginBottom: "2px"
+                                                    }}
+                                                    locale={{
+                                                        emptyText: "No data"
+                                                    }}
+                                                />
+                                                <div
+                                                    style={{
+                                                        display: "flex",
+                                                        justifyContent:
+                                                            "space-between",
+                                                        padding: "2px 4px",
+                                                        fontWeight: "bold",
+                                                        fontSize: "12px",
+                                                        backgroundColor:
+                                                            "#f1f3f4",
+                                                        borderRadius: "1px"
+                                                    }}
+                                                >
+                                                    <span
+                                                        style={{
+                                                            color: "#000"
+                                                        }}
+                                                    >
+                                                        Sub-Total
+                                                    </span>
+                                                    <span
+                                                        style={{
+                                                            color: "#000"
+                                                        }}
+                                                    >
+                                                        {group.deposits &&
+                                                        group.deposits.length >
+                                                            0
+                                                            ? group.subtotal_deposits.toLocaleString(
+                                                                  undefined,
+                                                                  {
+                                                                      minimumFractionDigits: 2
+                                                                  }
+                                                              )
+                                                            : "0.00"}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            {/* Expenses Section */}
+                                            <div
+                                                style={{ marginBottom: "6px" }}
+                                            >
+                                                <strong
+                                                    style={{
+                                                        fontSize: "12px",
+                                                        textTransform:
+                                                            "uppercase",
+                                                        display: "block",
+                                                        marginBottom: "2px",
+                                                        color: "#000"
+                                                    }}
+                                                >
+                                                    Expenses
+                                                </strong>
+                                                <Table
+                                                    className="fixed-width-table"
+                                                    dataSource={
+                                                        group.expenses &&
+                                                        group.expenses.length >
+                                                            0
+                                                            ? group.expenses
+                                                            : []
+                                                    }
+                                                    columns={columnsExpense}
+                                                    pagination={false}
+                                                    rowKey={(record, index) =>
+                                                        index
+                                                    }
+                                                    size="small"
+                                                    style={{
+                                                        marginBottom: "2px"
+                                                    }}
+                                                    locale={{
+                                                        emptyText: "No data"
+                                                    }}
+                                                />
+                                                <div
+                                                    style={{
+                                                        display: "flex",
+                                                        justifyContent:
+                                                            "space-between",
+                                                        padding: "2px 4px",
+                                                        fontWeight: "bold",
+                                                        fontSize: "12px",
+                                                        backgroundColor:
+                                                            "#f1f3f4",
+                                                        borderRadius: "1px"
+                                                    }}
+                                                >
+                                                    <span
+                                                        style={{
+                                                            color: "#000"
+                                                        }}
+                                                    >
+                                                        Sub-Total
+                                                    </span>
+                                                    <span
+                                                        style={{
+                                                            color: "#000"
+                                                        }}
+                                                    >
+                                                        {group.expenses &&
+                                                        group.expenses.length >
+                                                            0
+                                                            ? group.subtotal_expenses.toLocaleString(
+                                                                  undefined,
+                                                                  {
+                                                                      minimumFractionDigits: 2
+                                                                  }
+                                                              )
+                                                            : "0.00"}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            {/* Outstanding Checks Section */}
+                                            <div
+                                                style={{ marginBottom: "6px" }}
+                                            >
+                                                <strong
+                                                    style={{
+                                                        fontSize: "12px",
+                                                        textTransform:
+                                                            "uppercase",
+                                                        display: "block",
+                                                        marginBottom: "2px",
+                                                        color: "#000"
+                                                    }}
+                                                >
+                                                    Outstanding Checks
+                                                </strong>
+                                                <Table
+                                                    dataSource={
+                                                        group.outstanding_checks &&
+                                                        group.outstanding_checks
+                                                            .length > 0
+                                                            ? group.outstanding_checks
+                                                            : []
+                                                    }
+                                                    columns={
+                                                        columnsOutstandingCheck
+                                                    }
+                                                    pagination={false}
+                                                    rowKey={(record, index) =>
+                                                        index
+                                                    }
+                                                    size="small"
+                                                    style={{
+                                                        marginBottom: "2px"
+                                                    }}
+                                                    locale={{
+                                                        emptyText: "No data"
+                                                    }}
+                                                />
+                                                <div
+                                                    style={{
+                                                        display: "flex",
+                                                        justifyContent:
+                                                            "space-between",
+                                                        padding: "2px 4px",
+                                                        fontWeight: "bold",
+                                                        fontSize: "12px",
+                                                        backgroundColor:
+                                                            "#f1f3f4",
+                                                        borderRadius: "1px"
+                                                    }}
+                                                >
+                                                    <span
+                                                        style={{
+                                                            color: "#000"
+                                                        }}
+                                                    >
+                                                        Sub-Total
+                                                    </span>
+                                                    <span
+                                                        style={{
+                                                            color: "#000"
+                                                        }}
+                                                    >
+                                                        {group.outstanding_checks &&
+                                                        group.outstanding_checks
+                                                            .length > 0
+                                                            ? group.subtotal_outstandingcheck.toLocaleString(
+                                                                  undefined,
+                                                                  {
+                                                                      minimumFractionDigits: 2
+                                                                  }
+                                                              )
+                                                            : "0.00"}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            {/* PDC Section */}
+                                            <div
+                                                style={{ marginBottom: "6px" }}
+                                            >
+                                                <strong
+                                                    style={{
+                                                        fontSize: "12px",
+                                                        textTransform:
+                                                            "uppercase",
+                                                        display: "block",
+                                                        marginBottom: "2px",
+                                                        color: "#000"
+                                                    }}
+                                                >
+                                                    PDC
+                                                </strong>
+                                                <Table
+                                                    dataSource={
+                                                        group.pdc &&
+                                                        group.pdc.length > 0
+                                                            ? group.pdc
+                                                            : []
+                                                    }
+                                                    columns={columnsPDC}
+                                                    pagination={false}
+                                                    rowKey={(record, index) =>
+                                                        index
+                                                    }
+                                                    size="small"
+                                                    style={{
+                                                        marginBottom: "2px"
+                                                    }}
+                                                    locale={{
+                                                        emptyText: "No data"
+                                                    }}
+                                                />
+                                                <div
+                                                    style={{
+                                                        display: "flex",
+                                                        justifyContent:
+                                                            "space-between",
+                                                        padding: "2px 4px",
+                                                        fontWeight: "bold",
+                                                        fontSize: "12px",
+                                                        backgroundColor:
+                                                            "#f1f3f4",
+                                                        borderRadius: "1px"
+                                                    }}
+                                                >
+                                                    <span
+                                                        style={{
+                                                            color: "#000"
+                                                        }}
+                                                    >
+                                                        Sub-Total
+                                                    </span>
+                                                    <span
+                                                        style={{
+                                                            color: "#000"
+                                                        }}
+                                                    >
+                                                        {group.pdc &&
+                                                        group.pdc.length > 0
+                                                            ? group.subtotal_pdc.toLocaleString(
+                                                                  undefined,
+                                                                  {
+                                                                      minimumFractionDigits: 2
+                                                                  }
+                                                              )
+                                                            : "0.00"}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            {/* Total Section */}
+                                            <div
+                                                style={{
+                                                    display: "flex",
+                                                    justifyContent:
+                                                        "space-between",
+                                                    padding: "3px 5px",
+                                                    fontWeight: "bold",
+                                                    fontSize: "14px",
+                                                    backgroundColor: "#e8f5e8",
+                                                    borderRadius: "1px",
+                                                    border: "1px solid #0d5b10",
+                                                    marginTop: "4px"
+                                                }}
+                                            >
+                                                <span style={{ color: "#000" }}>
+                                                    TOTAL
+                                                </span>
+                                                <span style={{ color: "#000" }}>
+                                                    {group.total_daily_disbursement.toLocaleString(
+                                                        undefined,
+                                                        {
+                                                            minimumFractionDigits: 2
+                                                        }
+                                                    )}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    );
+                                })
+                            ) : (
                                 <div
-                                    key={index}
-                                    className="report-group"
                                     style={{
-                                        marginBottom: 30,
-                                        backgroundColor: "#f9f9f9",
-                                        border: "1px solid #ccc",
-                                        borderRadius: 6,
-                                        padding: 15
+                                        textAlign: "center",
+                                        padding: "15px 0",
+                                        fontStyle: "italic",
+                                        color: "#666",
+                                        fontSize: "8px"
                                     }}
                                 >
-                                    <div
-                                        style={{
-                                            backgroundColor: "#0d5b10",
-                                            padding: "8px 12px",
-                                            fontWeight: "bold",
-                                            borderRadius: 4,
-                                            marginBottom: 10,
-                                            color: "#fff"
-                                        }}
-                                        className="report-header-print"
-                                    >
-                                        {group.bank_info_formatted}
-                                    </div>
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            justifyContent: "space-between",
-                                            alignItems: "center"
-                                        }}
-                                    >
-                                        <strong>
-                                            Forwarded Balance : (
-                                            {
-                                                group.forwarded_balance_month_range
-                                            }
-                                            ){" "}
-                                        </strong>
-                                        <div
-                                            style={{
-                                                fontWeight: "bold",
-                                                fontSize: 20
-                                            }}
-                                        >
-                                            {group.forward_balance.toLocaleString(
-                                                undefined,
-                                                {
-                                                    minimumFractionDigits: 2
-                                                }
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    <div style={{ marginTop: 10 }}>
-                                        <strong
-                                            style={{
-                                                textTransform: "uppercase",
-                                                fontWeight: "bold",
-                                                fontSize: 16
-                                            }}
-                                        >
-                                            Deposits
-                                        </strong>
-                                        <Table
-                                            dataSource={group.deposits.map(
-                                                (item, idx, arr) => ({
-                                                    ...item,
-                                                    tableData: arr
-                                                })
-                                            )}
-                                            columns={columnsDeposit}
-                                            pagination={false}
-                                            bordered={false}
-                                            rowKey={(record, index) => index}
-                                        />
-                                        {/* 
-                                        <div
-                                            style={{
-                                                display: "flex",
-                                                justifyContent: "space-between",
-                                                paddingRight: 10,
-                                                marginTop: 10,
-                                                fontWeight: "bold"
-                                            }}
-                                        >
-                                            <span
-                                                style={{
-                                                    width: "90%"
-                                                }}
-                                            >
-                                                <span>Total Deposits : </span>
-                                                {group.deposits.some(
-                                                    item =>
-                                                        item.amount !== null &&
-                                                        item.amount !==
-                                                            undefined
-                                                )
-                                                    ? group.subtotal_deposits.toLocaleString(
-                                                          undefined,
-                                                          {
-                                                              minimumFractionDigits: 2
-                                                          }
-                                                      )
-                                                    : ""}
-                                            </span>
-                                        </div> */}
-                                        <div
-                                            style={{
-                                                display: "flex",
-                                                justifyContent: "space-between",
-                                                paddingRight: 10,
-                                                marginTop: 10,
-                                                fontWeight: "bold"
-                                            }}
-                                        >
-                                            <span>Sub-Total</span>
-                                            <span
-                                                style={{
-                                                    textAlign: "right",
-                                                    width: 220,
-                                                    fontSize: 20,
-                                                    fontWeight: "bold"
-                                                }}
-                                            >
-                                                {group.deposits.some(
-                                                    item =>
-                                                        item.amount !== null &&
-                                                        item.amount !==
-                                                            undefined
-                                                )
-                                                    ? group.subtotal_deposits.toLocaleString(
-                                                          undefined,
-                                                          {
-                                                              minimumFractionDigits: 2
-                                                          }
-                                                      )
-                                                    : ""}
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <div style={{ marginTop: 10 }}>
-                                        <strong
-                                            style={{
-                                                textTransform: "uppercase",
-                                                fontWeight: "bold",
-                                                fontSize: 16
-                                            }}
-                                        >
-                                            Expenses
-                                        </strong>
-                                        <Table
-                                            dataSource={group.expenses.map(
-                                                (item, idx, arr) => ({
-                                                    ...item,
-                                                    tableData: arr
-                                                })
-                                            )}
-                                            columns={columnsExpense}
-                                            pagination={false}
-                                            bordered={false}
-                                            rowKey={(record, index) => index}
-                                        />
-
-                                        <div
-                                            style={{
-                                                display: "flex",
-                                                justifyContent: "space-between",
-                                                paddingRight: 10,
-                                                marginTop: 10,
-                                                fontWeight: "bold"
-                                            }}
-                                        >
-                                            <span>Sub-Total</span>
-                                            <span
-                                                style={{
-                                                    textAlign: "right",
-                                                    width: 220,
-                                                    fontSize: 20,
-                                                    fontWeight: "bold"
-                                                }}
-                                            >
-                                                {group.expenses.some(
-                                                    item =>
-                                                        item.amount !== null &&
-                                                        item.amount !==
-                                                            undefined
-                                                )
-                                                    ? group.subtotal_expenses.toLocaleString(
-                                                          undefined,
-                                                          {
-                                                              minimumFractionDigits: 2
-                                                          }
-                                                      )
-                                                    : ""}
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <div style={{ marginTop: 10 }}>
-                                        <strong
-                                            style={{
-                                                textTransform: "uppercase",
-                                                fontWeight: "bold",
-                                                fontSize: 16
-                                            }}
-                                        >
-                                            Outstanding Checks
-                                        </strong>
-                                        <Table
-                                            dataSource={group.outstanding_checks.map(
-                                                (item, idx, arr) => ({
-                                                    ...item,
-                                                    tableData: arr
-                                                })
-                                            )}
-                                            columns={columnsOutstandingCheck}
-                                            pagination={false}
-                                            bordered={false}
-                                            rowKey={(record, index) => index}
-                                        />
-
-                                        <div
-                                            style={{
-                                                display: "flex",
-                                                justifyContent: "space-between",
-                                                paddingRight: 10,
-                                                marginTop: 10,
-                                                fontWeight: "bold"
-                                            }}
-                                        >
-                                            <span>Sub-Total</span>
-                                            <span
-                                                style={{
-                                                    textAlign: "right",
-                                                    width: 220,
-                                                    fontSize: 20,
-                                                    fontWeight: "bold"
-                                                }}
-                                            >
-                                                {/* {group.subtotal_outstandingcheck.toLocaleString(
-                                                            undefined,
-                                                            {
-                                                                minimumFractionDigits: 2
-                                                            }
-                                                        )} */}
-                                                {group.outstanding_checks.some(
-                                                    item =>
-                                                        item.amount !== null &&
-                                                        item.amount !==
-                                                            undefined
-                                                )
-                                                    ? group.subtotal_outstandingcheck.toLocaleString(
-                                                          undefined,
-                                                          {
-                                                              minimumFractionDigits: 2
-                                                          }
-                                                      )
-                                                    : ""}
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <div style={{ marginTop: 10 }}>
-                                        <strong
-                                            style={{
-                                                textTransform: "uppercase",
-                                                fontWeight: "bold",
-                                                fontSize: 16
-                                            }}
-                                        >
-                                            PDC
-                                        </strong>
-                                        <Table
-                                            dataSource={group.pdc.map(
-                                                (item, idx, arr) => ({
-                                                    ...item,
-                                                    tableData: arr
-                                                })
-                                            )}
-                                            columns={columnsPDC}
-                                            pagination={false}
-                                            bordered={false}
-                                            rowKey={(record, index) => index}
-                                        />
-
-                                        <div
-                                            style={{
-                                                display: "flex",
-                                                justifyContent: "space-between",
-                                                paddingRight: 10,
-                                                marginTop: 10,
-                                                fontWeight: "bold"
-                                            }}
-                                        >
-                                            <span>Sub-Total</span>
-                                            <span
-                                                style={{
-                                                    textAlign: "right",
-                                                    width: 220,
-                                                    fontSize: 20,
-                                                    fontWeight: "bold"
-                                                }}
-                                            >
-                                                {group.pdc.some(
-                                                    item =>
-                                                        item.amount !== null &&
-                                                        item.amount !==
-                                                            undefined
-                                                )
-                                                    ? group.subtotal_pdc.toLocaleString(
-                                                          undefined,
-                                                          {
-                                                              minimumFractionDigits: 2
-                                                          }
-                                                      )
-                                                    : ""}
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <Divider />
-
-                                    <div
-                                        className="report-total"
-                                        style={{
-                                            display: "flex",
-                                            justifyContent: "space-between",
-                                            paddingRight: 10,
-                                            marginTop: 5,
-                                            fontWeight: "bold"
-                                        }}
-                                    >
-                                        <span
-                                            style={{
-                                                fontSize: 18
-                                            }}
-                                        >
-                                            Total
-                                        </span>
-                                        <span
-                                            style={{
-                                                textAlign: "right",
-                                                width: 220,
-                                                fontSize: 20,
-                                                fontWeight: "bold"
-                                            }}
-                                        >
-                                            {group.total_daily_disbursement.toLocaleString(
-                                                undefined,
-                                                {
-                                                    minimumFractionDigits: 2
-                                                }
-                                            )}
-                                        </span>
-                                    </div>
+                                    No data available.
                                 </div>
-                            ))
-                        ) : (
-                            <div
-                                style={{
-                                    textAlign: "center",
-                                    padding: "40px 0",
-                                    fontStyle: "italic",
-                                    color: "#999"
-                                }}
-                            >
-                                No data available.
-                            </div>
-                        )}
-                    </Text>
-                ) : (
-                    <Table></Table>
-                )}
+                            )}
+                        </div>
+                    ) : (
+                        <Table></Table>
+                    )}
+                </div>
             </div>
 
             <div className="text-right mt-10">
@@ -850,77 +814,188 @@ export default function TabReportsDailyDisbursement() {
 
             <style>
                 {`
-                            
-                            
-        @media print {
-            @page {
-                size: A4 portrait;
-                margin: 10mm;
-            }
+    @media print {
+        @page {
+            size: A4 portrait;
+            margin: 8mm;
+        }
 
-    html, body {
-        width: 220mm;
-        height: 297mm;
-        margin: 0;
-        padding: 0;
-        -webkit-print-color-adjust: exact !important;
-        color-adjust: exact !important;
-        background: #ffffff !important; 
-        overflow: hidden !important;
-    }
+        html, body {
+            width: 100% !important;
+            height: auto !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: #ffffff !important;
+            font-size: 6px !important;
+            line-height: 1 !important;
+            -webkit-print-color-adjust: exact !important;
+            color-adjust: exact !important;
+            font-family: Arial, sans-serif !important;
+        }
 
-    #print-table-area {
-        background: #ffffff !important; 
-        transform: scale(0.85);
-        transform-origin: top center;
-        width: 100%;
-        margin: 0 auto;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-    }
+        #print-table-area {
+            width: 100% !important;
+            margin: 0 auto !important;
+            padding: 0 !important;
+            background: white !important;
+            position: static !important;
+            min-height: auto !important;
+            height: auto !important;
+            page-break-after: auto !important;
 
-    .ant-card {
-        background: #ffffff !important;
-        box-shadow: none !important;
-        border: none !important;
-    }
+        }
 
-    .hide-during-print {
-        display: none !important;
-    }
-        
+        .ant-card, .ant-card-body {
+            all: unset !important;
+            display: block !important;
+            background: white !important;
+            width: 100% !important;
+        }
 
-    .report-group {
-        background: #ffffff !important; /* ✅ Remove gray in each report group */
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-    }
+        .hide-during-print {
+            display: none !important;
+        }
 
-    table {
-        width: 100% !important;
-        table-layout: fixed !important;
-        border-collapse: collapse !important;
-    }
+        // #print-header {
+        //     margin-bottom: 2px !important;
+        //     padding-bottom: 2px !important;
+        //     text-align: center !important;
+            
+        // }
 
-    th, td {
-        font-size: 16px !important;
-        padding: 4px 6px !important;
-        word-wrap: break-word !important;
-    }
+        .page-header {
+            margin-bottom: 4px !important;
+            padding-bottom: 2px !important;
+            border-bottom: 1px solid #0d5b10 !important;
+            text-align: center !important;
 
-    .report-header-print {
-        background-color: #0d5b10 !important;
-        color: #fff !important;
-        font-weight: bold !important;
-        padding: 6px 10px !important;
-        border-radius: 4px !important;
-        margin-bottom: 8px !important;
-        text-transform: uppercase;
-        font-size: 12px !important;
-    }
+        }
+
+        .bank-section {
+            margin-bottom: 4px !important;
+            border: 1px solid #ccc !important;
+            padding: 3px !important;
+            background: white !important;
+            width: 100% !important;
+            page-break-inside: auto !important; 
+            break-inside: auto !important;
+        }
+
+        .bank-section:not(:first-child) {
+            page-break-before: always !important;
+        }
+
+
+        .ant-table-thead > tr > th {
+            padding: 1px 2px !important;
+            font-size: 12px !important;
+            background: #fafafa !important;
+            font-weight:  600 !important;
+            border-bottom: 1px solid #ddd !important;
+            height: 8px !important;
+            line-height: 1 !important;
+            // color: #000 !important;
+        }
+            
+
+        .ant-table-tbody > tr > td {
+            padding: 1px 2px !important;
+            font-size: 6px !important;
+            border-bottom: 1px solid #eee !important;
+            height: 7px !important;
+            line-height: 1 !important;
+            // color: #000 !important;
+        }
+
+        .ant-table-tbody > tr {
+            height: 8px !important;
+            page-break-inside: avoid !important; 
+            break-inside: avoid !important;
+
+        }
+
+        .ant-table-thead > tr > th {
+            -webkit-print-color-adjust: exact !important;
+            color-adjust: exact !important;
+        }
+            .fixed-width-table {
+  table-layout: fixed;
 }
 
-        `}
+       .fixed-width-table table {
+            table-layout: fixed !important;
+            width: 100% !important;
+            }
+
+            .fixed-width-table .ant-table-thead > tr > th,
+            .fixed-width-table .ant-table-tbody > tr > td {
+                width: auto !important;
+                text-align: left;
+                white-space: nowrap;
+                }
+            .col-date {
+            width: 50px !important;
+            }
+
+            .col-bank-date {
+            width: 50px !important;
+            }
+
+            .col-name {
+            width: 70px !important;
+            }
+
+            .col-amount {
+            width: 40px !important;
+            }
+        .ant-table-thead > tr > th .ant-table-cell {
+            -webkit-print-color-adjust: exact !important;
+            color-adjust: exact !important;
+            font-size: 15px !important;
+        }
+
+        .ant-table-placeholder {
+            font-size: 5px !important;
+            padding: 3px !important;
+            color: #666 !important;
+        }
+
+        .bank-section > div {
+            margin-bottom: 3px !important;
+            font-size: 12px !important;
+        }
+
+        strong, span, div {
+            // color: #000 !important;
+        }
+
+        .ant-table-wrapper {
+            page-break-inside: auto !important;
+        }
+
+        .ant-table-tbody > tr {
+            height: 8px !important;
+        }
+        .ant-table-tbody > t {
+            height: 8px !important;
+        }
+
+
+        .ant-table-thead > tr {
+            height: 8px !important;
+    }
+
+    @media screen {
+        .bank-section {
+            margin-bottom: 10px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .page-header {
+            display: none;
+        }
+    }
+    `}
             </style>
         </Card>
     );
