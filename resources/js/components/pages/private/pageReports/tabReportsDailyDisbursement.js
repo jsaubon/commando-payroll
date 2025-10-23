@@ -301,12 +301,7 @@ export default function TabReportsDailyDisbursement() {
                 <div className="text-center" id="print-header">
                     <Text>
                         <Select
-                            style={{
-                                fontSize: 20,
-                                fontStyle: "italic",
-                                border: "none"
-                            }}
-                            className="select-no-border"
+                            className="select-no-border title-header-select "
                             defaultValue="COMMANDO SECURITY SERVICE AGENCY, INC.
                             (COMMANDO)"
                         >
@@ -333,11 +328,11 @@ export default function TabReportsDailyDisbursement() {
                             <br />
                             Tel. No. (085) 342-8283 and (085) 341-3214
                         </div>
-                        <Title level={4}>Daily DisbursementReport</Title>
+                        <Title level={4}>Daily Disbursement Report</Title>
                     </Text>
                 </div>
 
-                <div id="print-table-area" ref={componentRef}>
+                <div id="print-table-area" ref={componentRef} className="">
                     {tableFilter.month ? (
                         <div>
                             {dataDailyDisbursement &&
@@ -346,17 +341,10 @@ export default function TabReportsDailyDisbursement() {
                                     return (
                                         <div
                                             key={index}
-                                            className="bank-section"
-                                            style={{
-                                                marginBottom: "6px",
-                                                backgroundColor: "#ffffff",
-                                                // border: "1px solid #ddd",
-                                                // borderRadius: "2px",
-                                                padding: "4px"
-                                            }}
+                                            className="bank-section-print bank-section-screen"
                                         >
                                             <div
-                                                className="text-center"
+                                                className="text-center print-only-header"
                                                 style={{
                                                     marginBottom: "10px",
                                                     paddingBottom: "5px"
@@ -398,6 +386,7 @@ export default function TabReportsDailyDisbursement() {
                                             </div>
 
                                             <div
+                                                className="bank-info-formatted"
                                                 style={{
                                                     backgroundColor: "#0d5b10",
                                                     padding: "3px 5px",
@@ -814,7 +803,7 @@ export default function TabReportsDailyDisbursement() {
 
             <style>
                 {`
-    @media print {
+     @media print {
         @page {
             size: A4 portrait;
             margin: 8mm;
@@ -842,7 +831,17 @@ export default function TabReportsDailyDisbursement() {
             min-height: auto !important;
             height: auto !important;
             page-break-after: auto !important;
+        }
+            .bank-info-formatted {
+                color: #fff !important;
+            }
 
+        .print-only-header {
+            display: block !important;
+            margin-bottom: 4px !important;
+            padding-bottom: 2px !important;
+            border-bottom: 1px solid #0d5b10 !important;
+            text-align: center !important;
         }
 
         .ant-card, .ant-card-body {
@@ -856,35 +855,21 @@ export default function TabReportsDailyDisbursement() {
             display: none !important;
         }
 
-        // #print-header {
-        //     margin-bottom: 2px !important;
-        //     padding-bottom: 2px !important;
-        //     text-align: center !important;
-            
-        // }
-
-        .page-header {
-            margin-bottom: 4px !important;
-            padding-bottom: 2px !important;
-            border-bottom: 1px solid #0d5b10 !important;
-            text-align: center !important;
-
+                 .bank-section-print {
+                   margin-bottom: 10px !important;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+                    padding: 3px !important;
+                    border: 1px solid #000 !important;
+                    background: white !important;
+                    page-break-inside: auto !important; 
+                    break-inside: auto !important;
+                    border-radius: 0 !important;
+                
         }
 
-        .bank-section {
-            margin-bottom: 4px !important;
-            border: 1px solid #ccc !important;
-            padding: 3px !important;
-            background: white !important;
-            width: 100% !important;
-            page-break-inside: auto !important; 
-            break-inside: auto !important;
-        }
-
-        .bank-section:not(:first-child) {
+        .bank-section-print:not(:first-child) {
             page-break-before: always !important;
         }
-
 
         .ant-table-thead > tr > th {
             padding: 1px 2px !important;
@@ -894,60 +879,59 @@ export default function TabReportsDailyDisbursement() {
             border-bottom: 1px solid #ddd !important;
             height: 8px !important;
             line-height: 1 !important;
-            // color: #000 !important;
         }
             
-
         .ant-table-tbody > tr > td {
             padding: 1px 2px !important;
             font-size: 6px !important;
             border-bottom: 1px solid #eee !important;
             height: 7px !important;
             line-height: 1 !important;
-            // color: #000 !important;
         }
 
         .ant-table-tbody > tr {
             height: 8px !important;
             page-break-inside: avoid !important; 
             break-inside: avoid !important;
-
         }
 
         .ant-table-thead > tr > th {
             -webkit-print-color-adjust: exact !important;
             color-adjust: exact !important;
         }
-            .fixed-width-table {
-  table-layout: fixed;
-}
 
-       .fixed-width-table table {
+        .fixed-width-table {
+            table-layout: fixed;
+        }
+
+        .fixed-width-table table {
             table-layout: fixed !important;
             width: 100% !important;
-            }
+        }
 
-            .fixed-width-table .ant-table-thead > tr > th,
-            .fixed-width-table .ant-table-tbody > tr > td {
-                width: auto !important;
-                text-align: left;
-                white-space: nowrap;
-                }
-            .col-date {
+        .fixed-width-table .ant-table-thead > tr > th,
+        .fixed-width-table .ant-table-tbody > tr > td {
+            width: auto !important;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .col-date {
             width: 50px !important;
-            }
+        }
 
-            .col-bank-date {
+        .col-bank-date {
             width: 50px !important;
-            }
+        }
 
-            .col-name {
+        .col-name {
             width: 70px !important;
-            }
+        }
 
-            .col-amount {
+        .col-amount {
             width: 40px !important;
-            }
+        }
+
         .ant-table-thead > tr > th .ant-table-cell {
             -webkit-print-color-adjust: exact !important;
             color-adjust: exact !important;
@@ -960,13 +944,13 @@ export default function TabReportsDailyDisbursement() {
             color: #666 !important;
         }
 
-        .bank-section > div {
+        .bank-section-print > div {
             margin-bottom: 3px !important;
             font-size: 12px !important;
         }
 
         strong, span, div {
-            // color: #000 !important;
+            color: #000 !important;
         }
 
         .ant-table-wrapper {
@@ -976,23 +960,42 @@ export default function TabReportsDailyDisbursement() {
         .ant-table-tbody > tr {
             height: 8px !important;
         }
-        .ant-table-tbody > t {
-            height: 8px !important;
-        }
-
 
         .ant-table-thead > tr {
             height: 8px !important;
+        }
+    
     }
 
     @media screen {
-        .bank-section {
-            margin-bottom: 10px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-        }
-        
-        .page-header {
-            display: none;
+        .bank-section-print {
+        margin-bottom: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+        padding: 15px !important;
+        background: white !important;
+        border-radius: 8px !important;
+        color: #ffff !important;
+    }
+    .bank-section-screen {
+        margin-bottom: 6px !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+        padding: 15px !important;
+        background: white !important;
+        border-radius: 8px !important;
+    }   
+
+    .title-header-select {
+        font-size: 20px !important;
+        font-weight: italic !important;
+        border: none !important;
+    }
+         
+
+    .print-only-header {
+        display: none !important;
+    }
+        .print-only-header {
+            display: none !important;
         }
     }
     `}
