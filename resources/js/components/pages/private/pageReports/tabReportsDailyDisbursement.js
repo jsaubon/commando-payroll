@@ -49,7 +49,7 @@ export default function TabReportsDailyDisbursement() {
 
     const columnsDeposit = [
         {
-            title: "Date",
+            title: "Date Deposited",
             dataIndex: "date_deposited_formatted",
             key: "date_deposited_formatted",
             width: "25%",
@@ -58,7 +58,7 @@ export default function TabReportsDailyDisbursement() {
             )
         },
         {
-            title: "Bank Date",
+            title: "Bank Transaction Date",
             dataIndex: "bank_transaction_date_formatted",
             key: "bank_transaction_date_formatted",
             width: "25%",
@@ -103,7 +103,7 @@ export default function TabReportsDailyDisbursement() {
             )
         },
         {
-            title: "Bank Date",
+            title: "Bank Transaction Date",
             dataIndex: "bank_transaction_date",
             key: "bank_transaction_date",
             width: "25%",
@@ -148,7 +148,7 @@ export default function TabReportsDailyDisbursement() {
             )
         },
         {
-            title: "Bank Date",
+            title: "Bank Transaction Date",
             dataIndex: "bank_transaction_date",
             key: "bank_transaction_date",
             width: "25%",
@@ -193,7 +193,7 @@ export default function TabReportsDailyDisbursement() {
             )
         },
         {
-            title: "Bank Date",
+            title: "Bank Transaction Date",
             dataIndex: "bank_transaction_date",
             key: "bank_transaction_date",
             width: "25%",
