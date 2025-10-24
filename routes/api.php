@@ -49,6 +49,7 @@ Route::get('testing', function () {
     dd($employees);
 });
 
+
 Route::get('get_report_daily_disbursement', function () {
     $month = request()->month;
     $bank_id = request()->bank_id;
@@ -90,8 +91,6 @@ Route::get('get_report_daily_disbursement', function () {
     $date_deposited_formatted = "DATE_FORMAT(date_deposited, '%Y-%m-%d')";
     $bank_transaction_date = "DATE_FORMAT(bank_transaction_date, '%Y-%m-%d')";
 
-
-
     $dataDeposit = App\Deposits::selectRaw("
         deposits.*,
         {$bank_info_formatted} AS bank_info_formatted,
@@ -105,11 +104,9 @@ Route::get('get_report_daily_disbursement', function () {
     $dataExpenses = App\Expenses::select([
         'expenses.*',
         \DB::raw($bank_info_formatted_expenses . ' AS bank_info_formatted'),
-
     ])
         ->when($year && $monthNum, fn($q) => $q->whereYear('date', $year)->whereMonth('date', $monthNum))
         ->when($bank_id, fn($q) => $q->where('bank_id', $bank_id))
-
         ->where('pdc', 0)
         ->where('out_standing_check', 0)
         ->get();
@@ -117,8 +114,6 @@ Route::get('get_report_daily_disbursement', function () {
     $dataOutStandingChecks = App\Expenses::select([
         'expenses.*',
         \DB::raw($bank_info_formatted_expenses . ' AS bank_info_formatted'),
-
-
     ])
         ->when($year && $monthNum, fn($q) => $q->whereYear('date', $year)->whereMonth('date', $monthNum))
         ->when($bank_id, fn($q) => $q->where('bank_id', $bank_id))
@@ -128,11 +123,9 @@ Route::get('get_report_daily_disbursement', function () {
     $dataPDC = App\Expenses::select([
         'expenses.*',
         \DB::raw($bank_info_formatted_expenses . ' AS bank_info_formatted'),
-
     ])
         ->when($year && $monthNum, fn($q) => $q->whereYear('date', $year)->whereMonth('date', $monthNum))
         ->when($bank_id, fn($q) => $q->where('bank_id', $bank_id))
-
         ->where('pdc', 1)
         ->get();
 
@@ -144,21 +137,12 @@ Route::get('get_report_daily_disbursement', function () {
         ->merge($dataPDC->pluck('bank_id'))
         ->unique();
 
+
+
+
     foreach ($bankIds as $bankId) {
         $forwarded_balance = 0;
         $forwarded_balance_month_range = null;
-
-        $deposits_total_amount = $dataDeposit->where('bank_id', $bankId)->sum('amount');
-        $expenses_total_amount = $dataExpenses->where('bank_id', $bankId)->sum('amount');
-        $total_outstandingcheck_amount = $dataOutStandingChecks->where('bank_id', $bankId)->sum('amount');
-        $total_pdc_amount = $dataPDC->where('bank_id', $bankId)->sum('amount');
-        $subtotal_deposits = $forwarded_balance + $deposits_total_amount;
-
-        $subtotal_expenses = $subtotal_deposits - $expenses_total_amount;
-        $subtotal_outstandingcheck = $subtotal_expenses - $total_outstandingcheck_amount;
-        $subtotal_pdc = $subtotal_outstandingcheck - $total_pdc_amount;
-
-        $total_daily_disbursement = $subtotal_pdc;
 
         $bankInfo = $dataDeposit->where('bank_id', $bankId)->first()->bank_info_formatted
             ?? $dataExpenses->where('bank_id', $bankId)->first()->bank_info_formatted
@@ -166,38 +150,77 @@ Route::get('get_report_daily_disbursement', function () {
             ?? $dataPDC->where('bank_id', $bankId)->first()->bank_info_formatted
             ?? '';
 
-        // Calculate forwarded balance from previous month
+        $deposits_total_amount = $dataDeposit->where('bank_id', $bankId)->sum('amount');
+        $expenses_total_amount = $dataExpenses->where('bank_id', $bankId)->sum('amount');
+        $total_outstandingcheck_amount = $dataOutStandingChecks->where('bank_id', $bankId)->sum('amount');
+        $total_pdc_amount = $dataPDC->where('bank_id', $bankId)->sum('amount');
+
+        $calculateTotalDailyDisbursement = function ($bankId, $targetYear, $targetMonth) use (&$calculateTotalDailyDisbursement) {
+            $prevDataDeposit = App\Deposits::where('bank_id', $bankId)
+                ->whereYear('date_deposited', $targetYear)
+                ->whereMonth('date_deposited', $targetMonth)
+                ->where('amount', '>', 0)
+                ->sum('amount');
+
+            $prevDataExpenses = App\Expenses::where('bank_id', $bankId)
+                ->whereYear('date', $targetYear)
+                ->whereMonth('date', $targetMonth)
+                ->where('pdc', 0)
+                ->where('out_standing_check', 0)
+                ->sum('amount');
+
+            $prevDataOutStanding = App\Expenses::where('bank_id', $bankId)
+                ->whereYear('date', $targetYear)
+                ->whereMonth('date', $targetMonth)
+                ->where('out_standing_check', 1)
+                ->sum('amount');
+
+            $prevDataPDC = App\Expenses::where('bank_id', $bankId)
+                ->whereYear('date', $targetYear)
+                ->whereMonth('date', $targetMonth)
+                ->where('pdc', 1)
+                ->sum('amount');
+
+            $prevForwardedBalance = 0;
+            $prevPrevMonth = date('Y-m', strtotime($targetYear . '-' . str_pad($targetMonth, 2, '0', STR_PAD_LEFT) . '-01 -1 month'));
+            [$prevPrevYear, $prevPrevMonthNum] = explode('-', $prevPrevMonth);
+
+            $hasData = App\Deposits::where('bank_id', $bankId)
+                ->whereYear('date_deposited', $prevPrevYear)
+                ->whereMonth('date_deposited', $prevPrevMonthNum)
+                ->exists() ||
+                App\Expenses::where('bank_id', $bankId)
+                ->whereYear('date', $prevPrevYear)
+                ->whereMonth('date', $prevPrevMonthNum)
+                ->exists();
+
+            if ($hasData) {
+                $prevForwardedBalance = $calculateTotalDailyDisbursement($bankId, $prevPrevYear, $prevPrevMonthNum);
+            }
+
+            $subtotal_deposits = $prevForwardedBalance + $prevDataDeposit;
+            $subtotal_expenses = $subtotal_deposits - $prevDataExpenses;
+            $subtotal_outstandingcheck = $subtotal_expenses - $prevDataOutStanding;
+            $total_daily_disbursement = $subtotal_outstandingcheck - $prevDataPDC;
+
+            return $total_daily_disbursement;
+        };
+
+
         if ($month) {
             $prevMonth = date('Y-m', strtotime($month . '-01 -1 month'));
             $forwarded_balance_month_range = date('Y-m-t', strtotime($prevMonth));
 
-            $fbmoDeposits = \App\Deposits::where('bank_id', $bankId)
-                ->whereYear('date_deposited', date('Y', strtotime($prevMonth)))
-                ->whereMonth('date_deposited', date('m', strtotime($prevMonth)))
-                ->sum('amount', $deposits_total_amount);
+            [$prevYear, $prevMonthNum] = explode('-', $prevMonth);
 
-            $prevExpenses = \App\Expenses::where('bank_id', $bankId)
-                ->whereYear('date', date('Y', strtotime($prevMonth)))
-                ->whereMonth('date', date('m', strtotime($prevMonth)))
-                ->where('pdc', 0)
-                ->where('out_standing_check', 0)
-                ->sum('amount', $expenses_total_amount);
-
-            $prevOutstanding = \App\Expenses::where('bank_id', $bankId)
-                ->whereYear('date', date('Y', strtotime($prevMonth)))
-                ->whereMonth('date', date('m', strtotime($prevMonth)))
-                ->where('out_standing_check', 1)
-                ->sum('amount', $total_outstandingcheck_amount);
-
-            $prevPdc = \App\Expenses::where('bank_id', $bankId)
-                ->whereYear('date', date('Y', strtotime($prevMonth)))
-                ->whereMonth('date', date('m', strtotime($prevMonth)))
-                ->where('pdc', 1)
-                ->sum('amount', $total_pdc_amount);
-
-            $forwarded_balance = $fbmoDeposits - $prevExpenses - $prevOutstanding - $prevPdc;
+            $forwarded_balance = $calculateTotalDailyDisbursement($bankId, $prevYear, $prevMonthNum);
         }
 
+        $subtotal_deposits = $forwarded_balance + $deposits_total_amount;
+        $subtotal_expenses = $subtotal_deposits - $expenses_total_amount;
+        $subtotal_outstandingcheck = $subtotal_expenses - $total_outstandingcheck_amount;
+        $subtotal_pdc = $subtotal_outstandingcheck - $total_pdc_amount;
+        $total_daily_disbursement = $subtotal_pdc;
 
         $groupedData[] = [
             'bank_info_formatted' => $bankInfo,
@@ -206,6 +229,9 @@ Route::get('get_report_daily_disbursement', function () {
             'outstanding_checks' => $dataOutStandingChecks->where('bank_id', $bankId)->values(),
             'pdc' => $dataPDC->where('bank_id', $bankId)->values(),
             'deposits_total_amount' => $deposits_total_amount,
+            'expenses_total_amount' => $expenses_total_amount,
+            'total_outstandingcheck_amount' => $total_outstandingcheck_amount,
+            'total_pdc_amount' => $total_pdc_amount,
             'subtotal_deposits' => $subtotal_deposits,
             'subtotal_expenses' => $subtotal_expenses,
             'subtotal_outstandingcheck' => $subtotal_outstandingcheck,
@@ -213,6 +239,7 @@ Route::get('get_report_daily_disbursement', function () {
             'forward_balance' => $forwarded_balance,
             'total_daily_disbursement' => $total_daily_disbursement,
             'forwarded_balance_month_range' => $forwarded_balance_month_range,
+
         ];
     }
 
