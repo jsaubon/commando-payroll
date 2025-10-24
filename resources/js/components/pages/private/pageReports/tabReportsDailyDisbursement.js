@@ -773,16 +773,8 @@ export default function TabReportsDailyDisbursement() {
                                     );
                                 })
                             ) : (
-                                <div
-                                    style={{
-                                        textAlign: "center",
-                                        padding: "15px 0",
-                                        fontStyle: "italic",
-                                        color: "#666",
-                                        fontSize: "8px"
-                                    }}
-                                >
-                                    No data available.
+                                <div>
+                                    <Table></Table>
                                 </div>
                             )}
                         </div>
@@ -831,6 +823,7 @@ export default function TabReportsDailyDisbursement() {
             min-height: auto !important;
             height: auto !important;
             page-break-after: auto !important;
+            
         }
         .bank-info-formatted {
                 color: #fff !important;
@@ -974,14 +967,14 @@ export default function TabReportsDailyDisbursement() {
     }
 
     @media screen {
-        .bank-section-print {
-        margin-bottom: 10px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
-        padding: 15px !important;
-        background: white !important;
-        border-radius: 8px !important;
-        color: #ffff !important;
-    }
+    //     .bank-section-print {
+    //     margin-bottom: 10px;
+    //     box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+    //     padding: 15px !important;
+    //     background: white !important;
+    //     border-radius: 8px !important;
+    //     color: #ffff !important;
+    // }
     .bank-section-screen {
         margin-bottom: 6px !important;
         box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
