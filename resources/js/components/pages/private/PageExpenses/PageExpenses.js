@@ -101,6 +101,7 @@ export default function PageExpenses() {
                         placeholder="Search Expenses"
                         style={{ width: "100%" }}
                         className="pull-right"
+                        allowClear
                         onChange={e => onChangeTable("search", e.target.value)}
                     />
                     {/* <Button

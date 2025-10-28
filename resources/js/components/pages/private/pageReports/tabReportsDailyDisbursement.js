@@ -23,7 +23,9 @@ export default function TabReportsDailyDisbursement() {
 
     useEffect(() => {
         fetchData("GET", `api/banks`).then(res => {
-            if (res.success) setDataBanks(res.data);
+            if (res.success) {
+                setDataBanks(res.data);
+            }
         });
     }, []);
 
@@ -82,13 +84,68 @@ export default function TabReportsDailyDisbursement() {
             align: "right",
             width: "15%",
             render: text => (
-                <div style={{ fontSize: "10px", lineHeight: "1" }}>
-                    {Number(text || 0).toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    })}
-                </div>
+                <div style={{ fontSize: "10px", lineHeight: "1" }}>{text}</div>
             )
+            // render: (text, record, index, data) => {
+            //     console.log("data", data);
+            //     console.log("index", index);
+
+            //     const deposits_total_amount = record.tableData || [];
+            //     console.log("deposits_total_amount", deposits_total_amount);
+
+            //     const totalAmount = deposits_total_amount.reduce(
+            //         (sum, item) => sum + Number(item.amount || 0),
+            //         0
+            //     );
+            //     const isLast = index === deposits_total_amount.length - 1;
+
+            //     return (
+            //         <div
+            //             style={{
+            //                 display: "flex",
+            //                 justifyContent: "space-between",
+            //                 alignItems: "left",
+            //                 whiteSpace: "nowrap"
+            //             }}
+            //         >
+            //             <span
+            //                 style={{
+            //                     width: "50%",
+            //                     textAlign: "left",
+            //                     paddingRight: "25px",
+            //                     fontSize: "10px",
+            //                     lineHeight: "1"
+            //                 }}
+            //             >
+            //                 {Number(text || 0).toLocaleString(undefined, {
+            //                     minimumFractionDigits: 2,
+            //                     maximumFractionDigits: 2
+            //                 })}
+            //             </span>
+            //             <span
+            //                 style={{
+            //                     width: "5pc",
+            //                     textAlign: "right",
+            //                     fontWeight: isLast ? "700" : "normal",
+            //                     borderBottom: isLast
+            //                         ? "1px solid #000"
+            //                         : "none",
+            //                     fontSize: "12px"
+            //                 }}
+            //             >
+            //                 {isLast
+            //                     ? Number(totalAmount || 0).toLocaleString(
+            //                           undefined,
+            //                           {
+            //                               minimumFractionDigits: 2,
+            //                               maximumFractionDigits: 2
+            //                           }
+            //                       )
+            //                     : ""}
+            //             </span>
+            //         </div>
+            //     );
+            // }
         }
     ];
 
@@ -454,13 +511,19 @@ export default function TabReportsDailyDisbursement() {
                                                 </strong>
                                                 <Table
                                                     className="fixed-width-table"
-                                                    dataSource={
-                                                        group.deposits &&
-                                                        group.deposits.length >
-                                                            0
-                                                            ? group.deposits
-                                                            : []
-                                                    }
+                                                    // dataSource={
+                                                    //     group.deposits &&
+                                                    //     group.deposits.length >
+                                                    //         0
+                                                    //         ? group.deposits
+                                                    //         : []
+                                                    // }
+                                                    dataSource={group.deposits.map(
+                                                        (item, idx, arr) => ({
+                                                            ...item,
+                                                            tableData: arr
+                                                        })
+                                                    )}
                                                     columns={columnsDeposit}
                                                     pagination={false}
                                                     rowKey={(record, index) =>
