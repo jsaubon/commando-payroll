@@ -1,5 +1,5 @@
 import { useReactToPrint } from "react-to-print";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, use } from "react";
 import Text from "antd/lib/typography/Text";
 import Title from "antd/lib/typography/Title";
 import {
@@ -22,11 +22,12 @@ export default function TabReportsDailyDisbursement() {
     });
 
     useEffect(() => {
-        fetchData("GET", `api/banks`).then(res => {
+        fetchData("GET", "api/banks?sort=asc").then(res => {
             if (res.success) {
                 setDataBanks(res.data);
             }
         });
+        return () => {};
     }, []);
 
     useEffect(() => {
@@ -48,6 +49,11 @@ export default function TabReportsDailyDisbursement() {
         content: () => componentRef.current
         // removeAfterPrint: true
     });
+
+    useEffect(() => {
+        dataBanks();
+        return () => {};
+    }, [dataBanks]);
 
     const columnsDeposit = [
         {
