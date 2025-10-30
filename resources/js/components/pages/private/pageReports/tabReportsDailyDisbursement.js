@@ -51,9 +51,10 @@ export default function TabReportsDailyDisbursement() {
     });
 
     useEffect(() => {
-        dataBanks();
+        if (dataBanks.data) {
+        }
         return () => {};
-    }, [dataBanks]);
+    }, [dataBanks.data]);
 
     const columnsDeposit = [
         {
